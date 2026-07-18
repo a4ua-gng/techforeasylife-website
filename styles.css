@@ -423,9 +423,13 @@ p { color: var(--muted); }
 .product-gallery-clean { grid-template-columns: 1.2fr .8fr; }
 .product-gallery-clean .gallery-item.wide { grid-column: 1 / -1; min-height: 560px; }
 .product-gallery-clean .gallery-item:not(.wide) { min-height: 440px; }
+.product-gallery-clean .gallery-item img { object-fit: contain; background: #050505; }
 .render-gallery-card { background: radial-gradient(circle at 65% 35%, rgba(185,163,255,.17), transparent 46%), #070709; }
 .render-gallery-card img { padding: 28px; object-fit: contain; filter: drop-shadow(0 30px 28px rgba(0,0,0,.75)); transform: rotate(-4deg); }
 .render-gallery-card:hover img { transform: rotate(-4deg) scale(1.025); opacity: 1; }
+.real-rocket-card { background: radial-gradient(circle at 50% 45%, rgba(185,163,255,.1), transparent 46%), #050505; }
+.real-rocket-card img { padding: 18px; object-fit: contain; background: #050505; filter: drop-shadow(0 24px 25px rgba(0,0,0,.78)); }
+.real-rocket-card:hover img { transform: scale(1.025); opacity: 1; }
 .lightbox { position: fixed; inset: 0; z-index: 500; display: none; place-items: center; padding: 30px; background: rgba(0,0,0,.88); backdrop-filter: blur(18px); }
 .lightbox.open { display: grid; }
 .lightbox img { max-width: min(1200px, 94vw); max-height: 86vh; border-radius: 20px; box-shadow: 0 30px 100px #000; }
@@ -478,6 +482,7 @@ p { color: var(--muted); }
 .programme-gallery { display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; }
 .programme-photo { min-height: 335px; margin: 0; position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: #08080b; }
 .programme-photo-main { grid-row: span 2; min-height: 682px; }
+.programme-photo-launch { grid-column: 1 / -1; min-height: 440px; }
 .programme-photo img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.82) contrast(1.05); transition: transform .6s var(--ease), filter .4s ease; }
 .programme-photo:hover img { transform: scale(1.025); filter: saturate(1) contrast(1); }
 .programme-photo figcaption { position: absolute; inset: auto 0 0; padding: 70px 24px 22px; background: linear-gradient(0deg, rgba(4,4,6,.94), transparent); }
