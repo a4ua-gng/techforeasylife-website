@@ -15,7 +15,7 @@ Static multi-page website for TEL's education and practical-learning branch, bui
 
 ## Publish this update on GitHub
 
-1. Download and extract `TEL-Website-Easy-Upload-v3.zip`.
+1. Download and extract `TEL-Website-Easy-Upload-v4.zip`.
 2. Open the `techforeasylife-website` repository on GitHub.
 3. Select **Add file → Upload files**.
 4. Select **every extracted file at once** and drag them into the upload area. This release deliberately has no folders: every `.html`, `.webp`, `.css`, `.js`, `.svg`, `.txt` and `.xml` file belongs beside `index.html` in the repository root.
@@ -37,7 +37,9 @@ Connect `techforeasylife.in` only after the GitHub Pages preview looks correct. 
 - Kit sales and institution proposals route to `techforeasylife.sales@gmail.com`.
 - Careers, operations and general questions route to `techforeasylife.operations@gmail.com`.
 - All website images are flattened into the repository root to avoid missed-folder uploads on GitHub.
-- The official TEL logo is used in the header and footer.
+- The official TEL logo is used in the header, footer, About brand panel and browser favicon.
+- The TEL Model Rocket Kit is the main visual focus, led by the line “Why skies? Go beyond it!”
+- The supplied TEL rocket render is presented beside the kit box and on the Product page.
 - Product pricing is intentionally not public.
 - Individual product access is marked coming soon; institutions are sent to direct enquiry.
 - The SAFEFLIGHT page is a public educational demo and does not issue a real kit unlock code.
