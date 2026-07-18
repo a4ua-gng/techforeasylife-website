@@ -7,6 +7,13 @@ const header = document.querySelector("[data-header]");
 const nav = document.querySelector("[data-nav]");
 const navToggle = document.querySelector("[data-nav-toggle]");
 
+const askTel = document.createElement("a");
+askTel.className = "ask-tel";
+askTel.href = "mailto:techforeasylife.operations@gmail.com?subject=General%20Question%20for%20TEL&body=Hello%20TEL%2C%0A%0AI%20have%20a%20question%20about%3A%0A%0AMy%20question%3A%0A";
+askTel.setAttribute("aria-label", "Email TEL operations with a question");
+askTel.innerHTML = "<span aria-hidden=\"true\">?</span><strong>Ask TEL</strong>";
+document.body.append(askTel);
+
 function updateHeader() {
   header?.classList.toggle("scrolled", window.scrollY > 24);
 }
@@ -227,17 +234,21 @@ if (contactForm) {
   const params = new URLSearchParams(window.location.search);
   const topicParam = params.get("topic");
   const topicField = contactForm.querySelector("[name='topic']");
-  if (topicParam === "institution") topicField.value = "Institution enquiry";
+  if (topicParam === "institution") topicField.value = "Institution proposal";
 
   contactForm.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!contactForm.reportValidity()) return;
     const data = new FormData(contactForm);
     const topic = data.get("topic");
+    const salesTopics = ["Institution proposal", "Product or kit sales"];
+    const recipient = salesTopics.includes(topic)
+      ? "techforeasylife.sales@gmail.com"
+      : "techforeasylife.operations@gmail.com";
     const subject = encodeURIComponent(`${topic} — ${data.get("name")}`);
     const body = encodeURIComponent(
       `Name: ${data.get("name")}\nEmail: ${data.get("email")}\nInstitution / organisation: ${data.get("organisation") || "Not provided"}\n\nMessage:\n${data.get("message")}`
     );
-    window.location.href = `mailto:techforeasylife.sales@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
   });
 }

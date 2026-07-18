@@ -1,6 +1,6 @@
 # TEL — Tech for Easy Life website
 
-Static multi-page website for TEL, built for GitHub Pages and `techforeasylife.in`.
+Static multi-page website for TEL's education and practical-learning branch, built for GitHub Pages and `techforeasylife.in`.
 
 ## Pages
 
@@ -15,14 +15,15 @@ Static multi-page website for TEL, built for GitHub Pages and `techforeasylife.i
 
 ## Publish this update on GitHub
 
-1. Download and extract `TEL-Website-Space-v2.zip`.
+1. Download and extract `TEL-Website-Easy-Upload-v3.zip`.
 2. Open the `techforeasylife-website` repository on GitHub.
 3. Select **Add file → Upload files**.
-4. Drag everything inside the extracted folder into the upload area. Make sure `index.html` is at the repository root, not inside another folder.
-5. Enter a commit message such as `Launch TEL multi-page website`.
-6. Select **Commit changes**.
-7. Open **Actions** and wait for the Pages deployment to show a green check.
-8. Refresh the live GitHub Pages URL. A hard refresh with `Ctrl + Shift + R` may be needed.
+4. Select **every extracted file at once** and drag them into the upload area. This release deliberately has no folders: every `.html`, `.webp`, `.css`, `.js`, `.svg`, `.txt` and `.xml` file belongs beside `index.html` in the repository root.
+5. Check that image names such as `kit-box.webp`, `tel-logo.webp` and `stem-classroom.webp` appear in the upload list. Do not upload the ZIP itself.
+6. Enter a commit message such as `Update TEL education website`.
+7. Select **Commit changes**.
+8. Open **Actions** and wait for the Pages deployment to show a green check.
+9. Refresh the live GitHub Pages URL. A hard refresh with `Ctrl + Shift + R` may be needed.
 
 GitHub Pages should remain configured as **Deploy from a branch → main → /(root)**.
 
@@ -32,7 +33,11 @@ Connect `techforeasylife.in` only after the GitHub Pages preview looks correct. 
 
 ## Notes
 
-- The contact form opens the visitor's email app and sends to `techforeasylife.sales@gmail.com`; there is no server or database.
+- The contact form opens the visitor's email app; there is no server or database.
+- Kit sales and institution proposals route to `techforeasylife.sales@gmail.com`.
+- Careers, operations and general questions route to `techforeasylife.operations@gmail.com`.
+- All website images are flattened into the repository root to avoid missed-folder uploads on GitHub.
+- The official TEL logo is used in the header and footer.
 - Product pricing is intentionally not public.
 - Individual product access is marked coming soon; institutions are sent to direct enquiry.
 - The SAFEFLIGHT page is a public educational demo and does not issue a real kit unlock code.
