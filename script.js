@@ -22,19 +22,33 @@ updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
 
 if (navToggle && nav) {
-  navToggle.addEventListener("click", () => {
-    const open = nav.classList.toggle("open");
+  const navLabel = navToggle.querySelector(".sr-only");
+
+  const setNavOpen = (open) => {
+    nav.classList.toggle("open", open);
     navToggle.setAttribute("aria-expanded", String(open));
-    document.body.style.overflow = open ? "hidden" : "";
+    document.body.classList.toggle("nav-open", open);
+    if (navLabel) navLabel.textContent = open ? "Close navigation" : "Open navigation";
+  };
+
+  navToggle.addEventListener("click", () => {
+    setNavOpen(!nav.classList.contains("open"));
   });
 
   nav.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      nav.classList.remove("open");
-      navToggle.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "";
-    });
+    link.addEventListener("click", () => setNavOpen(false));
   });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && nav.classList.contains("open")) {
+      setNavOpen(false);
+      navToggle.focus();
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 820 && nav.classList.contains("open")) setNavOpen(false);
+  }, { passive: true });
 }
 
 const page = document.body.dataset.page;
