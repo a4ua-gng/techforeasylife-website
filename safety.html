@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SAFEFLIGHT — Safety at TEL</title><meta name="description" content="Explore TEL's developing SAFEFLIGHT safety-learning approach and try the public readiness quiz.">
+  <meta name="theme-color" content="#050505"><link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><script src="script.js" defer></script>
+</head>
+<body data-page="safety">
+  <a class="skip-link" href="#main">Skip to content</a><div class="space-scene" aria-hidden="true"><div class="stars stars-a"></div><div class="stars stars-b"></div><div class="nebula nebula-one"></div><div class="nebula nebula-two"></div><div class="moon moon-home"><span></span></div><div class="orbit orbit-one"><i></i></div></div>
+  <header class="site-header" data-header><a class="brand" href="index.html" aria-label="TEL home"><span class="brand-mark" aria-hidden="true"><i></i></span><span><strong>TEL</strong><small>Tech for Easy Life</small></span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle><span></span><span></span><span class="sr-only">Open navigation</span></button><nav class="site-nav" id="site-nav" aria-label="Main navigation" data-nav><a href="index.html">Home</a><a href="product.html">Product</a><a href="schools.html">For schools</a><a href="safety.html">Safety</a><a href="careers.html">Careers</a><a href="about.html">About</a><a class="nav-cta" href="contact.html">Contact <span>↗</span></a></nav></header>
+
+  <main id="main">
+    <section class="page-hero shell">
+      <div class="page-hero-grid">
+        <div class="page-hero-copy reveal"><p class="eyebrow"><span></span> TEL SAFEFLIGHT</p><h1>Safety is<br><span class="outline">part of learning.</span></h1><p>SAFEFLIGHT is TEL’s developing safety-learning layer—designed to help participants slow down, understand responsibility and make informed decisions before any supervised practical experience.</p><div class="button-row"><a class="button button-primary" href="#demo">Try the learning demo <span>↓</span></a><a class="button button-ghost" href="#framework">Our framework</a></div></div>
+        <div class="safety-console glass-panel reveal delay-1"><div class="console-top"><span></span><span></span><span></span><small>SAFEFLIGHT // READINESS</small></div><div class="console-grid"><div><i class="console-check">✓</i><span>Permission confirmed</span></div><div><i class="console-check">✓</i><span>Adult supervisor present</span></div><div><i class="console-check">✓</i><span>Conditions assessed</span></div><div><i class="console-check">✓</i><span>Learning complete</span></div></div></div>
+      </div>
+    </section>
+
+    <section class="section shell" id="framework">
+      <div class="page-section-heading reveal"><p class="eyebrow"><span></span> The developing pathway</p><h2>Learn first. Check understanding. Participate responsibly.</h2><p>For institution programmes, the intended flow places safety education and adult control before practical participation. Exact delivery is agreed with each institution.</p></div>
+      <div class="safety-flow">
+        <article class="flow-card glass-panel reveal"><span>01</span><h3>Identify the experience</h3><p>A kit-specific or institution-provided entry point connects learners with the appropriate safety content.</p></article>
+        <article class="flow-card glass-panel reveal delay-1"><span>02</span><h3>Complete the learning</h3><p>Participants review clear, age-appropriate preparation, boundaries and responsibility guidance.</p></article>
+        <article class="flow-card glass-panel reveal delay-2"><span>03</span><h3>Check understanding</h3><p>A short knowledge check confirms that the important decisions are understood—not simply clicked through.</p></article>
+        <article class="flow-card glass-panel reveal"><span>04</span><h3>Adult retains control</h3><p>The school-appointed adult keeps permission and practical control throughout the institution’s approved activity.</p></article>
+      </div>
+    </section>
+
+    <section class="section shell" id="demo">
+      <div class="page-section-heading center reveal"><p class="eyebrow">Public interactive demo</p><h2>Flight-readiness console</h2><p>Build a safe learning scenario by confirming all four conditions. This demo teaches decision-making only; it does not authorize or instruct a practical activity.</p></div>
+      <div class="demo-shell glass-panel reveal" data-readiness-demo>
+        <div class="demo-head"><h3>Scenario readiness</h3><span class="demo-mode">● Demo mode — no real unlock</span></div>
+        <div class="readiness-layout">
+          <div class="readiness-orb" data-readiness-orb><span><strong data-readiness-count>0/4</strong><small data-readiness-state>Not ready</small></span></div>
+          <div class="readiness-controls">
+            <button class="readiness-toggle" type="button" data-readiness-toggle><i>✓</i><span><strong>Adult supervisor</strong><small>A designated adult is present and responsible</small></span></button>
+            <button class="readiness-toggle" type="button" data-readiness-toggle><i>✓</i><span><strong>Permission and approved place</strong><small>The institution has approved the setting</small></span></button>
+            <button class="readiness-toggle" type="button" data-readiness-toggle><i>✓</i><span><strong>Protective practices</strong><small>Required safeguards have been confirmed</small></span></button>
+            <button class="readiness-toggle" type="button" data-readiness-toggle><i>✓</i><span><strong>Conditions are suitable</strong><small>The responsible adult has assessed the environment</small></span></button>
+            <p class="readiness-message" data-readiness-message>Select every condition to complete this decision check.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-card glass-panel reveal" data-quiz>
+        <div class="demo-head"><h3>SAFEFLIGHT knowledge check</h3><span class="demo-mode">5 questions // pass 4</span></div>
+        <div class="quiz-progress"><div class="quiz-progress-track"><i data-quiz-progress></i></div><span data-quiz-counter>Question 1 of 5</span></div>
+
+        <div class="quiz-question active" data-question data-correct="1" data-explanation="A designated adult must remain responsible for permission and control.">
+          <h3>Who keeps responsibility and practical control during an institution-led activity?</h3>
+          <div class="quiz-options"><button class="quiz-option" type="button" data-answer="0"><i>A</i>Any student who volunteers</button><button class="quiz-option" type="button" data-answer="1"><i>B</i>The designated school-appointed adult</button><button class="quiz-option" type="button" data-answer="2"><i>C</i>Whoever arrives first</button></div><p class="quiz-feedback" data-feedback aria-live="polite"></p>
+        </div>
+        <div class="quiz-question" data-question data-correct="2" data-explanation="Pause and ask the responsible adult. Uncertainty is a reason to stop, not guess.">
+          <h3>If you are unsure whether conditions are appropriate, what is the responsible choice?</h3>
+          <div class="quiz-options"><button class="quiz-option" type="button" data-answer="0"><i>A</i>Continue because the plan is already scheduled</button><button class="quiz-option" type="button" data-answer="1"><i>B</i>Let students vote</button><button class="quiz-option" type="button" data-answer="2"><i>C</i>Pause and ask the responsible adult to reassess</button></div><p class="quiz-feedback" data-feedback aria-live="polite"></p>
+        </div>
+        <div class="quiz-question" data-question data-correct="0" data-explanation="Safety learning is a required part of preparation and should be completed before participation.">
+          <h3>When should the safety-learning step happen?</h3>
+          <div class="quiz-options"><button class="quiz-option" type="button" data-answer="0"><i>A</i>Before any practical participation</button><button class="quiz-option" type="button" data-answer="1"><i>B</i>Only after the activity</button><button class="quiz-option" type="button" data-answer="2"><i>C</i>Only if there is extra time</button></div><p class="quiz-feedback" data-feedback aria-live="polite"></p>
+        </div>
+        <div class="quiz-question" data-question data-correct="1" data-explanation="The approved area and permissions must remain valid. Moving elsewhere changes the safety conditions.">
+          <h3>The planned area becomes unavailable. What should the group do?</h3>
+          <div class="quiz-options"><button class="quiz-option" type="button" data-answer="0"><i>A</i>Move to any open-looking place</button><button class="quiz-option" type="button" data-answer="1"><i>B</i>Pause until an appropriate area is approved</button><button class="quiz-option" type="button" data-answer="2"><i>C</i>Reduce the group size and continue anywhere</button></div><p class="quiz-feedback" data-feedback aria-live="polite"></p>
+        </div>
+        <div class="quiz-question" data-question data-correct="2" data-explanation="Responsible technical work includes preparation, limits and safe decision-making.">
+          <h3>Which statement best matches TEL’s approach?</h3>
+          <div class="quiz-options"><button class="quiz-option" type="button" data-answer="0"><i>A</i>Finishing quickly matters most</button><button class="quiz-option" type="button" data-answer="1"><i>B</i>Safety is separate from STEM learning</button><button class="quiz-option" type="button" data-answer="2"><i>C</i>Responsible decisions are part of engineering</button></div><p class="quiz-feedback" data-feedback aria-live="polite"></p>
+        </div>
+
+        <div class="quiz-result" data-quiz-result aria-live="polite"><div class="result-mark" data-result-mark>✓</div><h3 data-result-title>Training checkpoint complete</h3><p data-result-copy>You passed the public learning demo. A real kit-specific checkpoint, if introduced, would be issued only through TEL’s controlled institution flow—not on this public page.</p><button class="button button-ghost" type="button" data-quiz-restart>Try again</button></div>
+      </div>
+      <p class="legal-note reveal">This page is an educational preview. It does not replace the institution’s risk assessment, applicable rules, trained adult supervision, manufacturer guidance or local authority requirements.</p>
+    </section>
+
+    <section class="section shell">
+      <div class="section-heading reveal"><div><p class="eyebrow"><span></span> For institutions</p><h2>A shared responsibility.</h2></div><p>TEL discusses roles and safeguards directly with each institution before any programme is agreed.</p></div>
+      <div class="feature-list reveal"><div><span>Institution</span><strong>Approval and supervision</strong><p>The institution appoints the responsible adult and confirms its own permissions, policies and environment.</p></div><div><span>TEL</span><strong>Clear learning design</strong><p>TEL provides the agreed educational pathway and communicates the intended boundaries of participation.</p></div><div><span>Educator</span><strong>Control and judgement</strong><p>The appointed adult retains practical control and stops or postpones whenever conditions are not suitable.</p></div><div><span>Student</span><strong>Learning and responsibility</strong><p>Students complete the required preparation, follow instructions and ask whenever something is unclear.</p></div></div>
+    </section>
+
+    <section class="section shell final-cta reveal"><div><p class="eyebrow"><span></span> Institution planning</p><h2>Discuss a responsible TEL learning pathway.</h2></div><a class="button button-light" href="contact.html?topic=institution">Contact TEL <span>↗</span></a></section>
+  </main>
+  <footer class="site-footer shell"><div class="footer-main"><a class="brand footer-brand" href="index.html"><span class="brand-mark"><i></i></span><span><strong>TEL</strong><small>Tech for Easy Life</small></span></a><p>Making meaningful technology<br>more accessible.</p><a class="footer-email" href="mailto:techforeasylife.sales@gmail.com">techforeasylife.sales@gmail.com</a></div><div class="footer-links"><div><span>Explore</span><a href="product.html">Product</a><a href="schools.html">For schools</a><a href="safety.html">Safety</a></div><div><span>Company</span><a href="about.html">About</a><a href="careers.html">Careers</a><a href="contact.html">Contact</a></div><div><span>Social</span><a href="https://www.instagram.com/techforeasylife.in/" target="_blank" rel="noreferrer">Instagram ↗</a></div></div><div class="footer-bottom"><span>© <span data-year></span> TEL — Tech for Easy Life</span><span>Built for a more accessible future.</span></div></footer>
+</body>
+</html>

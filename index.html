@@ -1,194 +1,182 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Tech for Easy Life creates structured, hands-on model rocketry experiences for schools and student innovators.">
+  <title>TEL — Technology, made accessible</title>
+  <meta name="description" content="TEL — Tech for Easy Life makes meaningful technology and STEM learning more accessible to students and institutions.">
   <meta name="theme-color" content="#050505">
-  <meta property="og:title" content="Tech for Easy Life | Student Aerospace, Made Practical">
-  <meta property="og:description" content="TEL Rocket Kits bring guided aerospace learning from textbooks to the launch field.">
-  <title>Tech for Easy Life | Student Aerospace, Made Practical</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
-<body>
-  <div class="grain" aria-hidden="true"></div>
+<body data-page="home">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="space-scene" aria-hidden="true">
+    <div class="stars stars-a"></div><div class="stars stars-b"></div>
+    <div class="nebula nebula-one"></div><div class="nebula nebula-two"></div>
+    <div class="moon moon-home"><span></span></div>
+    <div class="orbit orbit-one"><i></i></div><div class="orbit orbit-two"><i></i></div>
+  </div>
 
-  <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="Tech for Easy Life home">
-      <span class="brand-mark">T</span>
-      <span>TECH FOR EASY LIFE</span>
+  <header class="site-header" data-header>
+    <a class="brand" href="index.html" aria-label="TEL home">
+      <span class="brand-mark" aria-hidden="true"><i></i></span>
+      <span><strong>TEL</strong><small>Tech for Easy Life</small></span>
     </a>
-    <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav">
-      <span></span><span></span>
-      <span class="sr-only">Open menu</span>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span></span><span></span><span class="sr-only">Open navigation</span>
     </button>
-    <nav id="site-nav">
-      <a href="#kit">The Kit</a>
-      <a href="#schools">For Schools</a>
-      <a href="#journey">Our Journey</a>
-      <a href="#safety">Safety</a>
-      <a class="nav-cta" href="#contact">Request a Demo</a>
+    <nav class="site-nav" id="site-nav" aria-label="Main navigation" data-nav>
+      <a href="index.html">Home</a>
+      <a href="product.html">Product</a>
+      <a href="schools.html">For schools</a>
+      <a href="safety.html">Safety</a>
+      <a href="careers.html">Careers</a>
+      <a href="about.html">About</a>
+      <a class="nav-cta" href="contact.html">Contact <span>↗</span></a>
     </nav>
   </header>
 
-  <main>
-    <section class="hero">
+  <main id="main">
+    <section class="hero home-hero shell">
       <div class="hero-copy reveal">
-        <p class="eyebrow"><span></span> Student-built aerospace learning</p>
-        <h1>Don’t just teach<br><em>the sky.</em><br>Launch into it.</h1>
-        <p class="hero-lede">TEL turns classroom physics into a structured model-rocketry experience—built for students, educators and institutions ready to learn by doing.</p>
+        <p class="eyebrow"><span></span> Technology, closer to everyone</p>
+        <h1>Build curiosity.<br><em>Open the future.</em></h1>
+        <p class="hero-lede">TEL creates thoughtful technology experiences that make complex ideas feel tangible, engaging and accessible—starting with STEM learning for schools.</p>
         <div class="button-row">
-          <a class="button button-light" href="#contact">Request a school demo <span>↗</span></a>
-          <a class="text-link" href="#kit">Explore the rocket kit <span>↓</span></a>
+          <a class="button button-primary" href="product.html">Explore our current project <span>↗</span></a>
+          <a class="button button-ghost" href="schools.html">For institutions</a>
         </div>
-        <div class="hero-stats">
-          <div><strong>150–300 ft</strong><span>Target flight range*</span></div>
-          <div><strong>₹1.1L+</strong><span>Support raised since launch</span></div>
-          <div><strong>2022</strong><span>Our journey began</span></div>
-        </div>
+        <div class="hero-note"><span class="pulse-dot"></span> Building two projects. Revealing one.</div>
       </div>
 
-      <div class="hero-visual reveal" aria-label="Illustration of TEL model rocket">
-        <div class="orbit orbit-one"></div>
-        <div class="orbit orbit-two"></div>
-        <div class="coordinate c-one">26.1445° N</div>
-        <div class="coordinate c-two">91.7362° E</div>
-        <svg class="rocket" viewBox="0 0 240 620" role="img" aria-label="TEL model rocket">
-          <defs>
-            <linearGradient id="body" x1="0" x2="1"><stop stop-color="#d9d9d9"/><stop offset=".5" stop-color="#fff"/><stop offset="1" stop-color="#999"/></linearGradient>
-          </defs>
-          <path d="M120 18C82 58 65 115 65 176h110c0-61-17-118-55-158Z" fill="#f2f2f2" stroke="#222" stroke-width="3"/>
-          <path d="M65 176h110v280H65z" fill="url(#body)" stroke="#222" stroke-width="3"/>
-          <path d="M65 354 18 470v40l47-30Zm110 0 47 116v40l-47-30Z" fill="#111" stroke="#333" stroke-width="3"/>
-          <path d="M96 456h48v58H96z" fill="#181818"/>
-          <path d="m100 514 20 84 20-84Z" fill="#f3f3f3" opacity=".9"/>
-          <circle cx="120" cy="250" r="25" fill="#090909" stroke="#fff" stroke-width="4"/>
-          <path d="M106 250h28M120 236v28" stroke="#fff" stroke-width="3" opacity=".8"/>
-          <text x="120" y="325" text-anchor="middle" fill="#111" font-size="17" font-weight="700" letter-spacing="3">TEL / 01</text>
-        </svg>
-        <div class="spec-tag spec-a"><small>NOSE CONE</small><b>84 mm</b></div>
-        <div class="spec-tag spec-b"><small>A-TYPE MOTOR</small><b>19 × 70 mm</b></div>
-        <div class="flight-chip"><span></span> FLIGHT SYSTEM / READY</div>
+      <div class="hero-stage reveal delay-1" data-tilt data-depth="12">
+        <div class="stage-glow"></div>
+        <div class="glass-orbit orbit-label-one"><span>01</span> STEM learning</div>
+        <div class="glass-orbit orbit-label-two"><span>02</span> Coming soon</div>
+        <img class="hero-product" src="assets/optimized/kit-box.webp" alt="TEL educational model rocket kit presentation box">
+        <div class="stage-caption glass-panel">
+          <span>Current focus</span>
+          <strong>TEL Model Rocket Kit</strong>
+          <small>Institution-led learning experience</small>
+        </div>
       </div>
     </section>
 
-    <section class="marquee" aria-label="TEL mission statement">
-      <div>BUILD <i>✦</i> UNDERSTAND <i>✦</i> LAUNCH <i>✦</i> LEARN <i>✦</i> BUILD <i>✦</i> UNDERSTAND <i>✦</i> LAUNCH <i>✦</i> LEARN</div>
+    <div class="signal-strip" role="region" aria-label="TEL principles">
+      <div><span>ACCESSIBLE BY DESIGN</span><i></i><span>LEARNING THROUGH EXPERIENCE</span><i></i><span>RESPONSIBILITY FIRST</span><i></i><span>BUILT FOR CURIOSITY</span></div>
+    </div>
+
+    <section class="section shell split-section">
+      <div class="section-intro reveal">
+        <p class="eyebrow"><span></span> Our mission</p>
+        <h2>Technology should feel like an invitation, not a barrier.</h2>
+      </div>
+      <div class="mission-copy reveal delay-1">
+        <p class="large-copy">We make technology accessible by turning ambitious ideas into clear, human learning experiences.</p>
+        <p>Our work brings together thoughtful design, real-world STEM and responsible participation. The goal is simple: help more learners understand technology by experiencing it with the right guidance.</p>
+        <a class="text-link" href="about.html">Meet TEL <span>↗</span></a>
+      </div>
     </section>
 
-    <section class="section kit-section" id="kit">
+    <section class="section shell">
       <div class="section-heading reveal">
-        <p class="eyebrow dark"><span></span> The TEL Rocket Kit</p>
-        <h2>A complete learning experience.<br>Not another display model.</h2>
-        <p>Each element is designed to connect construction, flight and reflection—so students understand what makes a rocket work, not merely what one looks like.</p>
+        <div><p class="eyebrow"><span></span> In development</p><h2>Two projects.<br>One clear direction.</h2></div>
+        <p>We share only what is ready to be shared. No inflated promises—just deliberate work toward more accessible technology.</p>
       </div>
-      <div class="kit-grid">
-        <article class="feature-card feature-main reveal">
-          <span class="card-number">01</span>
-          <div class="line-art rocket-mini" aria-hidden="true">↟</div>
-          <h3>Buildable rocket system</h3>
-          <p>A reusable body, precision nose cone, fins and compatible A-type motor form the core flight platform.</p>
+      <div class="project-grid">
+        <article class="project-card project-featured glass-panel reveal" data-tilt>
+          <div class="project-number">Project 01</div>
+          <img src="assets/optimized/rocket-studio.webp" alt="Black TEL model rocket studio render">
+          <div class="project-content">
+            <span class="status-pill"><i></i> Current project</span>
+            <h3>TEL Model Rocket Kit</h3>
+            <p>A guided, institution-led STEM experience designed to turn physics, systems thinking and responsible engineering into something students can see and discuss.</p>
+            <a class="text-link" href="product.html">Discover the project <span>↗</span></a>
+          </div>
         </article>
-        <article class="feature-card reveal">
-          <span class="card-number">02</span>
-          <div class="icon">⌁</div>
-          <h3>Safety-first access</h3>
-          <p>Protective equipment, guided procedures and a quiz-based igniter access system support supervised use.</p>
+        <article class="project-card project-secret glass-panel reveal delay-1">
+          <div class="project-number">Project 02</div>
+          <div class="secret-visual" aria-hidden="true">
+            <div class="mini-moon"></div><div class="secret-orbit"></div><span>?</span>
+          </div>
+          <div class="project-content">
+            <span class="status-pill muted"><i></i> Under development</span>
+            <h3>Coming soon</h3>
+            <p>Our second project stays under wraps while we build it properly. Follow TEL for the reveal.</p>
+            <a class="text-link" href="https://www.instagram.com/techforeasylife.in/" target="_blank" rel="noreferrer">Follow the journey <span>↗</span></a>
+          </div>
         </article>
-        <article class="feature-card invert reveal">
-          <span class="card-number">03</span>
-          <div class="icon">∑</div>
-          <h3>Physics made visible</h3>
-          <p>Connect force, motion, aerodynamics and measurement to an experience students can observe and discuss.</p>
-        </article>
-        <article class="feature-card reveal">
-          <span class="card-number">04</span>
-          <div class="icon">◎</div>
-          <h3>Guided learning loop</h3>
-          <p>Prepare, assemble, check, launch and reflect through a clear educator-supported sequence.</p>
-        </article>
-      </div>
-      <p class="fine-print">*Flight range is an estimate and varies with build quality, weather, launch conditions and configuration. Launches require responsible adult supervision and an appropriate open area.</p>
-    </section>
-
-    <section class="section school-section" id="schools">
-      <div class="school-copy reveal">
-        <p class="eyebrow"><span></span> Made for institutions</p>
-        <h2>Bring aerospace out of the chapter and into the campus.</h2>
-        <p>TEL supports schools looking to introduce meaningful, hands-on STEM activities without building an entire aerospace programme from zero.</p>
-        <ul class="check-list">
-          <li><span>01</span> Structured kit demonstration and orientation</li>
-          <li><span>02</span> Classroom-linked concepts and student Q&amp;A</li>
-          <li><span>03</span> Supervised build and launch pathway</li>
-          <li><span>04</span> Institutional quantities and implementation support</li>
-        </ul>
-        <a class="button button-light" href="#contact">Discuss a school partnership <span>↗</span></a>
-      </div>
-      <div class="pricing-panel reveal">
-        <p class="panel-label">INSTITUTIONAL PRICING</p>
-        <div class="price-row"><span>10+ kits</span><strong>₹1,899<small>/kit</small></strong></div>
-        <div class="price-row featured"><span>20+ kits</span><strong>₹1,699<small>/kit</small></strong><b>POPULAR</b></div>
-        <div class="price-row"><span>30+ kits</span><strong>₹1,499<small>/kit</small></strong></div>
-        <p>Final scope may vary with delivery location, programme requirements and customisation. Contact TEL for a formal institutional quotation.</p>
       </div>
     </section>
 
-    <section class="section journey-section" id="journey">
-      <div class="section-heading reveal">
-        <p class="eyebrow dark"><span></span> Built through iteration</p>
-        <h2>From a student idea<br>to a launch-ready platform.</h2>
-      </div>
-      <div class="timeline">
-        <article class="reveal"><time>2022</time><h3>The first build</h3><p>TEL began with a student-built smart-home project and one question: how can technology become easier to experience?</p></article>
-        <article class="reveal"><time>2023</time><h3>Looking upward</h3><p>The team moved into model rocketry. Iteration turned the second rocket into TEL’s first successful flight.</p></article>
-        <article class="reveal"><time>2024</time><h3>External belief</h3><p>₹50,000 in seed support at Orahi, Delhi helped TEL move from experimentation towards a structured product.</p></article>
-        <article class="reveal"><time>2025–26</time><h3>Built for classrooms</h3><p>Further institutional backing supported the current educational kit, safety pathway and school-focused model.</p></article>
-      </div>
-    </section>
-
-    <section class="section safety-section" id="safety">
-      <div class="safety-mark reveal">SAFE<br>BY<br>DESIGN<span>®</span></div>
-      <div class="safety-copy reveal">
-        <p class="eyebrow dark"><span></span> Responsibility before ignition</p>
-        <h2>Excitement should never replace procedure.</h2>
-        <p>Model rocketry is an outdoor, supervised learning activity. TEL’s approach places preparation, protective equipment, clear boundaries and educator control before every launch.</p>
-        <div class="safety-grid">
-          <div><b>01</b><span>Adult-led supervision</span></div>
-          <div><b>02</b><span>Open-area launch checks</span></div>
-          <div><b>03</b><span>Protective equipment</span></div>
-          <div><b>04</b><span>Controlled ignition access</span></div>
+    <section class="section shell">
+      <div class="pathway glass-panel reveal">
+        <div class="pathway-visual" aria-hidden="true"><span></span><i></i><b></b></div>
+        <div class="pathway-copy">
+          <p class="eyebrow"><span></span> Choose your path</p>
+          <h2>Bring hands-on STEM into your learning environment.</h2>
+          <p>Institutions can speak with TEL about a guided implementation. Individual access is being prepared and is not available yet.</p>
+          <div class="pathway-actions">
+            <a class="path-card" href="schools.html#institutions"><span>For institutions</span><strong>Plan with TEL</strong><i>Available for enquiries ↗</i></a>
+            <a class="path-card disabled" href="schools.html#individuals"><span>For individuals</span><strong>Coming soon</strong><i>Get the latest updates →</i></a>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="contact-section" id="contact">
-      <div class="contact-copy reveal">
+    <section class="section shell safety-teaser">
+      <div class="safety-console glass-panel reveal">
+        <div class="console-top"><span></span><span></span><span></span><small>SAFEFLIGHT // LEARNING SYSTEM</small></div>
+        <div class="console-grid">
+          <div><i class="console-check">✓</i><span>Adult-led participation</span></div>
+          <div><i class="console-check">✓</i><span>Readiness learning</span></div>
+          <div><i class="console-check">✓</i><span>Knowledge check</span></div>
+          <div><i class="console-check">✓</i><span>Responsible decisions</span></div>
+        </div>
+      </div>
+      <div class="safety-copy reveal delay-1">
+        <p class="eyebrow"><span></span> Responsible by design</p>
+        <h2>Safety is part of the learning.</h2>
+        <p>SAFEFLIGHT is TEL’s developing safety-learning layer: a clear, age-appropriate path designed around adult supervision, preparation and informed choices.</p>
+        <a class="button button-ghost" href="safety.html">Try the safety demo <span>↗</span></a>
+      </div>
+    </section>
+
+    <section class="section shell team-teaser reveal">
+      <div class="team-banner">
+        <img src="assets/optimized/team-banner.webp" alt="Abstract TEL Team space artwork">
+        <div class="team-banner-overlay"></div>
+      </div>
+      <div class="team-teaser-content">
+        <p class="eyebrow"><span></span> The people behind TEL</p>
+        <h2>Small team.<br>Serious intent.</h2>
+        <p>TEL is led by co-founders Harsh Das and Devangi Das—working across vision, operations and the details that turn ideas into experiences.</p>
+        <a class="text-link" href="about.html#team">Meet the founders <span>↗</span></a>
+      </div>
+    </section>
+
+    <section class="section shell final-cta reveal">
+      <div>
         <p class="eyebrow"><span></span> Start a conversation</p>
-        <h2>Ready to bring<br>aerospace to your students?</h2>
-        <p>Tell us about your institution, expected student group and preferred implementation. The TEL team will respond with the appropriate next step.</p>
+        <h2>Want to explore TEL for your institution?</h2>
       </div>
-      <div class="contact-actions reveal">
-        <a class="contact-card" href="mailto:contact@techforeasylife.in?subject=School%20Rocket%20Kit%20Enquiry">
-          <span>Email enquiry</span><b>contact@techforeasylife.in</b><i>↗</i>
-        </a>
-        <a class="contact-card" href="https://wa.me/?text=Hello%20TEL%2C%20I%27d%20like%20to%20discuss%20your%20school%20rocket%20kit." target="_blank" rel="noopener">
-          <span>WhatsApp enquiry</span><b>Start a conversation</b><i>↗</i>
-        </a>
-        <p class="contact-note">Replace the temporary contact links with TEL’s official email and WhatsApp number before the final domain switch.</p>
-      </div>
+      <a class="button button-light" href="contact.html">Contact TEL <span>↗</span></a>
     </section>
   </main>
 
-  <footer>
-    <a class="brand" href="#top"><span class="brand-mark">T</span><span>TECH FOR EASY LIFE</span></a>
-    <p>Student-built technology for practical learning.<br>Guwahati, Assam, India.</p>
-    <div><a href="#kit">Rocket Kit</a><a href="#schools">Schools</a><a href="#safety">Safety</a></div>
-    <small>© <span id="year"></span> Tech for Easy Life. All rights reserved.</small>
+  <footer class="site-footer shell">
+    <div class="footer-main">
+      <a class="brand footer-brand" href="index.html"><span class="brand-mark"><i></i></span><span><strong>TEL</strong><small>Tech for Easy Life</small></span></a>
+      <p>Making meaningful technology<br>more accessible.</p>
+      <a class="footer-email" href="mailto:techforeasylife.sales@gmail.com">techforeasylife.sales@gmail.com</a>
+    </div>
+    <div class="footer-links"><div><span>Explore</span><a href="product.html">Product</a><a href="schools.html">For schools</a><a href="safety.html">Safety</a></div><div><span>Company</span><a href="about.html">About</a><a href="careers.html">Careers</a><a href="contact.html">Contact</a></div><div><span>Social</span><a href="https://www.instagram.com/techforeasylife.in/" target="_blank" rel="noreferrer">Instagram ↗</a></div></div>
+    <div class="footer-bottom"><span>© <span data-year></span> TEL — Tech for Easy Life</span><span>Built for a more accessible future.</span></div>
   </footer>
-
-  <script src="script.js"></script>
 </body>
 </html>
