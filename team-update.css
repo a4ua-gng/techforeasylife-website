@@ -1,0 +1,77 @@
+/* TEL team section update — loaded after styles.css */
+
+#team .section-heading {
+  align-items: end;
+}
+
+#team .team-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+#team .founder-card.with-photo {
+  min-height: 650px;
+}
+
+#team .founder-photo {
+  height: 380px;
+}
+
+#team .founder-card.with-photo .founder-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-bottom: 34px;
+}
+
+#team .founder-info h3 {
+  margin-bottom: 10px;
+}
+
+#team .founder-info .role {
+  min-height: 2.6em;
+  margin-top: 0;
+  color: #ffffff;
+  line-height: 1.45;
+}
+
+#team .team-quote {
+  margin: auto 0 0;
+  padding-top: 22px;
+  color: #d4d4dc;
+  border-top: 1px solid rgba(255, 255, 255, .11);
+  font: 500 clamp(1rem, 1.45vw, 1.22rem)/1.55 var(--font-display);
+  letter-spacing: -.015em;
+}
+
+#team .founder-index {
+  max-width: calc(100% - 40px);
+  white-space: normal;
+  line-height: 1.25;
+}
+
+#team .team-photo-humaira {
+  object-position: center 42%;
+}
+
+#team .team-photo-maverick {
+  object-position: center 35%;
+}
+
+@media (max-width: 760px) {
+  #team .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #team .founder-card.with-photo {
+    min-height: 620px;
+  }
+
+  #team .founder-photo {
+    height: 350px;
+  }
+
+  #team .founder-info .role {
+    min-height: 0;
+  }
+}
