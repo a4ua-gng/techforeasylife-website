@@ -266,9 +266,9 @@ p { color: var(--muted); }
 .hero-product-label span { display: block; margin-bottom: 5px; color: var(--violet); font-size: .58rem; letter-spacing: .12em; }
 .hero-product-label strong { font: 500 .82rem/1.2 var(--font-display); }
 
-.signal-strip { overflow: hidden; padding: 14px 0; border-block: 1px solid var(--line); background: rgba(255,255,255,.02); transform: rotate(-1deg) scale(1.02); }
-.signal-strip div { width: max-content; display: flex; align-items: center; gap: 30px; animation: marquee 30s linear infinite; }
-.signal-strip span { color: #898994; font-size: .64rem; letter-spacing: .2em; }
+.signal-strip { overflow: hidden; padding: 0; border-block: 1px solid var(--line); background: rgba(255,255,255,.02); }
+.signal-strip div { width: min(1320px, calc(100% - 40px)); min-height: 58px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: clamp(16px, 2.5vw, 38px); }
+.signal-strip span { color: #898994; font-size: .64rem; letter-spacing: .2em; white-space: nowrap; }
 .signal-strip i { width: 5px; height: 5px; border-radius: 50%; background: var(--violet); box-shadow: 0 0 12px var(--violet); }
 .quick-start { margin-top: 70px; padding: 28px; display: grid; grid-template-columns: .65fr 1.35fr; align-items: center; gap: 30px; border: 1px solid var(--line); border-radius: 24px; background: rgba(255,255,255,.025); backdrop-filter: blur(18px); }
 .quick-start-label h2 { margin: 0; max-width: 310px; font-size: clamp(1.7rem, 3vw, 2.7rem); }
@@ -724,7 +724,10 @@ p { color: var(--muted); }
   .hero-product { width: 110%; max-width: none; }
   .glass-orbit { display: none; }
   .stage-caption { right: 0; bottom: 2%; min-width: 210px; }
-  .signal-strip { transform: rotate(-2deg) scale(1.04); }
+  .signal-strip { padding: 14px 0; }
+  .signal-strip div { width: calc(100% - 28px); min-height: 0; flex-wrap: wrap; justify-content: center; gap: 11px 20px; }
+  .signal-strip span { font-size: .57rem; letter-spacing: .13em; }
+  .signal-strip i { display: none; }
   .project-card { min-height: 500px; }
   .project-content { padding: 24px; }
   .project-featured > img { height: 55%; }
