@@ -2,6 +2,14 @@
 
 document.documentElement.classList.add("js");
 
+/* Load the patch stylesheet on every page, including pages not replaced in this ZIP. */
+if (!document.querySelector('link[href="site-fixes.css"]')) {
+  const siteFixes = document.createElement("link");
+  siteFixes.rel = "stylesheet";
+  siteFixes.href = "site-fixes.css";
+  document.head.append(siteFixes);
+}
+
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const header = document.querySelector("[data-header]");
 const nav = document.querySelector("[data-nav]");
