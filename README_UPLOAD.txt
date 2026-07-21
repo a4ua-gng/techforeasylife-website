@@ -1,32 +1,22 @@
-TEL WEBSITE — FINAL VERIFIED SCHOOLS UPDATE (CORRECT PHYSICS DIAGRAM + BETTER IMAGE QUALITY)
+TEL WEBSITE — COMBINED V6 (SCHOOLS + PRODUCT SECTION REFINEMENT)
 
 Upload ALL files from this ZIP directly to the ROOT of your GitHub repository.
 Replace files when GitHub asks.
 
 FILES INCLUDED
 - schools.html
-- school-page-fixes-v4.css
-- school-hero-kit-2026c.webp
-- school-card-physics-diagram-2026c.webp
-- school-card-atl-lab-2026c.webp
-- school-card-stem-club-2026c.webp
-- school-card-event-fair-2026c.webp
-- school-card-teacher-demo-2026c.webp
-- kit-box.webp
-- tel-kit-cutout.webp
+- school-page-fixes-v6.css
+- site-fixes.css
+- school-hero-kit-2026f.webp
+- school-card-physics-syllabus-2026f.webp
+- school-card-atl-lab-2026f.webp
+- school-card-stem-club-2026f.webp
+- school-card-event-fair-2026f.webp
+- school-card-teacher-demo-2026f.webp
 
-WHAT THIS FIXES
-1. Physics extension now uses the exact rocket diagram image you provided most recently.
-2. School card images were re-exported at higher quality.
-3. Fresh versioned filenames help prevent old cached school images from showing.
-4. Home and Product stay restored with separate kit-box and rocket images.
-5. Schools page desktop and mobile UI structure stays the same as the verified build.
-
-IMAGE MAPPING
-- Physics extension: exact rocket system diagram (latest upload)
-- ATL / innovation lab: robotics lab students
-- STEM / science club: students collaborating
-- Event: science fair / exhibition
-- Teacher-supported demonstration: teacher-led classroom
-
-After deployment, hard refresh or clear the website cache once.
+WHAT THIS VERSION DOES
+1. Keeps the latest Schools page fixes and mappings.
+2. Physics card uses your exact NCERT-syllabus image.
+3. Adds an updated site-fixes.css to improve the Product hero/experience section on desktop and mobile.
+4. Product section gets cleaner spacing, stronger headline layout, better image framing and safer mobile stacking.
+5. This ZIP does NOT include kit-box.webp or tel-kit-cutout.webp.
