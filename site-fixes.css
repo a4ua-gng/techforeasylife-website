@@ -1,4 +1,4 @@
-/* TEL website: navigation, careers, schools and responsive fixes */
+/* TEL website: navigation, careers and responsive fixes */
 
 .site-nav {
   min-width: 0;
@@ -25,23 +25,10 @@ section,
 .team-teaser-content,
 .careers-board,
 .career-row,
-.application-panel,
-.benefit-grid,
-.implementation-grid,
-.programme-gallery {
+.application-panel {
   min-width: 0;
 }
 
-.button-cta-xl {
-  min-height: 68px;
-  padding: 0 30px;
-  border-radius: 18px;
-  font-size: 1rem;
-  font-weight: 700;
-  gap: 14px;
-}
-
-/* Careers */
 .application-panel-wrap {
   padding-top: 30px;
 }
@@ -80,333 +67,6 @@ section,
   overflow: hidden;
 }
 
-/* Schools page refinements */
-.schools-hero-art {
-  min-height: 470px;
-  display: grid;
-  align-items: center;
-}
-
-.schools-hero-panel {
-  position: relative;
-  min-height: 470px;
-  border-radius: 32px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 75% 18%, rgba(185,163,255,.18), transparent 32%),
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
-    #07070a;
-}
-
-.schools-hero-panel::before {
-  content: "";
-  position: absolute;
-  inset: 10% 10% auto auto;
-  width: 310px;
-  height: 310px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,.08);
-  box-shadow: 0 0 100px rgba(185,163,255,.12);
-}
-
-.schools-hero-panel::after {
-  content: "";
-  position: absolute;
-  right: -10%;
-  top: 10%;
-  width: 85%;
-  height: 36%;
-  border: 1px solid rgba(255,255,255,.09);
-  border-radius: 50%;
-  transform: rotate(-24deg);
-}
-
-.schools-hero-box {
-  position: absolute;
-  width: min(68%, 390px);
-  left: 6%;
-  top: 16%;
-  filter: drop-shadow(0 28px 45px rgba(0,0,0,.55));
-}
-
-.schools-hero-rocket {
-  position: absolute;
-  width: min(86%, 520px);
-  right: -3%;
-  bottom: 6%;
-  transform: rotate(-10deg);
-  filter: drop-shadow(0 26px 45px rgba(0,0,0,.7));
-}
-
-.schools-hero-tag {
-  position: absolute;
-  left: 6%;
-  bottom: 7%;
-  max-width: 245px;
-  padding: 16px 18px;
-  border-radius: 18px;
-  background: rgba(10,10,14,.8);
-  border: 1px solid rgba(255,255,255,.1);
-  backdrop-filter: blur(14px);
-}
-
-.schools-hero-tag span {
-  display: block;
-  margin-bottom: 8px;
-  color: #cfc2ff;
-  font-size: .62rem;
-  letter-spacing: .13em;
-  text-transform: uppercase;
-}
-
-.schools-hero-tag strong {
-  font: 500 1rem/1.35 var(--font-display);
-}
-
-.benefit-grid-refined {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.benefit-grid-refined .benefit-card,
-.feature-photo-card {
-  position: relative;
-  min-height: 450px;
-  padding: 24px 24px 30px;
-  border-radius: 28px;
-  border: 1px solid rgba(255,255,255,.11);
-  background:
-    radial-gradient(circle at 84% 18%, rgba(185,163,255,.13), transparent 30%),
-    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)),
-    rgba(7,7,10,.92);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.benefit-grid-refined .card-index {
-  color: #cfc2ff;
-  font: 600 .68rem/1 var(--font-display);
-  letter-spacing: .12em;
-}
-
-.benefit-grid-refined .card-visual {
-  min-height: 165px;
-  margin: 18px 0 20px;
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,.08);
-  background-color: #0c0c10;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  box-shadow: inset 0 1px rgba(255,255,255,.05);
-}
-
-.visual-observe {
-  background-image:
-    radial-gradient(circle at 20% 24%, rgba(255,255,255,.12) 0 10px, transparent 11px),
-    linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.01)),
-    url('tel-kit-cutout.webp');
-  background-size: auto, auto, 94%;
-  background-position: 20px 20px, center, center;
-}
-
-.visual-participation {
-  background-image:
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
-    url('kit-box.webp');
-  background-size: auto, 88%;
-  background-position: center, center;
-}
-
-.visual-existing,
-.visual-responsible,
-.visual-memory,
-.visual-partnership {
-  position: relative;
-  overflow: hidden;
-}
-
-.visual-existing {
-  background-image:
-    linear-gradient(135deg, rgba(255,255,255,.05), rgba(255,255,255,.01)),
-    radial-gradient(circle at 72% 22%, rgba(185,163,255,.16), transparent 26%);
-}
-
-.visual-existing::before,
-.visual-responsible::before,
-.visual-memory::before,
-.visual-partnership::before {
-  content: "";
-  position: absolute;
-  inset: 18px;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.08);
-}
-
-.visual-existing::after {
-  content: "PHY • ATL • CLUB";
-  position: absolute;
-  left: 24px;
-  bottom: 22px;
-  color: #f5f5fb;
-  font: 600 .82rem/1 var(--font-display);
-  letter-spacing: .14em;
-}
-
-.visual-responsible {
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(131,247,173,.14), transparent 18%),
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-}
-
-.visual-responsible::after {
-  content: "✓ supervised\A✓ guided\A✓ reflective";
-  white-space: pre;
-  position: absolute;
-  left: 24px;
-  bottom: 18px;
-  color: #e8fdee;
-  font: 500 .95rem/1.55 var(--font-display);
-}
-
-.visual-memory {
-  background-image:
-    radial-gradient(circle at 50% 30%, rgba(185,163,255,.2), transparent 26%),
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-}
-
-.visual-memory::after {
-  content: "STEM\Athat sticks";
-  white-space: pre;
-  position: absolute;
-  left: 24px;
-  bottom: 18px;
-  color: #fff;
-  font: 500 1.1rem/1.05 var(--font-display);
-}
-
-.visual-partnership {
-  background-image:
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-}
-
-.visual-partnership::after {
-  content: "TEL × School";
-  position: absolute;
-  left: 24px;
-  bottom: 22px;
-  color: #fff;
-  font: 600 1rem/1 var(--font-display);
-  letter-spacing: .08em;
-}
-
-.benefit-grid-refined h3 {
-  margin-bottom: 14px;
-  font-size: clamp(1.9rem, 2.5vw, 2.4rem);
-  line-height: 1;
-}
-
-.benefit-grid-refined p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 1rem;
-}
-
-.programme-gallery-refined {
-  display: grid;
-  grid-template-columns: 1.2fr .8fr;
-  gap: 18px;
-}
-
-.programme-gallery-refined .programme-photo {
-  position: relative;
-  min-height: 320px;
-  overflow: hidden;
-  border-radius: 28px;
-  border: 1px solid rgba(255,255,255,.1);
-  background: #09090d;
-}
-
-.programme-gallery-refined .programme-photo-main {
-  grid-row: span 2;
-  min-height: 660px;
-}
-
-.live-photo-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: .7;
-}
-
-.programme-gallery-refined .programme-photo:nth-child(3) img {
-  object-fit: contain;
-  padding: 18px;
-  background: radial-gradient(circle at 70% 24%, rgba(185,163,255,.12), transparent 30%), #07070a;
-}
-
-.programme-caption {
-  position: absolute;
-  inset: auto 0 0;
-  padding: 28px 24px 26px;
-  background: linear-gradient(0deg, rgba(5,5,7,.96), rgba(5,5,7,.74) 65%, transparent);
-}
-
-.programme-caption span {
-  display: inline-block;
-  margin-bottom: 10px;
-  color: #cfc2ff;
-  font-size: .68rem;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-
-.programme-caption strong {
-  display: block;
-  margin-bottom: 8px;
-  font: 500 1.6rem/1.05 var(--font-display);
-}
-
-.programme-caption p {
-  margin: 0;
-}
-
-.implementation-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.implementation-card {
-  min-height: 215px;
-  padding: 28px 26px;
-  border-radius: 26px;
-  background:
-    radial-gradient(circle at 84% 18%, rgba(185,163,255,.1), transparent 28%),
-    linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.015));
-}
-
-.implementation-card span {
-  display: block;
-  margin-bottom: 16px;
-  color: #cfc2ff;
-  font-size: .72rem;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-
-.implementation-card h3 {
-  margin-bottom: 12px;
-  font-size: clamp(2rem, 2.5vw, 2.5rem);
-  line-height: .98;
-}
-
-.implementation-card p {
-  margin: 0;
-}
-
 @media (max-width: 1100px) and (min-width: 821px) {
   .site-header {
     padding-inline: 18px;
@@ -422,21 +82,6 @@ section,
 
   .site-nav .nav-cta {
     padding: 9px 12px;
-  }
-}
-
-@media (max-width: 1050px) {
-  .benefit-grid-refined {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .programme-gallery-refined {
-    grid-template-columns: 1fr;
-  }
-
-  .programme-gallery-refined .programme-photo-main {
-    grid-row: auto;
-    min-height: 520px;
   }
 }
 
@@ -520,28 +165,6 @@ section,
     grid-template-columns: 1fr;
     gap: 28px;
   }
-
-  .schools-hero-art,
-  .schools-hero-panel {
-    min-height: 400px;
-  }
-
-  .schools-hero-box {
-    width: min(72%, 330px);
-  }
-
-  .schools-hero-rocket {
-    width: min(88%, 440px);
-  }
-
-  .benefit-grid-refined,
-  .implementation-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .benefit-grid-refined .benefit-card {
-    min-height: 0;
-  }
 }
 
 @media (max-width: 600px) {
@@ -549,17 +172,8 @@ section,
     display: none;
   }
 
-  .button-row .button,
-  .button-cta-xl,
-  .application-checklist .button {
+  .button-row .button {
     width: 100%;
-  }
-
-  .button-cta-xl {
-    min-height: 62px;
-    padding-inline: 20px;
-    border-radius: 16px;
-    font-size: .95rem;
   }
 
   .project-featured > .project-product-cutout {
@@ -596,58 +210,7 @@ section,
     border-radius: 22px;
   }
 
-  .schools-hero-art,
-  .schools-hero-panel {
-    min-height: 340px;
-  }
-
-  .schools-hero-box {
-    width: 76%;
-    left: 4%;
-    top: 12%;
-  }
-
-  .schools-hero-rocket {
+  .application-checklist .button {
     width: 100%;
-    right: -11%;
-    bottom: 2%;
-  }
-
-  .schools-hero-tag {
-    left: 4%;
-    right: 4%;
-    bottom: 4%;
-    max-width: none;
-    padding: 14px 15px;
-  }
-
-  .benefit-grid-refined .benefit-card,
-  .implementation-card {
-    padding: 22px 20px 24px;
-    border-radius: 22px;
-  }
-
-  .benefit-grid-refined .card-visual {
-    min-height: 140px;
-    margin: 16px 0 18px;
-    border-radius: 18px;
-  }
-
-  .benefit-grid-refined h3,
-  .implementation-card h3 {
-    font-size: clamp(1.9rem, 9vw, 2.3rem);
-  }
-
-  .programme-gallery-refined .programme-photo-main {
-    min-height: 420px;
-  }
-
-  .programme-gallery-refined .programme-photo {
-    min-height: 280px;
-    border-radius: 22px;
-  }
-
-  .programme-caption {
-    padding: 24px 18px 22px;
   }
 }
