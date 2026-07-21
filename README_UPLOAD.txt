@@ -21,6 +21,7 @@ HOW TO UPLOAD
 8. Hard-refresh the website after deployment (Ctrl+Shift+R on Windows).
 
 FILES INCLUDED
+- schools.html (restored earlier version with the original picture layout)
 - index.html
 - about.html
 - careers.html
@@ -28,3 +29,7 @@ FILES INCLUDED
 - site-fixes.css
 
 The updated script loads site-fixes.css on every existing page, so Careers appears in the desktop navigation and the mobile fixes apply site-wide without replacing every HTML page.
+
+SCHOOLS PAGE RESTORATION
+- Restored the oldest school-page layout from before the stock classroom/lab/workshop image cards were added.
+- Restored the original three TEL learning-environment pictures only: tel-classroom.webp, tel-field-wide.webp and tel-field-detail.webp.
