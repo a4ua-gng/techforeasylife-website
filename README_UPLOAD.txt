@@ -1,22 +1,29 @@
-TEL WEBSITE — COMBINED V6 (SCHOOLS + PRODUCT SECTION REFINEMENT)
+TEL WEBSITE — SAFEFLIGHT + PLAY LAB UPDATE (22 JULY 2026)
 
-Upload ALL files from this ZIP directly to the ROOT of your GitHub repository.
-Replace files when GitHub asks.
+Upload ALL extracted files from this ZIP directly to the ROOT of the
+techforeasylife-website GitHub repository. Replace files when GitHub asks.
+Do not upload the ZIP itself.
 
-FILES INCLUDED
-- schools.html
-- school-page-fixes-v6.css
-- site-fixes.css
-- school-hero-kit-2026f.webp
-- school-card-physics-syllabus-2026f.webp
-- school-card-atl-lab-2026f.webp
-- school-card-stem-club-2026f.webp
-- school-card-event-fair-2026f.webp
-- school-card-teacher-demo-2026f.webp
+MAIN ADDITIONS
+- safety.html, safeflight-system.css and safeflight-system.js
+  Full supervised SafeFlight learning demonstration, live weather awareness,
+  randomized 100%-pass quiz, non-operational demo lock screen, classroom
+  countdown, downloadable PDF learning certificate, altitude calculator and
+  secure teacher-panel concept.
+- play.html, play-lab.css and play-lab.js
+  TEL Play Lab with the Assembly Bay visual puzzle and Skyway Sprint arcade game.
+- Careers is visible again in the desktop navigation and has a new homepage card.
+- The earlier visual refresh, Contact contrast fixes and Tanishka Dhatrak team
+  addition remain included.
 
-WHAT THIS VERSION DOES
-1. Keeps the latest Schools page fixes and mappings.
-2. Physics card uses your exact NCERT-syllabus image.
-3. Adds an updated site-fixes.css to improve the Product hero/experience section on desktop and mobile.
-4. Product section gets cleaner spacing, stronger headline layout, better image framing and safer mobile stacking.
-5. This ZIP does NOT include kit-box.webp or tel-kit-cutout.webp.
+IMPORTANT SECURITY NOTE
+The public SafeFlight demonstration intentionally reveals only code 000, which
+must not be assigned to a physical kit. Real kit codes and teacher override
+tokens require authenticated server-side storage; they must never be added to
+public HTML or JavaScript files.
+
+AFTER UPLOAD
+1. Commit the uploaded files to main.
+2. Wait for the GitHub Pages deployment to finish.
+3. Hard-refresh the live website.
+4. Test Safety, Play, Careers, About and Contact on desktop and mobile.

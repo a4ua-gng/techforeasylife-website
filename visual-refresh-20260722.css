@@ -7,6 +7,11 @@ body[data-page] {
   --page-moon-opacity: .24;
 }
 
+[data-page="home"] main,
+[data-page="careers"] main {
+  overflow-x: clip;
+}
+
 body[data-page="product"] {
   --page-accent: 183, 145, 255;
   --page-secondary: 104, 170, 255;
@@ -24,6 +29,13 @@ body[data-page="safety"] {
   --page-secondary: 194, 168, 255;
   --page-glow-position: 76% 54%;
   --page-moon-opacity: .15;
+}
+
+body[data-page="play"] {
+  --page-accent: 203, 188, 255;
+  --page-secondary: 124, 185, 255;
+  --page-glow-position: 82% 32%;
+  --page-moon-opacity: .2;
 }
 
 body[data-page="careers"] {
@@ -91,6 +103,13 @@ body[data-page="safety"] .space-scene::before {
   background: repeating-radial-gradient(ellipse at 76% 52%, transparent 0 74px, rgba(var(--page-secondary), .045) 75px 76px);
 }
 
+body[data-page="play"] .space-scene::before {
+  opacity: .78;
+  background:
+    linear-gradient(122deg, transparent 0 49%, rgba(var(--page-accent),.075) 49.15%, transparent 49.38%),
+    repeating-radial-gradient(ellipse at 82% 34%, transparent 0 68px, rgba(var(--page-secondary),.045) 69px 70px);
+}
+
 body[data-page="careers"] .space-scene::before {
   opacity: .65;
   background:
@@ -122,12 +141,14 @@ body[data-page]:not([data-page="home"]) .moon {
 body[data-page="product"] .moon-home { right: -185px; top: 125px; }
 body[data-page="schools"] .moon-home { right: auto; left: -335px; top: 42%; }
 body[data-page="safety"] .moon-home { right: -285px; top: 37%; }
+body[data-page="play"] .moon-home { right: -230px; top: 22%; }
 body[data-page="careers"] .moon-home { right: -355px; top: 9%; }
 body[data-page="about"] .moon-home { right: -145px; top: 9%; }
 body[data-page="contact"] .moon-home { right: -300px; top: 52%; }
 
 body[data-page="schools"] .orbit-one { right: auto; left: -275px; top: 48%; transform: rotate(19deg); }
 body[data-page="safety"] .orbit-one { right: -305px; top: 44%; transform: rotate(-8deg); }
+body[data-page="play"] .orbit-one { right: auto; left: -245px; top: 58%; transform: rotate(15deg); }
 body[data-page="careers"] .orbit-one { right: auto; left: -270px; top: 64%; transform: rotate(17deg); }
 body[data-page="about"] .orbit-one { right: -225px; top: 265px; transform: rotate(-31deg); }
 body[data-page="contact"] .orbit-one { right: -290px; top: 58%; transform: rotate(12deg); }
@@ -175,6 +196,74 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
   color: #060608;
   -webkit-text-fill-color: #060608;
 }
+
+/* Home discovery cards: restore Careers as a visible destination and introduce Play Lab. */
+.home-discover-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.home-discover-card {
+  min-height: 480px;
+  padding: clamp(30px, 5vw, 58px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgba(19,18,29,.84), rgba(7,7,11,.9));
+  box-shadow: inset 0 1px rgba(255,255,255,.04), 0 28px 85px rgba(0,0,0,.3);
+}
+
+.home-discover-card::before,
+.home-discover-card::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.home-discover-card::before {
+  width: 330px;
+  height: 330px;
+  right: -90px;
+  top: -90px;
+  border: 1px solid rgba(203,188,255,.18);
+  border-radius: 50%;
+  box-shadow: 0 0 90px rgba(203,188,255,.07), inset 0 0 60px rgba(203,188,255,.03);
+}
+
+.home-discover-card::after {
+  width: 9px;
+  height: 9px;
+  right: 18%;
+  top: 16%;
+  background: #cbbcff;
+  border-radius: 50%;
+  box-shadow: 0 0 24px #cbbcff;
+}
+
+.home-discover-card.play-card {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(130,184,255,.12), transparent 37%),
+    linear-gradient(145deg, rgba(17,17,29,.88), rgba(6,6,10,.92));
+}
+
+.home-discover-card.careers-card {
+  background:
+    radial-gradient(circle at 84% 16%, rgba(211,157,255,.13), transparent 38%),
+    linear-gradient(145deg, rgba(22,17,28,.88), rgba(7,6,10,.92));
+}
+
+.home-discover-card > * { position: relative; z-index: 1; }
+.home-discover-card .card-kicker { color: #c9c9d3; font-size: .66rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.home-discover-card h2 { max-width: 480px; margin: auto 0 18px; font-size: clamp(2.5rem, 4.8vw, 4.8rem); }
+.home-discover-card p { max-width: 480px; }
+.home-discover-card .text-link { margin-top: 24px; }
+.home-discover-tags { margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 7px; }
+.home-discover-tags span { padding: 7px 9px; color: #bcbcc7; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.09); border-radius: 999px; font-size: .58rem; letter-spacing: .07em; text-transform: uppercase; }
 
 /* Contact controls: dark in normal, open, focused, and browser-autofilled states. */
 [data-page="contact"] .contact-form {
@@ -262,11 +351,6 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
 }
 
 @media (max-width: 820px) {
-  [data-page="home"] main,
-  [data-page="careers"] main {
-    overflow-x: clip;
-  }
-
   [data-page="contact"] .page-hero-copy {
     width: 100%;
     min-width: 0;
@@ -286,6 +370,14 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
   body[data-page]:not([data-page="home"]) main > .section:not(.final-cta)::before {
     inset: 14px -10px;
     border-radius: 28px;
+  }
+
+  .home-discover-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-discover-card {
+    min-height: 420px;
   }
 
   [data-page="contact"] .contact-form {

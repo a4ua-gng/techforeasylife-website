@@ -65,6 +65,7 @@ const pageFiles = {
   product: "product.html",
   schools: "schools.html",
   safety: "safety.html",
+  play: "play.html",
   careers: "careers.html",
   about: "about.html",
   contact: "contact.html"
