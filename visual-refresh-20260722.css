@@ -1,0 +1,306 @@
+/* TEL visual refresh — page identity, reliable contrast, and dark form controls. */
+
+body[data-page] {
+  --page-accent: 185, 163, 255;
+  --page-secondary: 122, 171, 255;
+  --page-glow-position: 82% 8%;
+  --page-moon-opacity: .24;
+}
+
+body[data-page="product"] {
+  --page-accent: 183, 145, 255;
+  --page-secondary: 104, 170, 255;
+  --page-glow-position: 86% 18%;
+}
+
+body[data-page="schools"] {
+  --page-accent: 137, 167, 255;
+  --page-secondary: 199, 178, 255;
+  --page-glow-position: 18% 42%;
+}
+
+body[data-page="safety"] {
+  --page-accent: 154, 178, 255;
+  --page-secondary: 194, 168, 255;
+  --page-glow-position: 76% 54%;
+  --page-moon-opacity: .15;
+}
+
+body[data-page="careers"] {
+  --page-accent: 211, 157, 255;
+  --page-secondary: 126, 154, 255;
+  --page-glow-position: 16% 18%;
+}
+
+body[data-page="about"] {
+  --page-accent: 191, 165, 255;
+  --page-secondary: 145, 195, 255;
+  --page-glow-position: 76% 22%;
+}
+
+body[data-page="contact"] {
+  --page-accent: 167, 143, 255;
+  --page-secondary: 113, 202, 255;
+  --page-glow-position: 82% 68%;
+}
+
+body[data-page]:not([data-page="home"]) .space-scene {
+  background:
+    radial-gradient(circle at var(--page-glow-position), rgba(var(--page-accent), .18), transparent 37%),
+    radial-gradient(circle at 12% 86%, rgba(var(--page-secondary), .08), transparent 33%),
+    linear-gradient(180deg, #050506 0%, #06060a 52%, #08070d 100%);
+}
+
+body[data-page]:not([data-page="home"]) .space-scene::before,
+body[data-page]:not([data-page="home"]) .space-scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+body[data-page]:not([data-page="home"]) .space-scene::after {
+  opacity: .42;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.7) 0 1px, transparent 1.35px),
+    radial-gradient(circle, rgba(var(--page-secondary),.8) 0 .7px, transparent 1.05px);
+  background-position: 14px 32px, 93px 58px;
+  background-size: 235px 235px, 151px 151px;
+  mask-image: linear-gradient(180deg, #000, transparent 92%);
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 92%);
+}
+
+body[data-page="product"] .space-scene::before {
+  background: repeating-radial-gradient(circle at 91% 19%, transparent 0 92px, rgba(var(--page-accent), .055) 93px 94px);
+}
+
+body[data-page="schools"] .space-scene::before {
+  opacity: .46;
+  background-image:
+    linear-gradient(rgba(var(--page-secondary),.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--page-secondary),.045) 1px, transparent 1px);
+  background-size: 118px 118px;
+  mask-image: radial-gradient(ellipse at 12% 54%, #000 0, transparent 58%);
+  -webkit-mask-image: radial-gradient(ellipse at 12% 54%, #000 0, transparent 58%);
+  transform: perspective(700px) rotateX(63deg) scale(1.55) translateY(30%);
+  transform-origin: center bottom;
+}
+
+body[data-page="safety"] .space-scene::before {
+  opacity: .75;
+  background: repeating-radial-gradient(ellipse at 76% 52%, transparent 0 74px, rgba(var(--page-secondary), .045) 75px 76px);
+}
+
+body[data-page="careers"] .space-scene::before {
+  opacity: .65;
+  background:
+    linear-gradient(122deg, transparent 0 31%, rgba(var(--page-accent),.09) 31.15%, transparent 31.45%),
+    linear-gradient(122deg, transparent 0 67%, rgba(var(--page-secondary),.07) 67.1%, transparent 67.35%),
+    linear-gradient(122deg, transparent 0 81%, rgba(255,255,255,.045) 81.1%, transparent 81.3%);
+}
+
+body[data-page="about"] .space-scene::before {
+  opacity: .8;
+  background:
+    radial-gradient(ellipse at 82% 22%, transparent 0 17%, rgba(var(--page-accent),.055) 17.2% 17.5%, transparent 17.7% 24%, rgba(var(--page-secondary),.035) 24.2% 24.5%, transparent 24.7%),
+    radial-gradient(circle at 8% 78%, rgba(var(--page-secondary),.07), transparent 30%);
+}
+
+body[data-page="contact"] .space-scene::before {
+  opacity: .82;
+  background:
+    linear-gradient(115deg, transparent 0 53%, rgba(var(--page-accent),.055) 53.15%, transparent 53.35%),
+    repeating-radial-gradient(circle at 84% 70%, transparent 0 84px, rgba(var(--page-secondary), .045) 85px 86px);
+}
+
+body[data-page]:not([data-page="home"]) .moon {
+  opacity: var(--page-moon-opacity);
+  border-color: rgba(var(--page-secondary), .13);
+  box-shadow: inset -80px -20px 100px rgba(0,0,0,.72), 0 0 110px rgba(var(--page-accent),.1);
+}
+
+body[data-page="product"] .moon-home { right: -185px; top: 125px; }
+body[data-page="schools"] .moon-home { right: auto; left: -335px; top: 42%; }
+body[data-page="safety"] .moon-home { right: -285px; top: 37%; }
+body[data-page="careers"] .moon-home { right: -355px; top: 9%; }
+body[data-page="about"] .moon-home { right: -145px; top: 9%; }
+body[data-page="contact"] .moon-home { right: -300px; top: 52%; }
+
+body[data-page="schools"] .orbit-one { right: auto; left: -275px; top: 48%; transform: rotate(19deg); }
+body[data-page="safety"] .orbit-one { right: -305px; top: 44%; transform: rotate(-8deg); }
+body[data-page="careers"] .orbit-one { right: auto; left: -270px; top: 64%; transform: rotate(17deg); }
+body[data-page="about"] .orbit-one { right: -225px; top: 265px; transform: rotate(-31deg); }
+body[data-page="contact"] .orbit-one { right: -290px; top: 58%; transform: rotate(12deg); }
+
+body[data-page]:not([data-page="home"]) main > .section:not(.final-cta) {
+  isolation: isolate;
+}
+
+body[data-page]:not([data-page="home"]) main > .section:not(.final-cta)::before {
+  content: "";
+  position: absolute;
+  inset: 24px -28px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 44px;
+  background:
+    radial-gradient(circle at 4% 30%, rgba(var(--page-accent),.052), transparent 31%),
+    linear-gradient(120deg, rgba(255,255,255,.012), transparent 44%);
+}
+
+body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.final-cta)::before {
+  background:
+    radial-gradient(circle at 96% 64%, rgba(var(--page-secondary),.05), transparent 33%),
+    linear-gradient(300deg, rgba(255,255,255,.012), transparent 44%);
+}
+
+/* Keep the active Contact CTA readable instead of turning white-on-white. */
+.site-nav .nav-cta,
+.site-nav .nav-cta.active,
+.site-nav .nav-cta:hover,
+.site-nav .nav-cta:focus-visible {
+  color: #08080c;
+  -webkit-text-fill-color: #08080c;
+}
+
+.site-nav .nav-cta.active {
+  background: #ffffff;
+  border-color: #ffffff;
+}
+
+.button-primary,
+.button-light,
+.button-primary:hover,
+.button-light:hover {
+  color: #060608;
+  -webkit-text-fill-color: #060608;
+}
+
+/* Contact controls: dark in normal, open, focused, and browser-autofilled states. */
+[data-page="contact"] .contact-form {
+  color-scheme: dark;
+  background:
+    radial-gradient(circle at 100% 0, rgba(var(--page-secondary),.075), transparent 32%),
+    linear-gradient(145deg, rgba(22,21,30,.92), rgba(9,9,14,.86));
+  border-color: rgba(var(--page-accent), .2);
+}
+
+[data-page="contact"] .field input,
+[data-page="contact"] .field select,
+[data-page="contact"] .field textarea {
+  min-height: 54px;
+  padding: 14px 16px;
+  color: #f7f7fb;
+  -webkit-text-fill-color: #f7f7fb;
+  caret-color: rgb(var(--page-secondary));
+  background-color: rgba(7,7,12,.76);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 13px;
+  box-shadow: inset 0 1px rgba(255,255,255,.025);
+  transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease;
+}
+
+[data-page="contact"] .field textarea {
+  min-height: 145px;
+}
+
+[data-page="contact"] .field input::placeholder,
+[data-page="contact"] .field textarea::placeholder {
+  color: #777785;
+  opacity: 1;
+  -webkit-text-fill-color: #777785;
+}
+
+[data-page="contact"] .field input:hover,
+[data-page="contact"] .field select:hover,
+[data-page="contact"] .field textarea:hover {
+  border-color: rgba(var(--page-accent),.38);
+  background-color: rgba(11,10,17,.9);
+}
+
+[data-page="contact"] .field input:focus,
+[data-page="contact"] .field select:focus,
+[data-page="contact"] .field textarea:focus {
+  border-color: rgba(var(--page-secondary),.82);
+  background-color: #0b0b12;
+  box-shadow: 0 0 0 3px rgba(var(--page-secondary),.09), inset 0 1px rgba(255,255,255,.035);
+}
+
+[data-page="contact"] .field select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 48px;
+  color-scheme: dark;
+  forced-color-adjust: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23cbbcff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 18px;
+}
+
+[data-page="contact"] .field select option,
+[data-page="contact"] .field select optgroup {
+  color: #f7f7fb;
+  background: #0b0b12;
+}
+
+[data-page="contact"] .field select option:checked {
+  color: #09090d;
+  background: #cbbcff;
+}
+
+[data-page="contact"] .field input:-webkit-autofill,
+[data-page="contact"] .field input:-webkit-autofill:hover,
+[data-page="contact"] .field input:-webkit-autofill:focus,
+[data-page="contact"] .field textarea:-webkit-autofill,
+[data-page="contact"] .field select:-webkit-autofill {
+  -webkit-text-fill-color: #f7f7fb !important;
+  caret-color: #f7f7fb;
+  border-color: rgba(var(--page-secondary),.52);
+  box-shadow: 0 0 0 1000px #0b0b12 inset, 0 0 0 3px rgba(var(--page-secondary),.07);
+  transition: background-color 9999s ease-out 0s;
+}
+
+@media (max-width: 820px) {
+  [data-page="home"] main,
+  [data-page="careers"] main {
+    overflow-x: clip;
+  }
+
+  [data-page="contact"] .page-hero-copy {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  [data-page="contact"] .page-hero-copy h1 {
+    max-width: 100%;
+    font-size: clamp(3rem, 14vw, 4rem);
+    letter-spacing: -.055em;
+  }
+
+  [data-page="contact"] .page-hero-copy .outline {
+    display: block;
+  }
+
+  body[data-page]:not([data-page="home"]) main > .section:not(.final-cta)::before {
+    inset: 14px -10px;
+    border-radius: 28px;
+  }
+
+  [data-page="contact"] .contact-form {
+    padding: 24px 18px;
+  }
+
+  [data-page="contact"] .field input,
+  [data-page="contact"] .field select,
+  [data-page="contact"] .field textarea {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-page]:not([data-page="home"]) .space-scene::after {
+    animation: none;
+  }
+}
