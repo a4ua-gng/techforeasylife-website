@@ -197,11 +197,24 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
   -webkit-text-fill-color: #060608;
 }
 
-/* Home discovery cards: restore Careers as a visible destination and introduce Play Lab. */
+/* Home discovery card: keep Careers prominent without a secondary Play destination. */
 .home-discover-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
+}
+
+.home-discover-grid.single-card {
+  grid-template-columns: 1fr;
+}
+
+.home-discover-grid.single-card .home-discover-card {
+  min-height: 420px;
+}
+
+.home-discover-grid.single-card .home-discover-card p,
+.home-discover-grid.single-card .home-discover-card h2 {
+  max-width: 720px;
 }
 
 .home-discover-card {

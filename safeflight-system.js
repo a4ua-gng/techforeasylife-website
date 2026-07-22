@@ -220,68 +220,176 @@ if (safeFlight) {
     }
   });
 
-  const questionBank = [
+  const safetyRules = [
     {
-      question: "Who makes the final decision about whether a supervised practical session can continue?",
-      answers: ["The student holding the kit", "The designated supervising adult", "The person running the countdown"],
-      correct: 1,
-      explanation: "The designated adult keeps responsibility and practical control throughout the session."
+      scenario: "the designated adult has not confirmed that the supervised session may continue",
+      correct: "Wait and ask the designated adult for a decision",
+      distractors: ["Begin because the digital checks look complete", "Let the learner group vote on whether to continue"],
+      explanation: "The designated adult keeps responsibility and makes the decision."
     },
     {
-      question: "The weather changes after the checklist is completed. What should happen?",
-      answers: ["Continue because the checklist was already completed", "Pause and ask the adult to reassess", "Ignore it if the group is ready"],
-      correct: 1,
-      explanation: "Readiness is ongoing. A meaningful change is a reason to pause and reassess."
+      scenario: "the weather changes after the conditions were reviewed",
+      correct: "Pause and ask the designated adult to reassess",
+      distractors: ["Rely on the earlier weather check", "Continue until the current digital step is finished"],
+      explanation: "Readiness must be reassessed whenever meaningful conditions change."
     },
     {
-      question: "A spectator crosses the marked boundary. What is the responsible response?",
-      answers: ["Pause the activity and alert the supervising adult", "Ask them to move while continuing", "Let the nearest student decide"],
-      correct: 0,
-      explanation: "The boundary must remain clear. Pause and let the supervising adult restore the agreed setup."
+      scenario: "a person enters the marked spectator boundary",
+      correct: "Pause and alert the designated adult",
+      distractors: ["Continue while asking the person to move", "Let the nearest learner manage the boundary"],
+      explanation: "The group pauses so the supervising adult can restore the approved boundary."
     },
     {
-      question: "What does a SafeFlight certificate confirm?",
-      answers: ["Automatic permission for any activity", "Completion of this learning checkpoint", "That weather will remain unchanged"],
-      correct: 1,
-      explanation: "It records learning completion only; it is never launch authorization."
+      scenario: "a learner does not understand an instruction",
+      correct: "Stop and ask the supervising adult for clarification",
+      distractors: ["Guess from the previous instruction", "Copy another group without asking"],
+      explanation: "Uncertainty is a reason to stop and ask rather than guess."
     },
     {
-      question: "If an instruction or condition is unclear, what should a learner do?",
-      answers: ["Guess based on the previous step", "Skip it without mentioning it", "Stop and ask the supervising adult"],
-      correct: 2,
-      explanation: "Uncertainty is a reason to stop and ask, not to guess."
+      scenario: "the kit serial does not match the learner’s assigned record",
+      correct: "Leave the kit as it is and tell the responsible teacher",
+      distractors: ["Edit the serial shown on the screen", "Use the kit because it looks similar"],
+      explanation: "A mismatch must be resolved by the responsible teacher before the pathway continues."
     },
     {
-      question: "Why is the kit serial checked at the beginning?",
-      answers: ["To connect the learner with the correct controlled pathway", "To replace adult supervision", "To publish the lock code"],
-      correct: 0,
-      explanation: "The serial connects the correct kit and learning pathway; it does not replace supervision."
+      scenario: "the institution’s approved learning area is unavailable",
+      correct: "Wait until the institution approves an appropriate alternative",
+      distractors: ["Choose any area that appears open", "Create a smaller boundary without approval"],
+      explanation: "A different location needs fresh institutional review and approval."
     },
     {
-      question: "What should happen if the approved field becomes unavailable?",
-      answers: ["Move to any open-looking area", "Pause until an appropriate location is approved", "Use a smaller group anywhere"],
-      correct: 1,
-      explanation: "Changing the location changes the safety conditions and requires fresh approval."
+      scenario: "the weather panel shows green with no automatic caution",
+      correct: "Still use local observations and wait for the mentor’s decision",
+      distractors: ["Treat green as automatic permission", "Ignore official local alerts because the website is green"],
+      explanation: "Green is supporting information, not permission or a guarantee."
     },
     {
-      question: "What is the purpose of the weather panel?",
-      answers: ["To guarantee safe conditions", "To replace local observations", "To add information for the adult's decision"],
-      correct: 2,
-      explanation: "Weather data adds context but cannot guarantee conditions or make the final decision."
+      scenario: "the weather panel shows a yellow caution",
+      correct: "Pause and ask the mentor to reassess current conditions",
+      distractors: ["Treat yellow the same as green", "Allow a learner to dismiss the warning"],
+      explanation: "Yellow means the conditions need mentor review before the demonstration can continue."
     },
     {
-      question: "When may a student share a kit code with another group?",
-      answers: ["Whenever the other group asks", "Only when the responsible teacher manages access", "After posting it in the class chat"],
-      correct: 1,
-      explanation: "Access is managed by the responsible teacher and should not be publicly shared."
+      scenario: "the weather panel shows a red warning",
+      correct: "Do not proceed and follow the mentor and official local alerts",
+      distractors: ["Wait briefly and continue without another review", "Continue because the checklist was completed earlier"],
+      explanation: "Red blocks the demonstration and requires the group to follow adult direction and local alerts."
     },
     {
-      question: "Which statement best represents SafeFlight?",
-      answers: ["Speed matters more than preparation", "Safety and responsible decisions are part of engineering", "A completed quiz removes the need for supervision"],
-      correct: 1,
-      explanation: "Preparation, limits and responsible decisions are part of the engineering process."
+      scenario: "a learner is asked by another student to handle restricted equipment",
+      correct: "Do not handle it and alert the responsible mentor",
+      distractors: ["Follow the request because it came from a classmate", "Handle it quickly before the next check"],
+      explanation: "Restricted equipment remains under the responsible adult’s control."
+    },
+    {
+      scenario: "the agreed stop signal is given",
+      correct: "Stop immediately and wait for adult direction",
+      distractors: ["Finish the current action before stopping", "Ask the learner group to vote on stopping"],
+      explanation: "The stop signal is immediate and is followed by adult direction."
+    },
+    {
+      scenario: "a spectator asks to cross the agreed boundary",
+      correct: "Keep the boundary in place and refer the request to the adult",
+      distractors: ["Allow a quick crossing without pausing", "Move the boundary to make room"],
+      explanation: "Only the responsible adult manages changes to the approved people and boundary plan."
+    },
+    {
+      scenario: "the assigned learning kit appears damaged or incomplete",
+      correct: "Do not use it and tell the supervising adult",
+      distractors: ["Improvise a repair with available materials", "Ignore the issue if the lesson is nearly finished"],
+      explanation: "A damaged or incomplete kit is set aside for adult review rather than improvised use."
+    },
+    {
+      scenario: "the supervising adult steps away from the group",
+      correct: "Pause until the responsible adult returns or formally transfers supervision",
+      distractors: ["Continue quietly while the adult is away", "Appoint a learner as the temporary supervisor"],
+      explanation: "The supervised pathway does not continue without the responsible adult."
+    },
+    {
+      scenario: "the group feels rushed and has not finished the checklist",
+      correct: "Slow down and complete every check with the adult",
+      distractors: ["Skip items that were correct last time", "Guess the remaining answers to save time"],
+      explanation: "Time pressure never replaces a complete supervised review."
+    },
+    {
+      scenario: "an official local alert conflicts with the website’s weather display",
+      correct: "Pause and follow the official alert and the mentor’s direction",
+      distractors: ["Trust the website instead of the official alert", "Let the learners choose which source they prefer"],
+      explanation: "Official local alerts and adult direction take priority over this demonstration."
+    },
+    {
+      scenario: "a learner has downloaded a SafeFlight certificate",
+      correct: "Treat it only as a record of learning completion",
+      distractors: ["Treat it as permission for a practical activity", "Use it to bypass the mentor checklist"],
+      explanation: "The certificate records learning only and does not grant practical authorization."
+    },
+    {
+      scenario: "the public demonstration reveals code 000",
+      correct: "Recognize it as non-operational and never use it for a physical kit",
+      distractors: ["Try it on any available physical kit", "Post it publicly as a working access code"],
+      explanation: "Code 000 is deliberately non-operational and exists only to demonstrate the interface."
+    },
+    {
+      scenario: "another learner asks to bypass the quiz or copy answers",
+      correct: "Ask them to complete their own learning and supervised check",
+      distractors: ["Share the answers so the class finishes faster", "Use the teacher-panel preview to skip the quiz"],
+      explanation: "Each learner completes the safety understanding rather than bypassing it."
+    },
+    {
+      scenario: "a condition changes after its checklist item was selected",
+      correct: "Reopen the affected check and reassess it with the adult",
+      distractors: ["Keep the earlier selection because it was once correct", "Avoid mentioning the change until the quiz is finished"],
+      explanation: "Checklist status must reflect current conditions, not an earlier moment."
     }
   ];
+
+  const scenarioContexts = [
+    "Before the supervised session begins,",
+    "During the classroom readiness review,",
+    "After the group has paused,",
+    "When a second learner group arrives,",
+    "While the approved area is being checked,",
+    "During a teacher-led demonstration,",
+    "When local conditions are being reassessed,",
+    "Before entering TEL Control,",
+    "After the class changes its schedule,",
+    "As the team prepares to complete the checklist,"
+  ];
+
+  const questionPrompts = [
+    "What is the best response?",
+    "Which action follows SafeFlight?",
+    "What should the learner do next?",
+    "Which choice keeps responsibility clear?",
+    "How should the group respond?"
+  ];
+
+  function buildQuestionBank() {
+    const bank = [];
+    safetyRules.forEach((rule, ruleIndex) => {
+      scenarioContexts.forEach((context, contextIndex) => {
+        questionPrompts.forEach((prompt, promptIndex) => {
+          const correct = (ruleIndex + contextIndex + promptIndex) % 3;
+          const answers = [...rule.distractors];
+          answers.splice(correct, 0, rule.correct);
+          bank.push({
+            id: `SF-${String(ruleIndex + 1).padStart(2, "0")}-${String(contextIndex + 1).padStart(2, "0")}-${String(promptIndex + 1).padStart(2, "0")}`,
+            question: `${context} ${rule.scenario}. ${prompt}`,
+            answers,
+            correct,
+            explanation: rule.explanation
+          });
+        });
+      });
+    });
+    return bank;
+  }
+
+  const questionBank = buildQuestionBank();
+  if (questionBank.length !== 1000) throw new Error("SafeFlight question bank must contain exactly 1,000 questions.");
+  safeFlight.dataset.questionBankSize = String(questionBank.length);
+  const questionBankLabel = safeFlight.querySelector("[data-sf-question-bank]");
+  if (questionBankLabel) questionBankLabel.textContent = questionBank.length.toLocaleString("en-IN");
 
   const quizQuestion = safeFlight.querySelector("[data-sf-question]");
   const quizOptions = safeFlight.querySelector("[data-sf-options]");
@@ -294,7 +402,12 @@ if (safeFlight) {
   const quizResult = safeFlight.querySelector("[data-sf-quiz-result]");
 
   function shuffledQuestions() {
-    return [...questionBank].sort(() => Math.random() - .5).slice(0, 5);
+    const pool = [...questionBank];
+    for (let index = pool.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      [pool[index], pool[swapIndex]] = [pool[swapIndex], pool[index]];
+    }
+    return pool.slice(0, 5);
   }
 
   function startQuiz() {
