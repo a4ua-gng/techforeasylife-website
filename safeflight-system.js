@@ -358,11 +358,13 @@ if (safeFlight) {
     quizResult.hidden = false;
     quizTrack.style.width = "100%";
     quizResult.innerHTML = passed
-      ? `<div class="sf-result-mark">✓</div><h4>100% — checkpoint complete</h4><p>You demonstrated the required safety understanding. The code below is a non-operational demonstration; production kit codes must come from TEL's secure server.</p><button class="button button-primary" type="button" data-sf-continue>Continue to Mission Control</button>`
+      ? `<div class="sf-result-mark">✓</div><h4>100% — checkpoint complete</h4><p>You demonstrated the required safety understanding. Your separate full-screen TEL Control demonstration is now available below.</p><button class="button button-primary" type="button" data-sf-continue>Reveal TEL Control access</button>`
       : `<div class="sf-result-mark" style="color:var(--sf-warning)">↻</div><h4>${state.quizScore}/5 — review and retry</h4><p>SafeFlight requires every answer to be correct. Review the feedback, then try a newly randomized set.</p><button class="button button-ghost" type="button" data-sf-retry>Try another set</button>`;
     quizResult.querySelector("[data-sf-retry]")?.addEventListener("click", startQuiz);
     quizResult.querySelector("[data-sf-continue]")?.addEventListener("click", () => showStage("mission"));
     if (passed) {
+      state.missionComplete = true;
+      try { window.sessionStorage.setItem("telSafeFlightDemoPassed", "1"); } catch (error) { /* The visible demo link remains available. */ }
       safeFlight.querySelectorAll("[data-sf-code-digit]").forEach((digit) => { digit.textContent = "0"; });
       updateProgress();
       showStage("mission");

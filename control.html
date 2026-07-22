@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TEL Control System | Classroom Demo</title>
+  <meta name="description" content="A non-operational TEL classroom control demonstration available after completing the SafeFlight learning pathway.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#050507">
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tel-control.css">
+  <script src="tel-control.js" defer></script>
+</head>
+<body class="control-page">
+  <div class="control-stars" aria-hidden="true"></div>
+
+  <div class="control-gate" data-control-gate hidden>
+    <div class="gate-card"><img src="tel-logo.webp" alt="TEL — Tech for Easy Life"><p class="control-panel-label"><span>SAFEFLIGHT ACCESS REQUIRED</span><i>LOCKED</i></p><h1>Complete the learning pathway first.</h1><p>This public control-panel demonstration opens after the SafeFlight checklist and perfect-score quiz are completed in this browser.</p><a class="control-button" href="safety.html#safe-flight-system">Return to SafeFlight</a></div>
+  </div>
+
+  <div class="control-app" data-control-app>
+    <header class="control-header">
+      <div class="control-brand"><img src="tel-logo.webp" alt="TEL — Tech for Easy Life"><div class="control-brand-copy"><strong>TEL CONTROL SYSTEM</strong><small>Classroom readiness demonstration</small></div></div>
+      <div class="control-header-actions"><span class="control-demo-pill">● Demo // No equipment connection</span><a class="control-exit" href="safety.html">Exit control</a></div>
+    </header>
+
+    <main class="control-grid">
+      <div class="control-column">
+        <section class="control-panel" aria-labelledby="weather-title">
+          <p class="control-panel-label"><span>LIVE WEATHER</span><i>OPEN-METEO API</i></p>
+          <h3 id="weather-title">Conditions and advisory</h3>
+          <p>Search the local area or use this device’s location. Weather can raise a warning; it cannot authorize a practical activity.</p>
+          <form class="weather-search" data-control-weather-search><label class="sr-only" for="control-city">City</label><input class="control-input" id="control-city" data-control-city placeholder="Search city" required><button class="control-button" type="submit">Check</button></form>
+          <div class="weather-actions"><button class="control-button secondary" type="button" data-control-location>Use current location</button></div>
+          <div class="weather-status" data-control-weather-status><strong data-control-advisory>WEATHER CHECK REQUIRED</strong><span data-control-suggestion>Load current conditions before starting the classroom countdown.</span><div class="weather-location" data-control-weather-location>No location selected</div><div class="weather-metrics" data-control-weather-metrics><div class="weather-metric"><small>Wind</small><b>—</b></div><div class="weather-metric"><small>Gusts</small><b>—</b></div><div class="weather-metric"><small>Visibility</small><b>—</b></div><div class="weather-metric"><small>Condition</small><b>—</b></div></div></div>
+          <p class="control-footnote">Green means no automatic caution was detected—not “approved to fly.” Yellow requires mentor review. Red stops the demonstration. Demo prompts are not operational limits.</p>
+        </section>
+
+        <section class="control-panel">
+          <p class="control-panel-label"><span>SYSTEM ADVISOR</span><i>SUPERVISED</i></p>
+          <h3>What the status means</h3>
+          <div class="advisor-list"><div class="advisor-item"><i>●</i><span><strong style="color:var(--control-green)">GREEN</strong><br>No automatic weather caution; mentor decision still required.</span></div><div class="advisor-item"><i>●</i><span><strong style="color:var(--control-yellow)">YELLOW</strong><br>Pause and ask the mentor to reassess the conditions.</span></div><div class="advisor-item"><i>●</i><span><strong style="color:var(--control-red)">RED</strong><br>Do not proceed. Follow the institution’s approved process.</span></div></div>
+        </section>
+      </div>
+
+      <section class="control-panel mission-panel" aria-labelledby="mission-title">
+        <div class="mission-copy"><p class="control-panel-label"><span>MISSION CONSOLE</span><i>DEMONSTRATION ONLY</i></p><h2 id="mission-title">TEL classroom<br>countdown.</h2><p>A visual and audio communication exercise. It does not connect to, activate or control any physical equipment.</p></div>
+        <div class="mission-console" aria-live="polite"><strong class="mission-count" data-control-count>—</strong><div class="mission-state" data-control-state>Complete weather and mentor checks</div><div class="mission-progress"><i data-control-progress></i></div></div>
+        <div class="mission-bottom"><div class="mission-actions"><button class="control-button" type="button" data-control-start disabled>Begin classroom countdown</button><button class="control-button secondary" type="button" data-control-stop>Pause simulation</button></div><div class="mission-name"><label class="sr-only" for="control-name">Learner name</label><input class="control-input" id="control-name" data-control-name placeholder="Learner name for certificate"><button class="control-button secondary" type="button" data-control-certificate disabled>Download certificate</button></div><p class="mission-message" data-control-message>This countdown becomes available only after weather is checked and every mentor-supervised item is confirmed.</p></div>
+      </section>
+
+      <div class="control-column">
+        <section class="control-panel" aria-labelledby="checklist-title">
+          <p class="control-panel-label"><span>MENTOR CHECKLIST</span><i data-control-check-count>0/6</i></p>
+          <h3 id="checklist-title">Confirm together.</h3>
+          <p>The supervising adult—not this website—keeps responsibility and practical control.</p>
+          <div class="checklist">
+            <button class="control-check" type="button" data-control-check="mentor"><i>✓</i><span><strong>Designated mentor present</strong><small>The institution-appointed adult is identified and responsible.</small></span></button>
+            <button class="control-check" type="button" data-control-check="area"><i>✓</i><span><strong>Approved area confirmed</strong><small>The location and class boundaries match the approved plan.</small></span></button>
+            <button class="control-check" type="button" data-control-check="spectators"><i>✓</i><span><strong>Spectator boundary clear</strong><small>Everyone understands where learners and observers should remain.</small></span></button>
+            <button class="control-check" type="button" data-control-check="signal"><i>✓</i><span><strong>Pause signal reviewed</strong><small>The whole group knows how the mentor will stop the exercise.</small></span></button>
+            <button class="control-check" type="button" data-control-check="restricted"><i>✓</i><span><strong>Restricted equipment mentor-controlled</strong><small>Students do not retrieve, handle or activate restricted equipment.</small></span></button>
+            <button class="control-check" type="button" data-control-check="decision"><i>✓</i><span><strong>Mentor decision confirmed</strong><small>Local observations and any weather caution were reviewed by the adult.</small></span></button>
+          </div>
+          <div class="checklist-status" data-control-check-status>Confirm all six items with the mentor.</div>
+        </section>
+
+        <section class="control-panel">
+          <p class="control-panel-label"><span>ACTIVITY LOG</span><i>LOCAL SESSION</i></p>
+          <h3>Control record</h3>
+          <ul class="system-log" data-control-log><li><time>—</time><span>Waiting for SafeFlight session.</span></li></ul>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

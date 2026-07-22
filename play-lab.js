@@ -6,12 +6,14 @@ if (assemblyGame) {
   const partButtons = [...assemblyGame.querySelectorAll("[data-part-button]")];
   const score = assemblyGame.querySelector("[data-assembly-score]");
   const status = assemblyGame.querySelector("[data-assembly-status]");
+  const stage = assemblyGame.querySelector("[data-assembly-stage]");
 
   function updateAssembly() {
     const selected = partButtons.filter((button) => button.classList.contains("selected"));
+    stage.dataset.progress = String(selected.length);
     score.textContent = `${selected.length}/4 fitted`;
     if (selected.length === 4) {
-      status.textContent = "Digital model complete! TEL identity confirmed. Try Skyway Sprint next.";
+      status.textContent = "All visual layers complete—the real TEL prototype is fully revealed.";
       status.style.color = "var(--success)";
     } else {
       status.textContent = `Choose ${4 - selected.length} more visual ${4 - selected.length === 1 ? "piece" : "pieces"} for the digital model.`;
@@ -22,10 +24,8 @@ if (assemblyGame) {
   partButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const part = button.dataset.partButton;
-      const visual = assemblyGame.querySelector(`[data-assembly-part="${part}"]`);
       const selected = button.classList.toggle("selected");
       button.setAttribute("aria-pressed", String(selected));
-      visual?.classList.toggle("fitted", selected);
       updateAssembly();
     });
     button.setAttribute("aria-pressed", "false");
@@ -36,7 +36,6 @@ if (assemblyGame) {
       button.classList.remove("selected");
       button.setAttribute("aria-pressed", "false");
     });
-    assemblyGame.querySelectorAll("[data-assembly-part]").forEach((part) => part.classList.remove("fitted"));
     updateAssembly();
   });
 
@@ -59,6 +58,8 @@ if (flightGame) {
 
   const width = canvas.width;
   const height = canvas.height;
+  const rocketSprite = new Image();
+  rocketSprite.src = "tel-rocket-real.webp";
   const input = { left: false, right: false };
   let storedBest = 0;
   try { storedBest = Number(window.localStorage.getItem("telSkywayBest") || 0); } catch (error) { storedBest = 0; }
@@ -137,41 +138,19 @@ if (flightGame) {
     const x = game.playerX;
     const y = height - 115;
     context.save();
-    context.translate(x, y);
-    context.fillStyle = "#f5f5f8";
-    context.beginPath();
-    context.moveTo(0, -43);
-    context.quadraticCurveTo(25, -15, 20, 28);
-    context.lineTo(-20, 28);
-    context.quadraticCurveTo(-25, -15, 0, -43);
-    context.fill();
-    context.fillStyle = "#cbbcff";
-    context.beginPath();
-    context.moveTo(-17, 12);
-    context.lineTo(-37, 36);
-    context.lineTo(-18, 31);
-    context.closePath();
-    context.fill();
-    context.beginPath();
-    context.moveTo(17, 12);
-    context.lineTo(37, 36);
-    context.lineTo(18, 31);
-    context.closePath();
-    context.fill();
-    context.fillStyle = "#0a0a0d";
-    context.font = "700 10px Arial";
-    context.textAlign = "center";
-    context.fillText("TEL", 0, 10);
     const trail = context.createLinearGradient(0, 27, 0, 69);
     trail.addColorStop(0, "rgba(203,188,255,.9)");
     trail.addColorStop(1, "rgba(159,196,255,0)");
     context.fillStyle = trail;
     context.beginPath();
-    context.moveTo(-9, 27);
-    context.lineTo(0, 70);
-    context.lineTo(9, 27);
+    context.moveTo(x - 8, y + 34);
+    context.lineTo(x, y + 78);
+    context.lineTo(x + 8, y + 34);
     context.closePath();
     context.fill();
+    if (rocketSprite.complete && rocketSprite.naturalWidth) {
+      context.drawImage(rocketSprite, x - 28, y - 54, 56, 86);
+    }
     context.restore();
   }
 
@@ -310,4 +289,108 @@ if (flightGame) {
   });
 
   game.animationId = window.requestAnimationFrame(frame);
+}
+
+const memoryGame = document.querySelector("[data-memory-game]");
+
+if (memoryGame) {
+  const photos = [
+    { id: "kit", src: "kit-box.webp", label: "TEL Kit" },
+    { id: "open-one", src: "kit-open-01.webp", label: "Inside the kit" },
+    { id: "open-two", src: "kit-open-02.webp", label: "Kit details" },
+    { id: "prototype", src: "tel-rocket-real.webp", label: "TEL prototype" },
+    { id: "school", src: "tel-school-box.webp", label: "School experience" },
+    { id: "workshop", src: "engineering-workshop.webp", label: "Workshop learning" }
+  ];
+  const board = memoryGame.querySelector("[data-memory-board]");
+  const movesText = memoryGame.querySelector("[data-memory-moves]");
+  const pairsText = memoryGame.querySelector("[data-memory-pairs]");
+  const statusText = memoryGame.querySelector("[data-memory-status]");
+  const message = memoryGame.querySelector("[data-memory-message]");
+  let first = null;
+  let second = null;
+  let locked = false;
+  let moves = 0;
+  let pairs = 0;
+
+  function shuffle(items) {
+    const copy = [...items];
+    for (let index = copy.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+    }
+    return copy;
+  }
+
+  function updateMemoryStatus() {
+    movesText.textContent = String(moves);
+    pairsText.textContent = `${pairs}/${photos.length}`;
+    statusText.textContent = pairs === photos.length ? "All pairs matched" : `${photos.length - pairs} ${photos.length - pairs === 1 ? "pair" : "pairs"} remaining`;
+  }
+
+  function chooseCard(button) {
+    if (locked || button === first || button.classList.contains("matched")) return;
+    button.classList.add("flipped");
+    button.setAttribute("aria-label", `${button.dataset.label} card revealed`);
+    if (!first) {
+      first = button;
+      message.textContent = "Choose one more card.";
+      return;
+    }
+    second = button;
+    moves += 1;
+    locked = true;
+    const match = first.dataset.cardId === second.dataset.cardId;
+    if (match) {
+      window.setTimeout(() => {
+        first.classList.add("matched");
+        second.classList.add("matched");
+        pairs += 1;
+        message.textContent = pairs === photos.length ? `Mission deck complete in ${moves} moves.` : "Pair found—keep going.";
+        first = null;
+        second = null;
+        locked = false;
+        updateMemoryStatus();
+      }, 380);
+    } else {
+      window.setTimeout(() => {
+        first.classList.remove("flipped");
+        second.classList.remove("flipped");
+        first.setAttribute("aria-label", "Hidden TEL mission card");
+        second.setAttribute("aria-label", "Hidden TEL mission card");
+        first = null;
+        second = null;
+        locked = false;
+        message.textContent = "Not a pair—try a different combination.";
+        updateMemoryStatus();
+      }, 780);
+    }
+    updateMemoryStatus();
+  }
+
+  function buildDeck() {
+    first = null;
+    second = null;
+    locked = false;
+    moves = 0;
+    pairs = 0;
+    board.innerHTML = "";
+    const deck = shuffle([...photos, ...photos].map((photo, index) => ({ ...photo, instance: index })));
+    deck.forEach((photo) => {
+      const button = document.createElement("button");
+      button.className = "memory-card";
+      button.type = "button";
+      button.dataset.cardId = photo.id;
+      button.dataset.label = photo.label;
+      button.setAttribute("aria-label", "Hidden TEL mission card");
+      button.innerHTML = `<span class="memory-card-inner"><span class="memory-face memory-front"><img src="tel-logo.webp" alt=""></span><span class="memory-face memory-back"><img src="${photo.src}" alt=""><span>${photo.label}</span></span></span>`;
+      button.addEventListener("click", () => chooseCard(button));
+      board.append(button);
+    });
+    message.textContent = "Select two cards to find a matching pair.";
+    updateMemoryStatus();
+  }
+
+  memoryGame.querySelector("[data-memory-reset]")?.addEventListener("click", buildDeck);
+  buildDeck();
 }

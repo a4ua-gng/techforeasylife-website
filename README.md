@@ -7,8 +7,9 @@ Static multi-page website for TEL's education and practical-learning branch, bui
 - `index.html` — Home
 - `product.html` — TEL Model Rocket Kit and project two teaser
 - `schools.html` — Institution and individual pathways
-- `safety.html` — SafeFlight access, learning, weather, quiz, Mission Control and STEM tools
-- `play.html` — TEL Play Lab browser games
+- `safety.html` — SafeFlight access, learning, weather, quiz, TEL Control handoff and STEM tools
+- `control.html` — Hidden, no-index full-screen TEL Control classroom demonstration
+- `play.html` — TEL Play Lab with three browser games
 - `careers.html` — Contribution areas and open applications
 - `about.html` — Mission and founding team
 - `contact.html` — Email-based enquiry form
@@ -46,8 +47,10 @@ Connect `techforeasylife.in` only after the GitHub Pages preview looks correct. 
 - Product pricing is intentionally not public.
 - Individual product access is marked coming soon; institutions are sent to direct enquiry.
 - The SafeFlight page is a public educational demo and does not issue a real kit unlock code. Real serial/code validation and teacher overrides require a secure authenticated backend.
-- Current weather awareness is supplied through Open-Meteo and never acts as automatic practical authorization.
-- TEL Play Lab includes a visual digital-model puzzle and a fictional arcade game; neither contains physical assembly or practical flight instructions.
+- Passing SafeFlight reveals the hidden `control.html` link for the current browser tab. That full-screen demo is deliberately omitted from navigation and search indexing.
+- Current weather awareness is supplied through Open-Meteo. Green means no automatic caution, yellow requires mentor review and red blocks the classroom demonstration; none of these states is practical authorization.
+- The TEL Control countdown is an audio/visual classroom communication simulation only. It does not connect to or activate physical equipment, and restricted equipment remains mentor-controlled.
+- TEL Play Lab includes Assembly Bay, Mission Memory and the fictional Skyway Sprint game. All imagery comes from existing TEL repository assets; no imagery was generated for this update.
 - Careers is visible in the desktop and mobile navigation and on the homepage.
 - Founder portraits for Harsh Das and Devangi Das are included on the About page, together with TEL classroom and field photographs on the Schools page.
 - The Schools page includes the institution proposal, ecosystem integration formats, reasons to choose TEL, implementation pathway and institution FAQ.
