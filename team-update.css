@@ -97,6 +97,34 @@
   object-position: center 43%;
 }
 
+/* Update Devangi's displayed quote without altering the rest of about.html. */
+#team .leadership-grid .founder-card:nth-child(2) .team-quote {
+  font-size: 0;
+}
+
+#team .leadership-grid .founder-card:nth-child(2) .team-quote::after {
+  content: "“comfort kills”";
+  color: #d4d4dc;
+  font: 500 clamp(1rem, 1.3vw, 1.18rem)/1.55 var(--font-display);
+  letter-spacing: -.015em;
+}
+
+/* Remove the former Visual Media Lead card from the visible team page. */
+#team .team-grid .founder-card:nth-child(5) {
+  display: none !important;
+}
+
+/* Keep the team summary accurate after the role removal. */
+#team .team-section-heading > p:last-child {
+  font-size: 0;
+}
+
+#team .team-section-heading > p:last-child::after {
+  content: "Our team supports TEL across people, outreach, finance, strategy and brand.";
+  color: var(--muted);
+  font: 400 1rem/1.6 var(--font-body);
+}
+
 #team .team-grid .founder-card:last-child:nth-child(odd) {
   grid-column: 1 / -1;
   width: calc((100% - 18px) / 2);
