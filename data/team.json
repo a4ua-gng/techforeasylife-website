@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "updatedAt": null,
+  "members": [
+    {
+      "id": "harsh-das",
+      "name": "Harsh Das",
+      "role": "Founder & Chief Executive Officer",
+      "quote": "greed is noble",
+      "label": "FOUNDER // 01",
+      "image": "harsh-das.webp",
+      "alt": "Harsh Das, Founder and Chief Executive Officer of TEL",
+      "section": "leadership",
+      "order": 1,
+      "active": true
+    },
+    {
+      "id": "devangi-das",
+      "name": "Devangi Das",
+      "role": "Co-founder & Chief Operations Officer",
+      "quote": "comfort kills",
+      "label": "CO-FOUNDER // 02",
+      "image": "devangi-das.webp",
+      "alt": "Devangi Das, Co-founder and Chief Operations Officer of TEL",
+      "section": "leadership",
+      "order": 2,
+      "active": true
+    },
+    {
+      "id": "humaira-rashid",
+      "name": "Humaira Rashid",
+      "role": "Head of Human Resources & Outreach (HoHRO)",
+      "quote": "kindness to others is great, but showing kindness to oneself is being human",
+      "label": "PEOPLE & OUTREACH // 01",
+      "image": "humaira-rashid.webp",
+      "alt": "Humaira Rashid, Head of Human Resources and Outreach at TEL",
+      "section": "team",
+      "order": 3,
+      "active": true
+    },
+    {
+      "id": "maverick-alam",
+      "name": "Maverick Alam",
+      "role": "Financial Analyst",
+      "quote": "the bridge between the first sketch and the last frame",
+      "label": "FINANCE // 02",
+      "image": "maverick-alam-corrected.webp",
+      "alt": "Maverick Alam, Financial Analyst at TEL",
+      "section": "team",
+      "order": 4,
+      "active": true
+    },
+    {
+      "id": "abhiraj-bhattacharya",
+      "name": "Abhiraj Bhattacharya",
+      "role": "Strategy Analyst",
+      "quote": "When I let go of what I am, I become what I might be.",
+      "label": "STRATEGY // 03",
+      "image": "abhiraj-bhattacharya-corrected.webp",
+      "alt": "Abhiraj Bhattacharya, Strategy Analyst at TEL",
+      "section": "team",
+      "order": 5,
+      "active": true
+    },
+    {
+      "id": "tanishka-dhatrak",
+      "name": "Tanishka Dhatrak",
+      "role": "Director of Marketing & Brand Strategy",
+      "quote": "A strong brand doesn't just build recognition—it builds opportunities, trust, and lasting impact.",
+      "label": "MARKETING & BRAND // 04",
+      "image": "tanishka-dhatrak.png",
+      "alt": "Tanishka Dhatrak, Director of Marketing and Brand Strategy at TEL",
+      "section": "team",
+      "order": 6,
+      "active": true
+    }
+  ]
+}
