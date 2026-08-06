@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>TEL Admin</title>
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <script src="admin.js" defer></script>
+</head>
+<body>
+  <div class="admin-shell">
+    <header class="admin-header">
+      <a class="brand" href="index.html" aria-label="TEL home">
+        <img src="tel-logo.webp" alt="TEL — Tech for Easy Life">
+      </a>
+      <div class="header-copy">
+        <span>PRIVATE CONTROL PANEL</span>
+        <strong>Team administration</strong>
+      </div>
+      <button class="button button-secondary" id="logoutButton" type="button" hidden>Log out</button>
+    </header>
+
+    <main>
+      <section class="panel login-panel" id="loginPanel">
+        <p class="eyebrow">SECURE ACCESS</p>
+        <h1>Enter the TEL admin password.</h1>
+        <p class="muted">The password is sent only to TEL’s Cloudflare Worker and is not stored by this page.</p>
+        <form id="loginForm" novalidate>
+          <label for="passwordInput">Admin password</label>
+          <div class="password-row">
+            <input id="passwordInput" name="password" type="password" autocomplete="current-password" required>
+            <button class="button button-primary" type="submit">Sign in</button>
+          </div>
+        </form>
+        <p class="status" id="loginStatus" role="status" aria-live="polite"></p>
+      </section>
+
+      <section id="dashboard" hidden>
+        <div class="dashboard-heading">
+          <div>
+            <p class="eyebrow">TEAM DIRECTORY</p>
+            <h1>Manage who appears on TEL.</h1>
+            <p class="muted">Add, edit, reorder, hide or remove members. Saving creates a GitHub commit.</p>
+          </div>
+          <div class="dashboard-actions">
+            <button class="button button-secondary" id="refreshButton" type="button">Reload</button>
+            <button class="button button-secondary" id="addMemberButton" type="button">Add member</button>
+            <button class="button button-primary" id="saveButton" type="button">Save to GitHub</button>
+          </div>
+        </div>
+
+        <div class="summary-strip">
+          <span><strong id="memberCount">0</strong> total</span>
+          <span><strong id="visibleCount">0</strong> visible</span>
+          <span id="lastUpdated">Not saved yet</span>
+        </div>
+
+        <p class="status" id="dashboardStatus" role="status" aria-live="polite"></p>
+        <div class="member-list" id="memberList"></div>
+      </section>
+    </main>
+  </div>
+
+  <template id="memberTemplate">
+    <article class="member-card">
+      <div class="member-card-top">
+        <div class="member-number"></div>
+        <div class="member-card-actions">
+          <button class="icon-button move-up" type="button" title="Move up" aria-label="Move member up">↑</button>
+          <button class="icon-button move-down" type="button" title="Move down" aria-label="Move member down">↓</button>
+          <button class="icon-button danger remove-member" type="button">Remove</button>
+        </div>
+      </div>
+
+      <div class="member-grid">
+        <div class="photo-column">
+          <div class="photo-preview">
+            <img alt="" hidden>
+            <span>No photo</span>
+          </div>
+          <label class="upload-control">
+            <span>Upload JPG, PNG or WebP</span>
+            <input class="image-file" type="file" accept="image/jpeg,image/png,image/webp">
+          </label>
+          <p class="upload-status"></p>
+        </div>
+
+        <div class="field-grid">
+          <label>
+            <span>Name *</span>
+            <input class="field-name" type="text" maxlength="100" required>
+          </label>
+          <label>
+            <span>Role *</span>
+            <input class="field-role" type="text" maxlength="160" required>
+          </label>
+          <label>
+            <span>Section</span>
+            <select class="field-section">
+              <option value="leadership">Leadership</option>
+              <option value="team">Team</option>
+            </select>
+          </label>
+          <label>
+            <span>Display order</span>
+            <input class="field-order" type="number" min="1" max="999" step="1">
+          </label>
+          <label class="field-wide">
+            <span>Label</span>
+            <input class="field-label" type="text" maxlength="100" placeholder="FOUNDER // 01">
+          </label>
+          <label class="field-wide">
+            <span>Quote</span>
+            <textarea class="field-quote" maxlength="400" rows="3"></textarea>
+          </label>
+          <label class="field-wide">
+            <span>Image path</span>
+            <input class="field-image" type="text" maxlength="200" placeholder="team-images/member-name.webp">
+          </label>
+          <label class="field-wide">
+            <span>Image alt text</span>
+            <input class="field-alt" type="text" maxlength="220">
+          </label>
+          <label class="toggle-label field-wide">
+            <input class="field-active" type="checkbox">
+            <span>Visible on the website</span>
+          </label>
+        </div>
+      </div>
+    </article>
+  </template>
+</body>
+</html>
