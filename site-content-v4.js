@@ -64,6 +64,8 @@
 
       if (visual.assetPath && isSafeRelativeAsset(visual.assetPath)) {
         node.src = visual.assetPath;
+        const galleryButton = node.closest("[data-gallery]");
+        if (galleryButton) galleryButton.dataset.gallery = visual.assetPath;
       }
 
       if (typeof visual.alt === "string") node.alt = visual.alt;
