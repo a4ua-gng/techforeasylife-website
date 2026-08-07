@@ -5,8 +5,22 @@
   const PREVIEW_PARAM = "tel-admin-preview";
   const isAdminPreview = new URLSearchParams(location.search).get(PREVIEW_PARAM) === "1";
   let currentDocument = { version: 2, updatedAt: null, visuals: [] };
+  let mutationTimer = null;
 
   window.addEventListener("message", handlePreviewMessage);
+  window.addEventListener("load", () => applyDocument(currentDocument));
+
+  const observer = new MutationObserver((mutations) => {
+    if (!mutations.some((mutation) => mutation.type === "childList" && (mutation.addedNodes.length || mutation.removedNodes.length))) return;
+    window.clearTimeout(mutationTimer);
+    mutationTimer = window.setTimeout(() => applyDocument(currentDocument), 70);
+  });
+
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+  });
+
   loadPublishedVisuals();
 
   async function loadPublishedVisuals() {
