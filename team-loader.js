@@ -8,9 +8,19 @@
   const teamGrid = teamSection.querySelector(".team-grid");
   if (!leadershipGrid || !teamGrid) return;
 
+  const photoClassById = {
+    "humaira-rashid": "team-photo-humaira",
+    "maverick-alam": "team-photo-maverick",
+    "abhiraj-bhattacharya": "team-photo-abhiraj",
+    "tanishka-dhatrak": "team-photo-tanishka"
+  };
+
   const createCard = (member, index) => {
     const article = document.createElement("article");
     article.className = `founder-card with-photo glass-panel reveal visible${index % 3 === 1 ? " delay-1" : index % 3 === 2 ? " delay-2" : ""}`;
+
+    // Older CSS hid the fifth hardcoded team card. Dynamic cards must always be visible.
+    article.style.setProperty("display", "flex", "important");
 
     const label = document.createElement("span");
     label.className = "founder-index";
@@ -24,6 +34,11 @@
     image.alt = member.alt || `${member.name || "TEL team member"}, ${member.role || "TEL"}`;
     image.loading = "lazy";
     image.decoding = "async";
+
+    if (photoClassById[member.id]) {
+      image.classList.add(photoClassById[member.id]);
+    }
+
     photoWrap.appendChild(image);
 
     const info = document.createElement("div");
@@ -50,7 +65,6 @@
   };
 
   const renderMembers = (grid, members) => {
-    if (!members.length) return;
     const fragment = document.createDocumentFragment();
     members.forEach((member, index) => fragment.appendChild(createCard(member, index)));
     grid.replaceChildren(fragment);
