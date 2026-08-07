@@ -2,6 +2,13 @@
   "version": 1,
   "events": [
     {
+      "id": "40cd047e-50bb-4fae-81b6-be43cf241e74",
+      "at": "2026-08-07T16:18:15.984Z",
+      "type": "site.publish",
+      "message": "Published site controls: announcement enabled.",
+      "commit": "ccaa965e85ca2a4d3cb11167ce0ec603e4563d54"
+    },
+    {
       "id": "8dc2a17f-04ff-45d9-bf62-0742e46289c2",
       "at": "2026-08-07T16:18:09.453Z",
       "type": "draft.save",
