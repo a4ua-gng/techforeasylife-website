@@ -1,4 +1,12 @@
 {
   "version": 1,
-  "events": []
+  "events": [
+    {
+      "id": "dc78fe15-77ab-4ce4-b5b0-8a97717637fb",
+      "at": "2026-08-07T16:12:08.968Z",
+      "type": "draft.save",
+      "message": "Saved site-control draft.",
+      "commit": "0fa398f05a0d4e31e7b09bc80d62a28e518ac99d"
+    }
+  ]
 }
