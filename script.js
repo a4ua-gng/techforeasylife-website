@@ -275,3 +275,11 @@ if (contactForm) {
     window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
   });
 }
+
+/* TEL Admin v4 published site controls */
+if (!document.querySelector('script[src="site-control-v4.js"]')) {
+  const siteControlV4 = document.createElement("script");
+  siteControlV4.src = "site-control-v4.js";
+  siteControlV4.defer = true;
+  document.head.append(siteControlV4);
+}
