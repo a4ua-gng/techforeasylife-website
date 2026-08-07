@@ -2,6 +2,45 @@
   "version": 1,
   "entries": [
     {
+      "id": "v-20260807161359-b4829a",
+      "label": "Before publish",
+      "createdAt": "2026-08-07T16:13:59.869Z",
+      "commit": null,
+      "config": {
+        "version": 1,
+        "updatedAt": "2026-08-07T16:12:13.393Z",
+        "publishedAt": "2026-08-07T16:12:13.393Z",
+        "announcement": {
+          "enabled": false,
+          "label": "TEL UPDATE",
+          "title": "",
+          "message": "",
+          "linkText": "",
+          "linkUrl": "",
+          "startAt": null,
+          "endAt": null
+        },
+        "maintenance": {
+          "enabled": true,
+          "title": "TEL is getting an update.",
+          "message": "We’ll be back shortly.",
+          "eta": "Back shortly"
+        },
+        "visibility": {
+          "hero": true,
+          "signalStrip": true,
+          "quickStart": true,
+          "mission": true,
+          "flagship": true,
+          "pathway": true,
+          "safety": true,
+          "leadership": true,
+          "careers": true,
+          "finalCta": true
+        }
+      }
+    },
+    {
       "id": "v-20260807161211-831592",
       "label": "Before publish",
       "createdAt": "2026-08-07T16:12:11.816Z",
