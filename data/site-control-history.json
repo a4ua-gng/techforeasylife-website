@@ -2,6 +2,45 @@
   "version": 1,
   "entries": [
     {
+      "id": "v-20260807162150-61ee7c",
+      "label": "Before publish",
+      "createdAt": "2026-08-07T16:21:50.086Z",
+      "commit": null,
+      "config": {
+        "version": 1,
+        "updatedAt": "2026-08-07T16:18:13.139Z",
+        "publishedAt": "2026-08-07T16:18:13.139Z",
+        "announcement": {
+          "enabled": true,
+          "label": "TEL UPDATE",
+          "title": "YOU TEST YOU TEST",
+          "message": "im okay!! check 1234{{}]]",
+          "linkText": "GET HELP",
+          "linkUrl": "techforeasylife.in",
+          "startAt": "2026-08-14T16:17:00.000Z",
+          "endAt": null
+        },
+        "maintenance": {
+          "enabled": false,
+          "title": "TEL is getting an update.",
+          "message": "We’ll be back shortly.",
+          "eta": "Back shortly"
+        },
+        "visibility": {
+          "hero": true,
+          "signalStrip": true,
+          "quickStart": true,
+          "mission": true,
+          "flagship": true,
+          "pathway": true,
+          "safety": true,
+          "leadership": true,
+          "careers": true,
+          "finalCta": true
+        }
+      }
+    },
+    {
       "id": "v-20260807161811-207278",
       "label": "Before publish",
       "createdAt": "2026-08-07T16:18:11.946Z",
