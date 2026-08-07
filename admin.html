@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>TEL Admin</title>
+  <title>TEL Admin v4</title>
   <link rel="icon" href="favicon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,16 +20,20 @@
       </a>
       <div class="header-copy">
         <span>PRIVATE CONTROL PANEL</span>
-        <strong>Team administration</strong>
+        <strong>TEL Mission Control v4</strong>
       </div>
-      <button class="button button-secondary" id="logoutButton" type="button" hidden>Log out</button>
+      <div class="header-actions">
+        <a class="button button-secondary" href="index.html" target="_blank" rel="noreferrer">Open site ↗</a>
+        <button class="button button-secondary" id="logoutButton" type="button" hidden>Log out</button>
+      </div>
     </header>
 
     <main>
       <section class="panel login-panel" id="loginPanel">
+        <div class="login-brand-mark"><img src="tel-logo.webp" alt="TEL"></div>
         <p class="eyebrow">SECURE ACCESS</p>
-        <h1>Enter the TEL admin password.</h1>
-        <p class="muted">The password is sent only to TEL’s Cloudflare Worker and is not stored by this page.</p>
+        <h1>Enter TEL Mission Control.</h1>
+        <p class="muted">Authentication stays deliberately simple. The visual tools begin only after secure access.</p>
         <form id="loginForm" novalidate>
           <label for="passwordInput">Admin password</label>
           <div class="password-row">
@@ -40,34 +44,204 @@
         <p class="status" id="loginStatus" role="status" aria-live="polite"></p>
       </section>
 
-      <section id="dashboard" hidden>
-        <div class="dashboard-heading">
-          <div>
-            <p class="eyebrow">TEAM DIRECTORY</p>
-            <h1>Manage who appears on TEL.</h1>
-            <p class="muted">Add, edit, reorder, hide or remove members. Saving creates a GitHub commit.</p>
+      <section class="workspace" id="dashboard" hidden>
+        <aside class="sidebar panel" aria-label="Admin sections">
+          <div class="sidebar-top">
+            <p class="eyebrow">MISSION CONTROL</p>
+            <strong>Website operations</strong>
           </div>
-          <div class="dashboard-actions">
-            <button class="button button-secondary" id="refreshButton" type="button">Reload</button>
-            <button class="button button-secondary" id="addMemberButton" type="button">Add member</button>
-            <button class="button button-primary" id="saveButton" type="button">Save to GitHub</button>
+          <nav class="admin-nav" id="adminNav">
+            <button class="nav-item active" type="button" data-view="overview"><span>01</span> Overview</button>
+            <button class="nav-item" type="button" data-view="publish"><span>02</span> Publish studio</button>
+            <button class="nav-item" type="button" data-view="announcement"><span>03</span> Announcement</button>
+            <button class="nav-item" type="button" data-view="visibility"><span>04</span> Visibility</button>
+            <button class="nav-item" type="button" data-view="team"><span>05</span> Team</button>
+            <button class="nav-item" type="button" data-view="history"><span>06</span> History</button>
+            <button class="nav-item" type="button" data-view="activity"><span>07</span> Activity</button>
+            <button class="nav-item" type="button" data-view="deployment"><span>08</span> Deployment</button>
+            <button class="nav-item nav-item-critical" type="button" data-view="maintenance"><span>09</span> Maintenance</button>
+          </nav>
+          <div class="sidebar-foot">
+            <span class="live-dot"></span>
+            <div><small>API</small><strong id="apiStatus">Checking…</strong></div>
           </div>
-        </div>
+        </aside>
 
-        <div class="summary-strip">
-          <span><strong id="memberCount">0</strong> total</span>
-          <span><strong id="visibleCount">0</strong> visible</span>
-          <span id="lastUpdated">Not saved yet</span>
-        </div>
+        <div class="workspace-main">
+          <div class="topbar panel">
+            <div>
+              <p class="eyebrow" id="viewEyebrow">CONTROL CENTER</p>
+              <h1 id="viewTitle">Mission Control.</h1>
+            </div>
+            <div class="topbar-actions">
+              <button class="button button-secondary" id="refreshAllButton" type="button">Refresh</button>
+              <button class="button button-primary" id="quickPublishButton" type="button">Publish draft</button>
+            </div>
+          </div>
 
-        <p class="status" id="dashboardStatus" role="status" aria-live="polite"></p>
-        <div class="member-list" id="memberList"></div>
+          <p class="status global-status" id="dashboardStatus" role="status" aria-live="polite"></p>
+
+          <section class="admin-view active" data-view-panel="overview">
+            <div class="metric-grid">
+              <article class="metric-card panel"><span>WEBSITE</span><strong id="metricWebsite">Checking</strong><small id="metricWebsiteSub">Running health scan</small></article>
+              <article class="metric-card panel"><span>DRAFT</span><strong id="metricDraft">Synced</strong><small id="metricDraftSub">No unpublished edits</small></article>
+              <article class="metric-card panel"><span>ANNOUNCEMENT</span><strong id="metricAnnouncement">Off</strong><small id="metricAnnouncementSub">No active message</small></article>
+              <article class="metric-card panel critical-metric"><span>MAINTENANCE</span><strong id="metricMaintenance">Off</strong><small id="metricMaintenanceSub">Public site available</small></article>
+            </div>
+
+            <div class="overview-grid">
+              <article class="panel command-card depth-card">
+                <div class="card-head"><div><p class="eyebrow">FAST ACTIONS</p><h2>Run the website.</h2></div><span class="orb" aria-hidden="true"></span></div>
+                <div class="command-grid">
+                  <button class="command-button" type="button" data-jump="announcement"><span>ANNOUNCEMENT</span><strong>Create or schedule a homepage message</strong></button>
+                  <button class="command-button" type="button" data-jump="visibility"><span>VISIBILITY</span><strong>Show or hide homepage sections</strong></button>
+                  <button class="command-button" type="button" data-jump="publish"><span>PUBLISH</span><strong>Preview and release the current draft</strong></button>
+                  <button class="command-button warning-command" type="button" data-jump="maintenance"><span>MAINTENANCE</span><strong>Control public maintenance mode</strong></button>
+                </div>
+              </article>
+
+              <article class="panel status-card">
+                <p class="eyebrow">LATEST DEPLOYMENT</p>
+                <div class="deployment-line"><span class="status-orb" id="overviewDeployOrb"></span><div><strong id="overviewDeployTitle">Checking GitHub…</strong><small id="overviewDeploySub">Waiting for repository status</small></div></div>
+                <button class="text-button" type="button" data-jump="deployment">Open deployment console →</button>
+              </article>
+            </div>
+          </section>
+
+          <section class="admin-view" data-view-panel="publish">
+            <div class="studio-grid">
+              <article class="panel editor-panel depth-card">
+                <div class="card-head"><div><p class="eyebrow">DRAFT → PREVIEW → PUBLISH</p><h2>Publish studio.</h2></div><span class="draft-chip" id="draftChip">SYNCED</span></div>
+                <p class="muted">Changes in Announcement, Visibility and Maintenance are kept as a draft until you publish them.</p>
+                <div class="publish-steps">
+                  <div><span>01</span><strong>Edit</strong><small>Change site controls without affecting the live site.</small></div>
+                  <div><span>02</span><strong>Preview</strong><small>Render the homepage with your current unsaved draft.</small></div>
+                  <div><span>03</span><strong>Publish</strong><small>Commit the draft and make it the live control state.</small></div>
+                </div>
+                <div class="button-row">
+                  <button class="button button-secondary" id="saveDraftButton" type="button">Save draft</button>
+                  <button class="button button-secondary" id="previewButton" type="button">Refresh preview</button>
+                  <button class="button button-primary" id="publishButton" type="button">Publish to live site</button>
+                </div>
+                <p class="status" id="publishStatus"></p>
+              </article>
+
+              <article class="panel preview-panel">
+                <div class="preview-toolbar"><span>LIVE-SHAPED PREVIEW</span><div><button type="button" class="preview-size active" data-preview-width="100%">Desktop</button><button type="button" class="preview-size" data-preview-width="760px">Tablet</button><button type="button" class="preview-size" data-preview-width="390px">Mobile</button></div></div>
+                <div class="preview-stage" id="previewStage"><iframe id="previewFrame" title="TEL homepage draft preview" src="index.html?tel-admin-preview=1"></iframe></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="admin-view" data-view-panel="announcement">
+            <div class="two-column-grid">
+              <article class="panel editor-panel depth-card">
+                <p class="eyebrow">HOMEPAGE ANNOUNCEMENT</p>
+                <h2>Custom announcement.</h2>
+                <p class="muted">The section is injected into the existing homepage only when it is active. The rest of the frontend stays untouched.</p>
+                <div class="field-grid single-fields">
+                  <label class="toggle-card"><input id="announcementEnabled" type="checkbox"><span><strong>Enable announcement</strong><small>Show it during the configured schedule.</small></span></label>
+                  <label><span>Eyebrow / label</span><input id="announcementLabel" type="text" maxlength="60" placeholder="TEL UPDATE"></label>
+                  <label><span>Headline</span><input id="announcementTitle" type="text" maxlength="120" placeholder="Something new is happening at TEL."></label>
+                  <label><span>Message</span><textarea id="announcementMessage" maxlength="500" rows="4" placeholder="Write the public announcement here."></textarea></label>
+                  <div class="field-split"><label><span>CTA text</span><input id="announcementLinkText" type="text" maxlength="60" placeholder="Learn more"></label><label><span>CTA link</span><input id="announcementLinkUrl" type="text" maxlength="240" placeholder="about.html"></label></div>
+                  <div class="field-split"><label><span>Starts</span><input id="announcementStartAt" type="datetime-local"></label><label><span>Ends</span><input id="announcementEndAt" type="datetime-local"></label></div>
+                </div>
+                <p class="form-hint">Leave start/end empty for an announcement that stays active until you turn it off.</p>
+              </article>
+
+              <article class="panel announcement-preview-panel">
+                <p class="eyebrow">SECTION PREVIEW</p>
+                <div class="announcement-mini" id="announcementMini">
+                  <span id="announcementMiniLabel">TEL UPDATE</span>
+                  <h3 id="announcementMiniTitle">Your announcement will appear here.</h3>
+                  <p id="announcementMiniMessage">This preview mirrors the new homepage announcement section.</p>
+                  <b id="announcementMiniLink">Learn more ↗</b>
+                </div>
+                <div class="schedule-readout"><span class="status-orb"></span><div><strong id="announcementScheduleState">Not scheduled</strong><small id="announcementScheduleDetail">No active announcement window.</small></div></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="admin-view" data-view-panel="visibility">
+            <article class="panel editor-panel depth-card">
+              <div class="card-head"><div><p class="eyebrow">HOMEPAGE VISIBILITY</p><h2>Section controls.</h2></div><span class="soft-chip">NON-DESTRUCTIVE</span></div>
+              <p class="muted">Hide a section without deleting its content. Re-enable it later with one switch.</p>
+              <div class="visibility-grid" id="visibilityGrid"></div>
+            </article>
+          </section>
+
+          <section class="admin-view" data-view-panel="team">
+            <div class="dashboard-heading team-heading">
+              <div><p class="eyebrow">TEAM DIRECTORY</p><h2>Manage who appears on TEL.</h2><p class="muted">Existing team controls stay here: add, edit, reorder, hide, remove and upload photos.</p></div>
+              <div class="dashboard-actions"><button class="button button-secondary" id="refreshTeamButton" type="button">Reload team</button><button class="button button-secondary" id="addMemberButton" type="button">Add member</button><button class="button button-primary" id="saveTeamButton" type="button">Save team</button></div>
+            </div>
+            <div class="summary-strip panel"><span><strong id="memberCount">0</strong> total</span><span><strong id="visibleCount">0</strong> visible</span><span id="lastUpdated">Not saved yet</span></div>
+            <p class="status" id="teamStatus"></p>
+            <div class="member-list" id="memberList"></div>
+          </section>
+
+          <section class="admin-view" data-view-panel="history">
+            <article class="panel editor-panel">
+              <div class="card-head"><div><p class="eyebrow">VERSION HISTORY</p><h2>Rollback without panic.</h2></div><span class="soft-chip">LAST 20</span></div>
+              <p class="muted">Each publish stores the previous live control state. Restore one version and it becomes live again.</p>
+              <div class="history-list" id="historyList"></div>
+            </article>
+          </section>
+
+          <section class="admin-view" data-view-panel="activity">
+            <article class="panel editor-panel">
+              <div class="card-head"><div><p class="eyebrow">ACTIVITY LOG</p><h2>Every important action.</h2></div><button class="button button-secondary" id="refreshActivityButton" type="button">Refresh log</button></div>
+              <div class="activity-list" id="activityList"></div>
+            </article>
+          </section>
+
+          <section class="admin-view" data-view-panel="deployment">
+            <div class="deployment-grid">
+              <article class="panel deployment-console depth-card">
+                <div class="console-title"><div class="console-lights"><i></i><i></i><i></i></div><span>DEPLOYMENT CONSOLE</span></div>
+                <div class="console-body" id="deploymentConsole"><p>&gt; Waiting for repository status…</p></div>
+                <div class="button-row"><button class="button button-secondary" id="refreshDeploymentButton" type="button">Refresh deployment</button><button class="button button-primary" id="runHealthButton" type="button">Run health scan</button></div>
+              </article>
+              <article class="panel health-panel">
+                <p class="eyebrow">WEBSITE HEALTH</p>
+                <h2>Public checks.</h2>
+                <div class="health-list" id="healthList"></div>
+              </article>
+            </div>
+          </section>
+
+          <section class="admin-view" data-view-panel="maintenance">
+            <div class="maintenance-grid">
+              <article class="panel maintenance-control critical-panel">
+                <p class="eyebrow">MAINTENANCE MODE</p>
+                <h2>Control the public gate.</h2>
+                <p class="muted">When published, visitors see a TEL-branded maintenance screen across the website. Admin preview remains available.</p>
+                <label class="maintenance-master"><input id="maintenanceEnabled" type="checkbox"><span><strong id="maintenanceToggleTitle">Maintenance is OFF</strong><small id="maintenanceToggleCopy">The public site is available normally.</small></span></label>
+                <div class="field-grid single-fields">
+                  <label><span>Maintenance headline</span><input id="maintenanceTitle" type="text" maxlength="120" placeholder="TEL is getting an update."></label>
+                  <label><span>Message</span><textarea id="maintenanceMessage" maxlength="500" rows="4" placeholder="We’ll be back shortly."></textarea></label>
+                  <label><span>Status note / ETA</span><input id="maintenanceEta" type="text" maxlength="120" placeholder="Back shortly"></label>
+                </div>
+                <div class="danger-note"><strong>Important</strong><p>This switch changes only the draft until you publish. That prevents accidental lockouts.</p></div>
+                <div class="button-row"><button class="button button-secondary" id="maintenancePreviewButton" type="button">Preview maintenance</button><button class="button button-danger" id="maintenancePublishButton" type="button">Publish maintenance state</button></div>
+              </article>
+              <article class="panel maintenance-preview">
+                <img src="tel-logo.webp" alt="TEL">
+                <span>PRIVATE PREVIEW</span>
+                <h3 id="maintenanceMiniTitle">TEL is getting an update.</h3>
+                <p id="maintenanceMiniMessage">We’ll be back shortly.</p>
+                <small id="maintenanceMiniEta">Back shortly</small>
+              </article>
+            </div>
+          </section>
+        </div>
       </section>
     </main>
   </div>
 
   <template id="memberTemplate">
-    <article class="member-card">
+    <article class="member-card panel">
       <div class="member-card-top">
         <div class="member-number"></div>
         <div class="member-card-actions">
@@ -76,60 +250,22 @@
           <button class="icon-button danger remove-member" type="button">Remove</button>
         </div>
       </div>
-
       <div class="member-grid">
         <div class="photo-column">
-          <div class="photo-preview">
-            <img alt="" hidden>
-            <span>No photo</span>
-          </div>
-          <label class="upload-control">
-            <span>Upload JPG, PNG or WebP</span>
-            <input class="image-file" type="file" accept="image/jpeg,image/png,image/webp">
-          </label>
+          <div class="photo-preview"><img alt="" hidden><span>No photo</span></div>
+          <label class="upload-control"><span>Upload JPG, PNG or WebP</span><input class="image-file" type="file" accept="image/jpeg,image/png,image/webp"></label>
           <p class="upload-status"></p>
         </div>
-
         <div class="field-grid">
-          <label>
-            <span>Name *</span>
-            <input class="field-name" type="text" maxlength="100" required>
-          </label>
-          <label>
-            <span>Role *</span>
-            <input class="field-role" type="text" maxlength="160" required>
-          </label>
-          <label>
-            <span>Section</span>
-            <select class="field-section">
-              <option value="leadership">Leadership</option>
-              <option value="team">Team</option>
-            </select>
-          </label>
-          <label>
-            <span>Display order</span>
-            <input class="field-order" type="number" min="1" max="999" step="1">
-          </label>
-          <label class="field-wide">
-            <span>Label</span>
-            <input class="field-label" type="text" maxlength="100" placeholder="FOUNDER // 01">
-          </label>
-          <label class="field-wide">
-            <span>Quote</span>
-            <textarea class="field-quote" maxlength="400" rows="3"></textarea>
-          </label>
-          <label class="field-wide">
-            <span>Image path</span>
-            <input class="field-image" type="text" maxlength="200" placeholder="team-images/member-name.webp">
-          </label>
-          <label class="field-wide">
-            <span>Image alt text</span>
-            <input class="field-alt" type="text" maxlength="220">
-          </label>
-          <label class="toggle-label field-wide">
-            <input class="field-active" type="checkbox">
-            <span>Visible on the website</span>
-          </label>
+          <label><span>Name *</span><input class="field-name" type="text" maxlength="100" required></label>
+          <label><span>Role *</span><input class="field-role" type="text" maxlength="160" required></label>
+          <label><span>Section</span><select class="field-section"><option value="leadership">Leadership</option><option value="team">Team</option></select></label>
+          <label><span>Display order</span><input class="field-order" type="number" min="1" max="999" step="1"></label>
+          <label class="field-wide"><span>Label</span><input class="field-label" type="text" maxlength="100" placeholder="FOUNDER // 01"></label>
+          <label class="field-wide"><span>Quote</span><textarea class="field-quote" maxlength="400" rows="3"></textarea></label>
+          <label class="field-wide"><span>Image path</span><input class="field-image" type="text" maxlength="200" placeholder="team-images/member-name.webp"></label>
+          <label class="field-wide"><span>Image alt text</span><input class="field-alt" type="text" maxlength="220"></label>
+          <label class="toggle-label field-wide"><input class="field-active" type="checkbox"><span>Visible on the website</span></label>
         </div>
       </div>
     </article>
