@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-07T14:52:00.000Z",
-  "publishedAt": "2026-08-07T14:52:00.000Z",
+  "updatedAt": "2026-08-07T16:12:13.393Z",
+  "publishedAt": "2026-08-07T16:12:13.393Z",
   "announcement": {
     "enabled": false,
     "label": "TEL UPDATE",
@@ -13,7 +13,7 @@
     "endAt": null
   },
   "maintenance": {
-    "enabled": false,
+    "enabled": true,
     "title": "TEL is getting an update.",
     "message": "We’ll be back shortly.",
     "eta": "Back shortly"
