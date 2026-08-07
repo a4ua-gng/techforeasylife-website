@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-07T16:14:00.968Z",
+  "updatedAt": "2026-08-07T16:18:07.434Z",
   "publishedAt": "2026-08-07T16:14:00.968Z",
   "announcement": {
-    "enabled": false,
+    "enabled": true,
     "label": "TEL UPDATE",
-    "title": "",
-    "message": "",
-    "linkText": "",
-    "linkUrl": "",
-    "startAt": null,
+    "title": "YOU TEST YOU TEST",
+    "message": "im okay!! check 1234{{}]]",
+    "linkText": "GET HELP",
+    "linkUrl": "techforeasylife.in",
+    "startAt": "2026-08-14T16:17:00.000Z",
     "endAt": null
   },
   "maintenance": {
