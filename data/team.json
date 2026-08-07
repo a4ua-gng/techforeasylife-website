@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-07T11:19:30.345Z",
+  "updatedAt": "2026-08-07T13:58:42.732Z",
   "members": [
     {
       "id": "harsh-das",
@@ -72,6 +72,18 @@
       "alt": "Tanishka Dhatrak, Director of Marketing and Brand Strategy at TEL",
       "section": "team",
       "order": 6,
+      "active": true
+    },
+    {
+      "id": "new-member-1786110873578",
+      "name": "Jidan Hussain",
+      "role": "Growth & Outreach Manager",
+      "quote": "Let not the world declare thy worth, let thy deeds proclaim it.",
+      "label": "GROWTH // 05",
+      "image": "team-images/new-member-1786110873578.jpg",
+      "alt": "Jidan Hussain, Growth and Outreach Manager at TEL",
+      "section": "team",
+      "order": 7,
       "active": true
     }
   ]
