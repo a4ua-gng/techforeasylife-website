@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-07T16:18:13.139Z",
+  "updatedAt": "2026-08-07T16:21:46.083Z",
   "publishedAt": "2026-08-07T16:18:13.139Z",
   "announcement": {
     "enabled": true,
@@ -9,7 +9,7 @@
     "message": "im okay!! check 1234{{}]]",
     "linkText": "GET HELP",
     "linkUrl": "techforeasylife.in",
-    "startAt": "2026-08-14T16:17:00.000Z",
+    "startAt": "2026-08-07T16:17:00.000Z",
     "endAt": null
   },
   "maintenance": {
