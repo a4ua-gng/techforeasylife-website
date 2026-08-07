@@ -40,6 +40,7 @@
   let currentConfig = null;
 
   loadStyles();
+  loadVisualRuntime();
   window.addEventListener("message", handlePreviewMessage);
   loadPublishedConfig();
 
@@ -200,6 +201,14 @@
     link.rel = "stylesheet";
     link.href = "site-control-v4.css";
     document.head.append(link);
+  }
+
+  function loadVisualRuntime() {
+    if (document.querySelector('script[src="site-content-v4.js"]')) return;
+    const script = document.createElement("script");
+    script.src = "site-content-v4.js";
+    script.defer = true;
+    document.head.append(script);
   }
 
   window.TELSiteControl = {
