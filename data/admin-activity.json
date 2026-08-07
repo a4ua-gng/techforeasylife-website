@@ -2,6 +2,13 @@
   "version": 1,
   "events": [
     {
+      "id": "1211a41f-9323-4a55-a29d-035e72677328",
+      "at": "2026-08-07T16:21:47.646Z",
+      "type": "draft.save",
+      "message": "Saved site-control draft.",
+      "commit": "3b8cd0753121af69d096e1cb71385f1653fa8468"
+    },
+    {
       "id": "40cd047e-50bb-4fae-81b6-be43cf241e74",
       "at": "2026-08-07T16:18:15.984Z",
       "type": "site.publish",
