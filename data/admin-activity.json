@@ -2,6 +2,13 @@
   "version": 1,
   "events": [
     {
+      "id": "9f89d576-27cd-461d-9b38-9ecec8e3e264",
+      "at": "2026-08-08T13:51:07.613Z",
+      "type": "visual.upload",
+      "message": "Uploaded website visual site-visuals/home-hero-box.png.",
+      "commit": "4b47d00a2110b412e770b892606228542f643e24"
+    },
+    {
       "id": "b2c852f5-567a-4ea2-a317-3d8366065cbf",
       "at": "2026-08-08T13:50:05.210Z",
       "type": "visual.upload",
