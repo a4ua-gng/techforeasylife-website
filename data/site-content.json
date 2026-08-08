@@ -1,34 +1,36 @@
 {
   "version": 2,
-  "updatedAt": null,
+  "updatedAt": "2026-08-08T14:59:24.579Z",
   "visuals": [
     {
       "id": "home-hero-box",
       "name": "Homepage hero kit box",
       "page": "index.html",
-      "assetPath": "tel-school-box.webp",
+      "assetPath": "site-visuals/home-hero-box.png",
       "defaultAssetPath": "tel-school-box.webp",
       "imageSelector": ".home-hero .hero-product-box",
       "alt": "TEL Model Rocket Kit presentation box",
+      "note": "Main kit box in the homepage hero.",
       "fit": "contain",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Main kit box in the homepage hero."
+      "labels": []
     },
     {
       "id": "home-hero-rocket",
       "name": "Homepage hero rocket",
       "page": "index.html",
-      "assetPath": "tel-school-rocket.webp",
+      "assetPath": "site-visuals/home-hero-rocket.png",
       "defaultAssetPath": "tel-school-rocket.webp",
       "imageSelector": ".home-hero .hero-product-rocket",
       "alt": "Black TEL model rocket from the educational kit",
+      "note": "Rocket beside the box in the homepage hero.",
       "fit": "contain",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Rocket beside the box in the homepage hero."
+      "labels": []
     },
     {
       "id": "home-flagship-kit",
@@ -38,11 +40,12 @@
       "defaultAssetPath": "tel-kit-cutout.webp",
       "imageSelector": ".project-featured .project-product-cutout",
       "alt": "Black TEL model rocket kit render",
+      "note": "Product render in the flagship card.",
       "fit": "contain",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Product render in the flagship card."
+      "labels": []
     },
     {
       "id": "home-founder-harsh",
@@ -52,11 +55,12 @@
       "defaultAssetPath": "harsh-das.webp",
       "imageSelector": ".founder-teaser-visual > div:nth-child(1) img",
       "alt": "TEL founder portrait",
+      "note": "First portrait in the leadership teaser.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "First portrait in the leadership teaser."
+      "labels": []
     },
     {
       "id": "home-founder-devangi",
@@ -66,11 +70,12 @@
       "defaultAssetPath": "devangi-das.webp",
       "imageSelector": ".founder-teaser-visual > div:nth-child(2) img",
       "alt": "TEL co-founder portrait",
+      "note": "Second portrait in the leadership teaser.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Second portrait in the leadership teaser."
+      "labels": []
     },
     {
       "id": "product-hero-kit",
@@ -80,11 +85,12 @@
       "defaultAssetPath": "tel-kit-cutout.webp",
       "imageSelector": ".product-page-art > img:first-child",
       "alt": "Black TEL model rocket from the educational kit",
+      "note": "Main visual at the top of the product page.",
       "fit": "contain",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Main visual at the top of the product page."
+      "labels": []
     },
     {
       "id": "product-showcase-box",
@@ -94,11 +100,12 @@
       "defaultAssetPath": "kit-box.webp",
       "imageSelector": ".product-main-image .composition-box",
       "alt": "TEL educational model rocket kit presentation box",
+      "note": "Box in the main product composition.",
       "fit": "contain",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Box in the main product composition."
+      "labels": []
     },
     {
       "id": "product-showcase-rocket",
@@ -108,11 +115,12 @@
       "defaultAssetPath": "tel-kit-cutout.webp",
       "imageSelector": ".product-main-image .composition-rocket",
       "alt": "Black TEL model rocket from the kit",
+      "note": "Rocket in the main product composition.",
       "fit": "contain",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Rocket in the main product composition."
+      "labels": []
     },
     {
       "id": "product-gallery-open-1",
@@ -122,11 +130,12 @@
       "defaultAssetPath": "kit-open-01.webp",
       "imageSelector": "[data-gallery=\"kit-open-01.webp\"] img",
       "alt": "Open TEL educational kit on a matte-black studio background",
+      "note": "Wide gallery image.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Wide gallery image."
+      "labels": []
     },
     {
       "id": "product-gallery-open-2",
@@ -136,11 +145,12 @@
       "defaultAssetPath": "kit-open-02.webp",
       "imageSelector": "[data-gallery=\"kit-open-02.webp\"] img",
       "alt": "TEL kit contents arranged in presentation boxes",
+      "note": "Second product gallery image.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Second product gallery image."
+      "labels": []
     },
     {
       "id": "product-gallery-rocket",
@@ -150,11 +160,12 @@
       "defaultAssetPath": "tel-rocket-real.webp",
       "imageSelector": "[data-gallery=\"tel-rocket-real.webp\"] img",
       "alt": "Real TEL rocket prototype photographed against black",
+      "note": "Real rocket prototype gallery image.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Real rocket prototype gallery image."
+      "labels": []
     },
     {
       "id": "schools-hero-kit",
@@ -164,11 +175,12 @@
       "defaultAssetPath": "school-hero-kit-2026f.webp",
       "imageSelector": ".schools-showcase-image",
       "alt": "TEL Model Rocket Kit showcase with packaging, accessories and assembled model rocket",
+      "note": "Main schools-page kit showcase.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Main schools-page kit showcase."
+      "labels": []
     },
     {
       "id": "schools-card-physics",
@@ -178,11 +190,12 @@
       "defaultAssetPath": "school-card-physics-syllabus-2026f.webp",
       "imageSelector": ".school-fit-grid .school-fit-card:nth-child(1) .school-fit-media img",
       "alt": "Graphic showing TEL connections with NCERT physics topics",
+      "note": "NCERT alignment card visual.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "NCERT alignment card visual."
+      "labels": []
     },
     {
       "id": "schools-card-atl",
@@ -192,11 +205,12 @@
       "defaultAssetPath": "school-card-atl-lab-2026f.webp",
       "imageSelector": ".school-fit-grid .school-fit-card:nth-child(2) .school-fit-media img",
       "alt": "Students working in an ATL or innovation lab",
+      "note": "ATL or innovation lab card visual.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "ATL or innovation lab card visual."
+      "labels": []
     },
     {
       "id": "schools-card-stem",
@@ -206,11 +220,12 @@
       "defaultAssetPath": "school-card-stem-club-2026f.webp",
       "imageSelector": ".school-fit-grid .school-fit-card:nth-child(3) .school-fit-media img",
       "alt": "Students collaborating in a STEM or science club",
+      "note": "STEM club card visual.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "STEM club card visual."
+      "labels": []
     },
     {
       "id": "schools-card-event",
@@ -220,11 +235,12 @@
       "defaultAssetPath": "school-card-event-fair-2026f.webp",
       "imageSelector": ".school-fit-grid .school-fit-card:nth-child(4) .school-fit-media img",
       "alt": "Students presenting projects at a school STEM event",
+      "note": "Project week or STEM showcase card visual.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Project week or STEM showcase card visual."
+      "labels": []
     },
     {
       "id": "schools-card-teacher",
@@ -234,11 +250,12 @@
       "defaultAssetPath": "school-card-teacher-demo-2026f.webp",
       "imageSelector": ".school-fit-grid .school-fit-card:nth-child(5) .school-fit-media img",
       "alt": "Teacher guiding students in a classroom learning session",
+      "note": "Teacher-supported demonstration card visual.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Teacher-supported demonstration card visual."
+      "labels": []
     },
     {
       "id": "schools-gallery-classroom",
@@ -248,11 +265,12 @@
       "defaultAssetPath": "tel-classroom.webp",
       "imageSelector": ".school-gallery .programme-photo:nth-child(1) img",
       "alt": "Students examining a TEL rocket prototype in a classroom",
+      "note": "Classroom gallery photo.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Classroom gallery photo."
+      "labels": []
     },
     {
       "id": "schools-gallery-field",
@@ -262,11 +280,12 @@
       "defaultAssetPath": "tel-field-wide.webp",
       "imageSelector": ".school-gallery .programme-photo:nth-child(2) img",
       "alt": "A supervised TEL rocket field testing environment",
+      "note": "Field gallery photo.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Field gallery photo."
+      "labels": []
     },
     {
       "id": "schools-gallery-detail",
@@ -276,11 +295,12 @@
       "defaultAssetPath": "tel-field-detail.webp",
       "imageSelector": ".school-gallery .programme-photo:nth-child(3) img",
       "alt": "Close view of a TEL rocket prototype during a controlled field setup",
+      "note": "Prototype gallery detail photo.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Prototype gallery detail photo."
+      "labels": []
     },
     {
       "id": "about-brand-panel",
@@ -290,11 +310,12 @@
       "defaultAssetPath": "tel-logo.webp",
       "imageSelector": ".about-brand-panel > img",
       "alt": "TEL — Tech for Easy Life",
+      "note": "Large TEL brand image in the About-page hero.",
       "fit": "contain",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Large TEL brand image in the About-page hero."
+      "labels": []
     },
     {
       "id": "about-founder-harsh",
@@ -304,11 +325,12 @@
       "defaultAssetPath": "harsh-das.webp",
       "imageSelector": ".leadership-grid .founder-card:nth-child(1) .founder-photo img",
       "alt": "Harsh Das, Founder and Chief Executive Officer of TEL",
+      "note": "Founder portrait on the About page.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Founder portrait on the About page."
+      "labels": []
     },
     {
       "id": "about-founder-devangi",
@@ -318,11 +340,12 @@
       "defaultAssetPath": "devangi-das.webp",
       "imageSelector": ".leadership-grid .founder-card:nth-child(2) .founder-photo img",
       "alt": "Devangi Das, Co-founder and Chief Operations Officer of TEL",
+      "note": "Co-founder portrait on the About page.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Co-founder portrait on the About page."
+      "labels": []
     },
     {
       "id": "about-team-humaira",
@@ -332,11 +355,12 @@
       "defaultAssetPath": "humaira-rashid.webp",
       "imageSelector": ".team-photo-humaira",
       "alt": "Humaira Rashid, Head of Human Resources and Outreach at TEL",
+      "note": "Team portrait on the About page. The Team editor still controls member data.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Team portrait on the About page. The Team editor still controls member data."
+      "labels": []
     },
     {
       "id": "about-team-maverick",
@@ -346,11 +370,12 @@
       "defaultAssetPath": "maverick-alam-corrected.webp",
       "imageSelector": ".team-photo-maverick",
       "alt": "Maverick Alam, Financial Analyst at TEL",
+      "note": "Team portrait on the About page. The Team editor still controls member data.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Team portrait on the About page. The Team editor still controls member data."
+      "labels": []
     },
     {
       "id": "about-team-abhiraj",
@@ -360,11 +385,12 @@
       "defaultAssetPath": "abhiraj-bhattacharya-corrected.webp",
       "imageSelector": ".team-photo-abhiraj",
       "alt": "Abhiraj Bhattacharya, Strategy Analyst at TEL",
+      "note": "Team portrait on the About page. The Team editor still controls member data.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Team portrait on the About page. The Team editor still controls member data."
+      "labels": []
     },
     {
       "id": "about-team-tanishka",
@@ -374,11 +400,12 @@
       "defaultAssetPath": "tanishka-dhatrak.png",
       "imageSelector": ".team-photo-tanishka",
       "alt": "Tanishka Dhatrak, Director of Marketing and Brand Strategy at TEL",
+      "note": "Team portrait on the About page. The Team editor still controls member data.",
       "fit": "cover",
       "positionX": 50,
       "positionY": 50,
       "active": true,
-      "note": "Team portrait on the About page. The Team editor still controls member data."
+      "labels": []
     }
   ]
 }
