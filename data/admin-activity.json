@@ -2,6 +2,13 @@
   "version": 1,
   "events": [
     {
+      "id": "f0e2365e-1dd9-43a5-b7a1-66a547e97bee",
+      "at": "2026-08-08T14:43:48.515Z",
+      "type": "visual.upload",
+      "message": "Uploaded website visual site-visuals/home-hero-rocket.png.",
+      "commit": "c5ed139d5bb01054d992ca1d043e21156ccd93fe"
+    },
+    {
       "id": "6523ad8d-673a-4aef-9f45-fde8f7b04f68",
       "at": "2026-08-08T14:43:45.557Z",
       "type": "visual.upload",
