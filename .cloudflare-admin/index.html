@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>TEL Mission Control v4.2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <script src="admin.js" defer></script>
+</head>
+<body>
+<div class="shell">
+  <header class="header">
+    <a class="brand" href="https://techforeasylife.in" target="_blank" rel="noreferrer"><img src="https://techforeasylife.in/tel-logo.webp" alt="TEL"></a>
+	    <div class="header-copy"><span>PRIVATE CONTROL PANEL</span><strong>TEL Mission Control v4.2</strong></div>
+    <div class="header-actions"><button class="btn secondary mobile-menu-toggle" id="mobileNavToggle" type="button" aria-expanded="false" aria-controls="nav">Controls</button><a class="btn secondary open-site-btn" href="https://techforeasylife.in" target="_blank" rel="noreferrer">Open site ↗</a><button class="btn secondary" id="logout" hidden>Log out</button></div>
+  </header>
+
+  <main>
+    <section class="panel login" id="loginPanel">
+      <p class="eyebrow">SECURE ACCESS</p>
+      <h1>Enter Mission Control.</h1>
+      <p class="muted">Sign in with the existing TEL admin password.</p>
+      <form id="loginForm">
+        <label>Admin password<div class="password-row"><input id="password" type="password" autocomplete="current-password" required><button class="btn primary" type="submit">Sign in</button></div></label>
+      </form>
+      <p class="status" id="loginStatus"></p>
+    </section>
+
+    <section class="workspace" id="dashboard" hidden>
+      <div class="nav-backdrop" id="navBackdrop" hidden></div>
+      <aside class="sidebar panel" id="controlSidebar">
+        <div class="mobile-sidebar-head"><div><p class="eyebrow">MISSION CONTROL</p><strong>Website controls</strong></div><button class="icon-btn" id="mobileNavClose" type="button" aria-label="Close controls">×</button></div>
+        <div class="side-title"><p class="eyebrow">MISSION CONTROL</p><strong>Website operations</strong></div>
+        <nav id="nav">
+          <button class="nav active" data-view="overview"><span>01</span>Overview</button>
+          <button class="nav" data-view="publish"><span>02</span>Publish studio</button>
+          <button class="nav" data-view="announcement"><span>03</span>Announcement</button>
+          <button class="nav" data-view="visibility"><span>04</span>Visual editor</button>
+          <button class="nav" data-view="careers"><span>05</span>Careers</button>
+          <button class="nav" data-view="team"><span>06</span>Team</button>
+          <button class="nav" data-view="history"><span>07</span>History</button>
+          <button class="nav" data-view="activity"><span>08</span>Activity</button>
+          <button class="nav" data-view="deployment"><span>09</span>Deployment</button>
+          <button class="nav critical" data-view="maintenance"><span>10</span>Maintenance</button>
+        </nav>
+        <div class="mobile-sidebar-actions"><a class="btn secondary" href="https://techforeasylife.in" target="_blank" rel="noreferrer">Open public site ↗</a></div>
+        <div class="api-state"><i id="apiDot"></i><div><small>ADMIN API</small><strong id="apiState">Checking…</strong></div></div>
+      </aside>
+
+      <div class="main">
+        <div class="topbar panel"><div><p class="eyebrow" id="viewEyebrow">CONTROL CENTER</p><h1 id="viewTitle">Mission Control.</h1></div><div class="actions"><button class="btn secondary" id="refreshAll">Refresh</button><button class="btn primary" id="quickPublish">Publish draft</button></div></div>
+        <p class="status global" id="globalStatus"></p>
+
+        <section class="view active" data-panel="overview">
+          <div class="metrics">
+            <article class="panel metric"><span>WEBSITE</span><strong id="metricWebsite">Checking</strong><small id="metricWebsiteSub">Running health scan</small></article>
+            <article class="panel metric"><span>DRAFT</span><strong id="metricDraft">Synced</strong><small id="metricDraftSub">No unpublished edits</small></article>
+            <article class="panel metric"><span>ANNOUNCEMENT</span><strong id="metricAnnouncement">Off</strong><small id="metricAnnouncementSub">No active message</small></article>
+            <article class="panel metric career-metric"><span>CAREERS</span><strong id="metricCareers">0 open</strong><small id="metricCareersSub">No listed vacancies</small></article>
+            <article class="panel metric danger"><span>MAINTENANCE</span><strong id="metricMaintenance">Off</strong><small id="metricMaintenanceSub">Public site available</small></article>
+          </div>
+          <div class="overview-grid">
+            <article class="panel card depth"><div class="card-head"><div><p class="eyebrow">FAST ACTIONS</p><h2>Run the website.</h2></div><span class="orb"></span></div><div class="command-grid">
+              <button class="command" data-jump="announcement"><span>ANNOUNCEMENT</span><strong>Create or schedule a homepage message</strong></button>
+              <button class="command" data-jump="visibility"><span>VISUAL CMS</span><strong>Edit website images and section visibility</strong></button>
+              <button class="command" data-jump="careers"><span>CAREERS</span><strong>Add roles, departments and vacancy counts</strong></button>
+              <button class="command" data-jump="publish"><span>PUBLISH</span><strong>Preview and release the current draft</strong></button>
+              <button class="command warn" data-jump="maintenance"><span>MAINTENANCE</span><strong>Control the public maintenance gate</strong></button>
+            </div></article>
+            <article class="panel card deployment-summary"><p class="eyebrow">LATEST DEPLOYMENT</p><div class="deploy-line"><i id="deployDot"></i><div><strong id="deployTitle">Checking…</strong><small id="deploySub">Waiting for repository state</small></div></div><button class="link-btn" data-jump="deployment">Open deployment console →</button></article>
+          </div>
+        </section>
+
+        <section class="view" data-panel="publish">
+          <div class="studio-grid">
+	            <article class="panel card depth"><div class="card-head"><div><p class="eyebrow">DRAFT → PREVIEW → PUBLISH</p><h2>Publish studio.</h2></div><span class="chip" id="draftChip">SYNCED</span></div><p class="muted">Announcement, careers, visibility and maintenance changes stay in draft until you publish.</p><div class="steps"><div><span>01</span><strong>Edit</strong><small>Change controls safely.</small></div><div><span>02</span><strong>Preview</strong><small>Render the public website with the draft.</small></div><div><span>03</span><strong>Publish</strong><small>Make the draft live.</small></div></div><div class="actions"><button class="btn secondary" id="saveDraft">Save draft</button><button class="btn secondary" id="refreshPreview">Refresh preview</button><button class="btn primary" id="publishDraft">Publish to live site</button></div><p class="status" id="publishStatus"></p></article>
+            <article class="panel preview-panel"><div class="preview-toolbar"><span>LIVE-SHAPED PREVIEW</span><div><button class="preview-size active" data-width="100%">Desktop</button><button class="preview-size" data-width="760px">Tablet</button><button class="preview-size" data-width="390px">Mobile</button></div></div><div class="preview-stage"><iframe id="previewFrame" title="TEL homepage draft preview" src="/preview/?tel-admin-preview=1"></iframe></div></article>
+          </div>
+        </section>
+
+        <section class="view" data-panel="announcement">
+          <div class="two-grid">
+            <article class="panel card depth"><p class="eyebrow">HOMEPAGE ANNOUNCEMENT</p><h2>Custom announcement.</h2><p class="muted">Create a homepage announcement without changing the rest of the frontend.</p><div class="fields one">
+              <label class="toggle-card"><input id="announcementEnabled" type="checkbox"><span><strong>Enable announcement</strong><small>It appears only inside the configured schedule.</small></span></label>
+              <label>Eyebrow / label<input id="announcementLabel" maxlength="60" placeholder="TEL UPDATE"></label>
+              <label>Headline<input id="announcementTitle" maxlength="120" placeholder="Something new is happening at TEL."></label>
+              <label>Message<textarea id="announcementMessage" maxlength="500" rows="4"></textarea></label>
+              <div class="split"><label>CTA text<input id="announcementLinkText" maxlength="60" placeholder="Learn more"></label><label>CTA link<input id="announcementLinkUrl" maxlength="240" placeholder="about.html"></label></div>
+              <div class="split"><label>Starts<input id="announcementStartAt" type="datetime-local"></label><label>Ends<input id="announcementEndAt" type="datetime-local"></label></div>
+            </div><p class="hint">Leave start/end empty for an announcement that stays active until disabled.</p></article>
+            <article class="panel card"><p class="eyebrow">SECTION PREVIEW</p><div class="announcement-mini"><span id="annMiniLabel">TEL UPDATE</span><h3 id="annMiniTitle">Your announcement will appear here.</h3><p id="annMiniMessage">Preview of the homepage announcement.</p><b id="annMiniLink">No CTA</b></div><div class="schedule"><i></i><div><strong id="annScheduleState">Disabled</strong><small id="annScheduleDetail">No active announcement.</small></div></div></article>
+          </div>
+        </section>
+
+        <section class="view" data-panel="visibility">
+          <div class="visual-cms-stack">
+            <article class="panel card depth">
+              <div class="card-head">
+                <div><p class="eyebrow">HOMEPAGE VISIBILITY</p><h2>Section controls.</h2></div>
+                <span class="chip">NON-DESTRUCTIVE</span>
+              </div>
+              <p class="muted">Hide or restore homepage sections without deleting their content.</p>
+              <div class="visibility-grid" id="visibilityGrid"></div>
+            </article>
+
+            <article class="panel card visual-manager">
+              <div class="visual-manager-head">
+                <div>
+                  <p class="eyebrow">WEBSITE VISUAL EDITOR</p>
+                  <h2>Edit the actual pictures.</h2>
+                  <p class="muted">Replace the images shown on TEL, adjust crop/focus, edit alt text, preview the exact page, then save the visual configuration live.</p>
+                </div>
+                <div class="actions visual-actions">
+                  <button class="btn secondary" id="reloadVisuals" type="button">Reload visuals</button>
+                  <button class="btn primary" id="saveVisuals" type="button">Save visual changes</button>
+                </div>
+              </div>
+              <div class="visual-filter-block">
+                <div class="visual-filter-label"><span>FILTER BY PAGE</span><small>Tap a page to edit only its pictures.</small></div>
+                <div class="visual-page-tabs" id="visualPageFilter" role="tablist" aria-label="Filter visual editor by page"></div>
+              </div>
+              <div class="visual-summary">
+                <span><strong id="visualCount">0</strong> editable visual slots</span>
+                <span>Uploads are staged first. The public image changes only after <strong>Save visual changes</strong>.</span>
+              </div>
+              <p class="status" id="visualStatus"></p>
+              <div class="visual-editor-grid" id="visualEditorGrid"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" data-panel="careers">
+          <div class="career-admin-head">
+            <div><p class="eyebrow">CAREERS CONTROL</p><h2>Manage current openings.</h2><p class="muted">Add exact roles, departments and vacant-position counts. Paused roles stay saved but disappear from the public page.</p></div>
+            <div class="actions"><button class="btn secondary" id="addVacancy" type="button">Add opening</button><button class="btn secondary" id="saveCareers" type="button">Save draft</button><button class="btn primary" id="reviewCareers" type="button">Review &amp; publish</button></div>
+          </div>
+
+          <div class="panel career-summary">
+            <span><strong id="careerOpenRoleCount">0</strong> open roles</span>
+            <span><strong id="careerOpenPositionCount">0</strong> vacant positions</span>
+            <span><strong id="careerDepartmentCount">0</strong> departments</span>
+            <span id="careerDraftState">Synced with live</span>
+          </div>
+          <p class="status" id="careerStatus"></p>
+
+          <div class="career-admin-grid">
+            <div class="career-editor-stack">
+              <article class="panel card career-settings-card">
+                <div class="card-head"><div><p class="eyebrow">APPLICATION SETTINGS</p><h2>Keep the route clear.</h2></div><span class="chip">DRAFT CONTROLLED</span></div>
+                <div class="career-settings-fields">
+                  <label class="toggle-card"><input id="generalApplicationsOpen" type="checkbox"><span><strong>Accept general applications</strong><small>Show a general-application option when someone does not match a listed role.</small></span></label>
+                  <label>Application email<input id="careerApplicationEmail" type="email" maxlength="160" autocomplete="email" placeholder="techforeasylife.operations@gmail.com"></label>
+                </div>
+                <p class="hint">Every Apply button prepares an email with the selected role and department already filled in.</p>
+              </article>
+
+              <div class="career-list-head"><div><p class="eyebrow">VACANCY BOARD</p><h3>Roles shown in order.</h3></div><button class="btn secondary" id="addVacancyInline" type="button">+ Add opening</button></div>
+              <div class="vacancy-list" id="vacancyList"></div>
+            </div>
+
+            <article class="panel career-preview-panel">
+              <div class="preview-toolbar"><span>CAREERS PAGE PREVIEW</span><div><button class="career-preview-size active" data-career-width="100%">Desktop</button><button class="career-preview-size" data-career-width="390px">Mobile</button></div></div>
+              <div class="career-preview-stage"><iframe id="careerPreviewFrame" title="TEL careers draft preview" src="/preview/careers.html?tel-admin-preview=1"></iframe></div>
+              <div class="career-preview-note"><i></i><span>This preview uses the current unsaved career fields. Save the draft, then publish when ready.</span></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" data-panel="team">
+          <div class="team-head"><div><p class="eyebrow">TEAM DIRECTORY</p><h2>Manage who appears on TEL.</h2><p class="muted">Add, edit, reorder, hide, remove and upload photos.</p></div><div class="actions"><button class="btn secondary" id="reloadTeam">Reload team</button><button class="btn secondary" id="addMember">Add member</button><button class="btn primary" id="saveTeam">Save team</button></div></div>
+          <div class="panel summary"><span><strong id="memberCount">0</strong> total</span><span><strong id="visibleCount">0</strong> visible</span><span id="teamUpdated">Not saved yet</span></div><p class="status" id="teamStatus"></p><div id="memberList" class="member-list"></div>
+        </section>
+
+        <section class="view" data-panel="history"><article class="panel card"><div class="card-head"><div><p class="eyebrow">VERSION HISTORY</p><h2>Rollback without panic.</h2></div><span class="chip">LAST 20</span></div><p class="muted">Every publish snapshots the previous live state.</p><div class="list" id="historyList"></div></article></section>
+        <section class="view" data-panel="activity"><article class="panel card"><div class="card-head"><div><p class="eyebrow">ACTIVITY LOG</p><h2>Every important action.</h2></div><button class="btn secondary" id="reloadActivity">Refresh log</button></div><div class="list" id="activityList"></div></article></section>
+
+        <section class="view" data-panel="deployment"><div class="deploy-grid"><article class="panel console"><div class="console-title"><div><i></i><i></i><i></i></div><span>DEPLOYMENT CONSOLE</span></div><div class="console-body" id="deploymentConsole"><p>&gt; Waiting…</p></div><div class="actions console-actions"><button class="btn secondary" id="reloadDeployment">Refresh deployment</button><button class="btn primary" id="runHealth">Run health scan</button></div></article><article class="panel card"><p class="eyebrow">WEBSITE HEALTH</p><h2>Public checks.</h2><div class="list" id="healthList"></div></article></div></section>
+
+        <section class="view" data-panel="maintenance"><div class="maintenance-grid"><article class="panel card critical-panel"><p class="eyebrow">MAINTENANCE MODE</p><h2>Control the public gate.</h2><p class="muted">This stays draft-only until you publish, reducing accidental lockouts.</p><label class="toggle-card maintenance-toggle"><input id="maintenanceEnabled" type="checkbox"><span><strong id="maintenanceToggleTitle">Maintenance is OFF</strong><small id="maintenanceToggleCopy">The public site is available normally.</small></span></label><div class="fields one"><label>Maintenance headline<input id="maintenanceTitle" maxlength="120"></label><label>Message<textarea id="maintenanceMessage" maxlength="500" rows="4"></textarea></label><label>Status note / ETA<input id="maintenanceEta" maxlength="120"></label></div><div class="danger-note"><strong>Important</strong><p>Enabling this and publishing places the TEL maintenance screen across the public site.</p></div><div class="actions"><button class="btn secondary" id="previewMaintenance">Preview maintenance</button><button class="btn danger-btn" id="publishMaintenance">Publish maintenance state</button></div></article><article class="panel maintenance-preview"><img src="https://techforeasylife.in/tel-logo.webp" alt="TEL"><span>PRIVATE PREVIEW</span><h3 id="maintMiniTitle">TEL is getting an update.</h3><p id="maintMiniMessage">We’ll be back shortly.</p><small id="maintMiniEta">Back shortly</small></article></div></section>
+      </div>
+    </section>
+  </main>
+</div>
+
+<template id="memberTemplate">
+  <article class="panel member-card">
+    <div class="member-top"><div class="member-number"></div><div class="actions"><button class="icon move-up">↑</button><button class="icon move-down">↓</button><button class="icon remove">Remove</button></div></div>
+    <div class="member-grid"><div><div class="photo"><img hidden><span>No photo</span></div><label class="upload">Upload JPG, PNG or WebP<input class="image-file" type="file" accept="image/jpeg,image/png,image/webp"></label><p class="upload-status muted"></p></div><div class="fields"><label>Name *<input class="f-name" maxlength="100"></label><label>Role *<input class="f-role" maxlength="160"></label><label>Section<select class="f-section"><option value="leadership">Leadership</option><option value="team">Team</option></select></label><label>Order<input class="f-order" type="number" min="1" max="999"></label><label class="wide">Label<input class="f-label" maxlength="100"></label><label class="wide">Quote<textarea class="f-quote" maxlength="400" rows="3"></textarea></label><label class="wide">Image path<input class="f-image" maxlength="200"></label><label class="wide">Alt text<input class="f-alt" maxlength="220"></label><label class="wide active-check"><input class="f-active" type="checkbox"> Visible on website</label></div></div>
+  </article>
+</template>
+</body>
+</html>

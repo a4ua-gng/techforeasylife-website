@@ -22,6 +22,11 @@
       message: "We’ll be back shortly.",
       eta: "Back shortly",
     },
+    careers: {
+      applicationEmail: "techforeasylife.operations@gmail.com",
+      generalApplicationsOpen: true,
+      vacancies: [],
+    },
     visibility: {
       hero: true,
       signalStrip: true,
@@ -64,11 +69,18 @@
 
   function mergeConfig(input) {
     const safe = input && typeof input === "object" ? input : {};
+    const careers = safe.careers && typeof safe.careers === "object" ? safe.careers : {};
     return {
       ...DEFAULTS,
       ...safe,
       announcement: { ...DEFAULTS.announcement, ...(safe.announcement || {}) },
       maintenance: { ...DEFAULTS.maintenance, ...(safe.maintenance || {}) },
+      careers: {
+        ...DEFAULTS.careers,
+        ...careers,
+        generalApplicationsOpen: careers.generalApplicationsOpen !== false,
+        vacancies: Array.isArray(careers.vacancies) ? careers.vacancies.map(normalizeVacancy) : [],
+      },
       visibility: { ...DEFAULTS.visibility, ...(safe.visibility || {}) },
     };
   }
@@ -77,6 +89,7 @@
     currentConfig = config;
     applyVisibility(config.visibility);
     applyAnnouncement(config.announcement);
+    applyCareers(config.careers);
     applyMaintenance(config.maintenance);
   }
 
@@ -156,6 +169,171 @@
     if (Number.isFinite(start) && now < start) return false;
     if (Number.isFinite(end) && now >= end) return false;
     return true;
+  }
+
+  function normalizeVacancy(vacancy, index) {
+    const source = vacancy && typeof vacancy === "object" ? vacancy : {};
+    const openings = Number.isFinite(Number(source.openings)) ? Math.round(Number(source.openings)) : 1;
+    return {
+      id: String(source.id || `vacancy-${index + 1}`).slice(0, 60),
+      role: String(source.role || "").trim().slice(0, 120),
+      department: String(source.department || "").trim().slice(0, 100),
+      description: String(source.description || "").trim().slice(0, 500),
+      location: String(source.location || "").trim().slice(0, 100),
+      openings: Math.min(99, Math.max(1, openings)),
+      active: source.active !== false,
+    };
+  }
+
+  function applyCareers(careers) {
+    if (document.body.dataset.page !== "careers") return;
+
+    const email = isSafeEmail(careers.applicationEmail)
+      ? careers.applicationEmail.trim()
+      : DEFAULTS.careers.applicationEmail;
+    const vacancies = (Array.isArray(careers.vacancies) ? careers.vacancies : [])
+      .map(normalizeVacancy)
+      .filter((vacancy) => vacancy.active && vacancy.role && vacancy.department && vacancy.description);
+    const positionCount = vacancies.reduce((total, vacancy) => total + vacancy.openings, 0);
+    const departmentCount = new Set(vacancies.map((vacancy) => vacancy.department)).size;
+
+    document.querySelectorAll("[data-career-role-count]").forEach((node) => { node.textContent = String(vacancies.length); });
+    document.querySelectorAll("[data-career-position-count]").forEach((node) => { node.textContent = String(positionCount); });
+
+    const summary = document.querySelector("[data-career-board-summary]");
+    if (summary) {
+      summary.textContent = vacancies.length
+        ? `${vacancies.length} open role${vacancies.length === 1 ? "" : "s"} across ${departmentCount} department${departmentCount === 1 ? "" : "s"}, with ${positionCount} position${positionCount === 1 ? "" : "s"} currently vacant.`
+        : careers.generalApplicationsOpen
+          ? "No specific role is open right now, but focused general applications are welcome."
+          : "TEL is not accepting applications right now. Please check again later.";
+    }
+
+    const board = document.querySelector("[data-career-board]");
+    if (board) {
+      board.replaceChildren();
+      if (!vacancies.length) {
+        board.append(createCareerEmptyState(careers.generalApplicationsOpen, email));
+      } else {
+        vacancies.forEach((vacancy, index) => board.append(createVacancyCard(vacancy, index, email)));
+      }
+    }
+
+    const generalSection = document.querySelector("[data-general-application-section]");
+    if (generalSection) generalSection.hidden = !careers.generalApplicationsOpen;
+    document.querySelectorAll("[data-general-application]").forEach((link) => {
+      link.href = createGeneralApplicationLink(email);
+    });
+  }
+
+  function createVacancyCard(vacancy, index, email) {
+    const card = document.createElement("article");
+    card.className = "career-vacancy-card";
+
+    const number = document.createElement("span");
+    number.className = "career-vacancy-index";
+    number.textContent = String(index + 1).padStart(2, "0");
+
+    const main = document.createElement("div");
+    main.className = "career-vacancy-main";
+    const department = document.createElement("span");
+    department.textContent = vacancy.department;
+    const title = document.createElement("h3");
+    title.textContent = vacancy.role;
+    const description = document.createElement("p");
+    description.textContent = vacancy.description;
+    const meta = document.createElement("div");
+    meta.className = "career-vacancy-meta";
+    if (vacancy.location) {
+      const location = document.createElement("span");
+      location.textContent = vacancy.location;
+      meta.append(location);
+    }
+    const departmentMeta = document.createElement("span");
+    departmentMeta.textContent = vacancy.department;
+    meta.append(departmentMeta);
+    main.append(department, title, description, meta);
+
+    const action = document.createElement("div");
+    action.className = "career-vacancy-action";
+    const count = document.createElement("span");
+    count.className = "career-vacancy-count";
+    count.textContent = `${vacancy.openings} ${vacancy.openings === 1 ? "vacancy" : "vacancies"}`;
+    const link = document.createElement("a");
+    link.className = "button button-primary career-apply-button";
+    link.href = createRoleApplicationLink(email, vacancy);
+    link.textContent = "Apply for this role ↗";
+    action.append(count, link);
+
+    card.append(number, main, action);
+    return card;
+  }
+
+  function createCareerEmptyState(generalApplicationsOpen, email) {
+    const state = document.createElement("div");
+    state.className = "career-empty-state";
+    const label = document.createElement("span");
+    label.textContent = generalApplicationsOpen ? "NO SPECIFIC VACANCIES" : "APPLICATIONS PAUSED";
+    const title = document.createElement("h3");
+    title.textContent = generalApplicationsOpen ? "No listed role right now." : "There are no open applications right now.";
+    const message = document.createElement("p");
+    message.textContent = generalApplicationsOpen
+      ? "If you can make a specific, useful contribution, you can still send TEL a focused general application."
+      : "The board is kept current by TEL Mission Control. Check again later for new openings.";
+    state.append(label, title, message);
+    if (generalApplicationsOpen) {
+      const link = document.createElement("a");
+      link.className = "button button-ghost";
+      link.href = createGeneralApplicationLink(email);
+      link.textContent = "Send a general application ↗";
+      state.append(link);
+    }
+    return state;
+  }
+
+  function createRoleApplicationLink(email, vacancy) {
+    const subject = `TEL application — ${vacancy.role}`;
+    const body = [
+      "Hello TEL,",
+      "",
+      "I would like to apply for the following opening:",
+      `Role: ${vacancy.role}`,
+      `Department: ${vacancy.department}`,
+      `Location / format: ${vacancy.location || "Not specified"}`,
+      "",
+      "Name:",
+      "Age or class (optional):",
+      "Location and time zone:",
+      "Relevant skills:",
+      "Portfolio or work samples:",
+      "Weekly availability:",
+      "Why I am a good fit for this role:",
+      "",
+    ].join("\n");
+    return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  function createGeneralApplicationLink(email) {
+    const body = [
+      "Hello TEL,",
+      "",
+      "I would like to send a general application.",
+      "",
+      "Name:",
+      "Age or class (optional):",
+      "Location and time zone:",
+      "The specific contribution I can own:",
+      "Relevant skills:",
+      "Portfolio or work samples:",
+      "Weekly availability:",
+      "Why TEL:",
+      "",
+    ].join("\n");
+    return `mailto:${email}?subject=${encodeURIComponent("General application to TEL")}&body=${encodeURIComponent(body)}`;
+  }
+
+  function isSafeEmail(value) {
+    return typeof value === "string" && /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(value.trim());
   }
 
   function applyMaintenance(maintenance) {

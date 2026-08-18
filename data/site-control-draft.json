@@ -18,6 +18,11 @@
     "message": "We’ll be back shortly.",
     "eta": "Back shortly"
   },
+  "careers": {
+    "applicationEmail": "techforeasylife.operations@gmail.com",
+    "generalApplicationsOpen": true,
+    "vacancies": []
+  },
   "visibility": {
     "hero": true,
     "signalStrip": true,

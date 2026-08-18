@@ -10,7 +10,7 @@ Static multi-page website for TEL's education and practical-learning branch, bui
 - `safety.html` — SafeFlight access, learning, weather, quiz, TEL Control handoff and STEM tools
 - `control.html` — Hidden, no-index full-screen TEL Control classroom demonstration
 - `play.html` — Archived TEL Play Lab file; intentionally hidden from navigation and search indexing
-- `careers.html` — Contribution areas and open applications
+- `careers.html` — Live vacancy board, vacant-position counts and simplified applications
 - `about.html` — Mission and founding team
 - `contact.html` — Email-based enquiry form
 - `404.html` — Branded not-found page
@@ -20,7 +20,7 @@ Static multi-page website for TEL's education and practical-learning branch, bui
 1. Download and extract the latest TEL website ZIP.
 2. Open the `techforeasylife-website` repository on GitHub.
 3. Select **Add file → Upload files**.
-4. Select **every extracted file at once** and drag them into the upload area. This release deliberately has no folders: every `.html`, `.webp`, `.css`, `.js`, `.svg`, `.txt` and `.xml` file belongs beside `index.html` in the repository root.
+4. Select the complete extracted website, including its `data` folder, and drag it into the upload area without flattening the directory structure.
 5. Check that image names such as `kit-box.webp`, `tel-logo.webp` and `stem-classroom.webp` appear in the upload list. Do not upload the ZIP itself.
 6. Enter a commit message such as `Update TEL education website`.
 7. Select **Commit changes**.
@@ -38,6 +38,8 @@ Connect `techforeasylife.in` only after the GitHub Pages preview looks correct. 
 - The contact form opens the visitor's email app; there is no server or database.
 - Kit sales and institution proposals route to `techforeasylife.sales@gmail.com`.
 - Careers, operations and general questions route to `techforeasylife.operations@gmail.com`.
+- Published career roles, departments, vacancy counts and application settings are stored in `data/site-control.json` and rendered by `site-control-v4.js`.
+- `.cloudflare-admin/` is the deployment source for the private Cloudflare Pages admin panel; `tel-admin-worker-v4.js` is the separate Admin API Worker source. Secrets remain Cloudflare bindings and are never stored in this repository.
 - All website images are flattened into the repository root to avoid missed-folder uploads on GitHub.
 - The official TEL logo is used in the header, footer, About brand panel and browser favicon.
 - The TEL Model Rocket Kit is the main visual focus, led by the line “Why skies? Go beyond it!”

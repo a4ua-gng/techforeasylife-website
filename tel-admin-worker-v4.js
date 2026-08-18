@@ -1,7 +1,9 @@
 const API_VERSION = "2026-03-10";
-const WORKER_VERSION = "4.0.0";
+const WORKER_VERSION = "4.2.0";
 const TEAM_FILE = "data/team.json";
 const IMAGE_DIRECTORY = "team-images";
+const SITE_CONTENT_FILE = "data/site-content.json";
+const SITE_VISUAL_DIRECTORY = "site-visuals";
 const SITE_FILE = "data/site-control.json";
 const SITE_DRAFT_FILE = "data/site-control-draft.json";
 const SITE_HISTORY_FILE = "data/site-control-history.json";
@@ -25,14 +27,17 @@ export default {
       if (!originIsAllowed(request, env)) return jsonResponse(request, env, 403, { ok: false, error: "Origin not allowed." });
 
       if (request.method === "GET" && (path === "/" || path === "/health")) return healthResponse(request, env);
-      if (request.method === "POST" && path === "/api/login") return login(request, env);
-      if (request.method === "GET" && path === "/api/team") return getTeam(request, env);
-      if (request.method === "GET" && path === "/api/site-control") return getSiteControl(request, env);
+      if (request.method === "POST" && path === "/api/login") return await login(request, env);
+      if (request.method === "GET" && path === "/api/team") return await getTeam(request, env);
+      if (request.method === "GET" && path === "/api/site-control") return await getSiteControl(request, env);
+      if (request.method === "GET" && path === "/api/site-content") return await getSiteContent(request, env);
 
       const protectedRoutes = new Set([
         "PUT /api/team",
         "POST /api/images",
         "DELETE /api/images",
+        "PUT /api/site-content",
+        "POST /api/site-assets",
         "GET /api/admin/site",
         "PUT /api/admin/site/draft",
         "POST /api/admin/site/publish",
@@ -45,20 +50,32 @@ export default {
         if (!auth.ok) return auth.response;
       }
 
-      if (request.method === "PUT" && path === "/api/team") return saveTeam(request, env);
-      if (request.method === "POST" && path === "/api/images") return uploadImage(request, env);
-      if (request.method === "DELETE" && path === "/api/images") return deleteImage(request, env, url);
-      if (request.method === "GET" && path === "/api/admin/site") return getSiteAdmin(request, env);
-      if (request.method === "PUT" && path === "/api/admin/site/draft") return saveSiteDraft(request, env);
-      if (request.method === "POST" && path === "/api/admin/site/publish") return publishSite(request, env);
-      if (request.method === "POST" && path === "/api/admin/site/rollback") return rollbackSite(request, env);
-      if (request.method === "GET" && path === "/api/admin/deployment") return getDeploymentStatus(request, env);
+      if (request.method === "PUT" && path === "/api/team") return await saveTeam(request, env);
+      if (request.method === "POST" && path === "/api/images") return await uploadImage(request, env);
+      if (request.method === "DELETE" && path === "/api/images") return await deleteImage(request, env, url);
+      if (request.method === "PUT" && path === "/api/site-content") return await saveSiteContent(request, env);
+      if (request.method === "POST" && path === "/api/site-assets") return await uploadSiteAsset(request, env);
+      if (request.method === "GET" && path === "/api/admin/site") return await getSiteAdmin(request, env);
+      if (request.method === "PUT" && path === "/api/admin/site/draft") return await saveSiteDraft(request, env);
+      if (request.method === "POST" && path === "/api/admin/site/publish") return await publishSite(request, env);
+      if (request.method === "POST" && path === "/api/admin/site/rollback") return await rollbackSite(request, env);
+      if (request.method === "GET" && path === "/api/admin/deployment") return await getDeploymentStatus(request, env);
 
       return jsonResponse(request, env, 404, { ok: false, error: "Route not found." });
     } catch (error) {
-      console.error(error);
       const status = error instanceof HttpError ? error.status : 500;
-      return jsonResponse(request, env, status, { ok: false, error: error instanceof Error ? error.message : "Unexpected Worker error." });
+      const message = error instanceof Error ? error.message : "Unexpected Worker error.";
+      console.error(JSON.stringify({
+        message: "TEL Admin API request failed",
+        method: request.method,
+        path: new URL(request.url).pathname,
+        status,
+        error: message
+      }));
+      return jsonResponse(request, env, status, {
+        ok: false,
+        error: status >= 500 ? "The admin service could not complete this request." : message
+      });
     }
   },
 };
@@ -70,6 +87,7 @@ function defaultSiteControl() {
     publishedAt: null,
     announcement: { enabled: false, label: "TEL UPDATE", title: "", message: "", linkText: "", linkUrl: "", startAt: null, endAt: null },
     maintenance: { enabled: false, title: "TEL is getting an update.", message: "We’ll be back shortly.", eta: "Back shortly" },
+    careers: { applicationEmail: "techforeasylife.operations@gmail.com", generalApplicationsOpen: true, vacancies: [] },
     visibility: { hero: true, signalStrip: true, quickStart: true, mission: true, flagship: true, pathway: true, safety: true, leadership: true, careers: true, finalCta: true },
   };
 }
@@ -112,9 +130,12 @@ function healthResponse(request, env) {
     routes: {
       publicTeam: "GET /api/team",
       publicSiteControl: "GET /api/site-control",
+      publicSiteContent: "GET /api/site-content",
       login: "POST /api/login",
       saveTeam: "PUT /api/team",
       uploadImage: "POST /api/images",
+      saveSiteContent: "PUT /api/site-content",
+      uploadSiteAsset: "POST /api/site-assets",
       adminSite: "GET /api/admin/site",
       saveDraft: "PUT /api/admin/site/draft",
       publish: "POST /api/admin/site/publish",
@@ -226,8 +247,132 @@ async function deleteImage(request, env, url) {
   return jsonResponse(request, env, 200, { ok: true, message: "Image removed from GitHub.", commit: result.commit?.sha || null });
 }
 
+async function getSiteContent(request, env) {
+  const fallback = { version: 2, updatedAt: null, visuals: [] };
+  const file = await githubGetFile(env, SITE_CONTENT_FILE);
+  if (!file) return jsonResponse(request, env, 200, { ok: true, exists: false, data: fallback });
+  const data = validateSiteContent(parseJsonFile(file, SITE_CONTENT_FILE));
+  return jsonResponse(request, env, 200, { ok: true, exists: true, data });
+}
+
+async function saveSiteContent(request, env) {
+  const body = await readJsonBody(request, MAX_JSON_BYTES);
+  const data = validateSiteContent({
+    version: 2,
+    updatedAt: new Date().toISOString(),
+    visuals: body.visuals
+  });
+  const result = await githubPutJson(env, SITE_CONTENT_FILE, data, "Update TEL website visuals from Admin v4.2");
+  const activity = await appendActivity(env, {
+    type: "visuals.save",
+    message: `Saved ${data.visuals.length} website visual${data.visuals.length === 1 ? "" : "s"}.`,
+    commit: result.commit?.sha || null
+  });
+  return jsonResponse(request, env, 200, {
+    ok: true,
+    message: "Website visual configuration saved to GitHub.",
+    commit: result.commit?.sha || null,
+    data,
+    activity
+  });
+}
+
+async function uploadSiteAsset(request, env) {
+  const body = await readJsonBody(request, 8 * 1024 * 1024);
+  const path = typeof body.path === "string" ? body.path.trim().toLowerCase() : "";
+  const match = path.match(/^site-visuals\/([a-z0-9][a-z0-9-]{1,79})\.(jpg|png|webp)$/);
+  if (!match || path.includes("..")) throw new HttpError(400, "A valid site-visuals image path is required.");
+
+  const expectedType = { jpg: "image/jpeg", png: "image/png", webp: "image/webp" }[match[2]];
+  if (body.contentType !== expectedType) throw new HttpError(400, "The image type does not match its file extension.");
+
+  let base64 = typeof body.base64 === "string" ? body.base64.trim() : "";
+  base64 = base64.replace(/^data:image\/[a-zA-Z0-9.+-]+;base64,/, "").replace(/\s/g, "");
+  if (!base64 || !/^[A-Za-z0-9+/]+={0,2}$/.test(base64)) throw new HttpError(400, "Image data is not valid base64.");
+  if (Math.floor((base64.length * 3) / 4) > MAX_IMAGE_BYTES) throw new HttpError(413, "Image must be 5 MB or smaller.");
+
+  const existing = await githubGetFile(env, path);
+  const result = await githubPutFile(
+    env,
+    path,
+    base64,
+    existing?.sha,
+    existing ? `Replace website visual ${match[1]}` : `Add website visual ${match[1]}`
+  );
+  const activity = await appendActivity(env, {
+    type: "visual.upload",
+    message: `Uploaded replacement visual ${path}.`,
+    commit: result.commit?.sha || null
+  });
+  return jsonResponse(request, env, 200, {
+    ok: true,
+    message: "Website visual uploaded to GitHub.",
+    path,
+    commit: result.commit?.sha || null,
+    activity
+  });
+}
+
+function validateSiteContent(input) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) throw new HttpError(400, "Site content must be an object.");
+  if (!Array.isArray(input.visuals)) throw new HttpError(400, "visuals must be an array.");
+  if (input.visuals.length > 100) throw new HttpError(400, "A maximum of 100 website visuals is allowed.");
+
+  const seenIds = new Set();
+  const visuals = input.visuals.map((visual, index) => {
+    if (!visual || typeof visual !== "object" || Array.isArray(visual)) throw new HttpError(400, `Visual ${index + 1} is invalid.`);
+    const id = cleanText(visual.id, 80, `Visual ${index + 1} id`).toLowerCase();
+    if (!/^[a-z0-9][a-z0-9-]{1,79}$/.test(id)) throw new HttpError(400, `Visual ${index + 1} has an invalid id.`);
+    if (seenIds.has(id)) throw new HttpError(400, `Duplicate visual id: ${id}`);
+    seenIds.add(id);
+
+    const page = cleanText(visual.page, 100, `${id} page`);
+    if (!/^[a-z0-9][a-z0-9-]*\.html$/i.test(page)) throw new HttpError(400, `${id} has an invalid page.`);
+    const assetPath = cleanAssetPath(visual.assetPath, `${id} asset path`);
+    const defaultAssetPath = cleanAssetPath(visual.defaultAssetPath, `${id} default asset path`);
+    const fit = ["inherit", "contain", "cover", "fill", "none", "scale-down"].includes(visual.fit) ? visual.fit : "inherit";
+    const labels = Array.isArray(visual.labels)
+      ? visual.labels.slice(0, 20).map((label) => cleanOptionalText(label, 80)).filter(Boolean)
+      : [];
+
+    return {
+      id,
+      name: cleanOptionalText(visual.name, 120) || id,
+      page,
+      assetPath,
+      defaultAssetPath: defaultAssetPath || assetPath,
+      imageSelector: cleanOptionalText(visual.imageSelector, 500),
+      alt: cleanOptionalText(visual.alt, 220),
+      note: cleanOptionalText(visual.note, 300),
+      fit,
+      positionX: clampInteger(visual.positionX, 50, 0, 100),
+      positionY: clampInteger(visual.positionY, 50, 0, 100),
+      active: visual.active !== false,
+      labels
+    };
+  });
+
+  return {
+    version: 2,
+    updatedAt: typeof input.updatedAt === "string" ? input.updatedAt : null,
+    visuals
+  };
+}
+
+function cleanAssetPath(value, label) {
+  const path = cleanOptionalText(value, 240);
+  if (!path) return "";
+  if (path.includes("..") || path.startsWith("/") || path.startsWith("//") || /^[a-z]+:/i.test(path)) {
+    throw new HttpError(400, `${label} is unsafe.`);
+  }
+  if (!/^[a-zA-Z0-9_./-]+\.(avif|gif|jpe?g|png|svg|webp)$/i.test(path)) {
+    throw new HttpError(400, `${label} must point to an image file.`);
+  }
+  return path;
+}
+
 async function getSiteControl(request, env) {
-  const published = await readJsonOrDefault(env, SITE_FILE, defaultSiteControl());
+  const published = normalizeSiteControl(await readJsonOrDefault(env, SITE_FILE, defaultSiteControl()));
   return jsonResponse(request, env, 200, { ok: true, data: published });
 }
 async function getSiteAdmin(request, env) {
@@ -298,6 +443,13 @@ function summarizePublish(config) {
   const parts = [];
   if (config.announcement?.enabled) parts.push("announcement enabled");
   if (config.maintenance?.enabled) parts.push("maintenance enabled");
+  const openRoles = config.careers?.vacancies?.filter((vacancy) => vacancy.active !== false) || [];
+  const openPositions = openRoles.reduce((total, vacancy) => total + vacancy.openings, 0);
+  if (openRoles.length) {
+    parts.push(`${openRoles.length} career role${openRoles.length === 1 ? "" : "s"} / ${openPositions} position${openPositions === 1 ? "" : "s"} open`);
+  } else if (config.careers?.generalApplicationsOpen) {
+    parts.push("general career applications open");
+  }
   const hidden = Object.entries(config.visibility || {}).filter(([, visible]) => visible === false).length;
   if (hidden) parts.push(`${hidden} homepage section${hidden === 1 ? "" : "s"} hidden`);
   return parts.length ? `Published site controls: ${parts.join(", ")}.` : "Published site controls.";
@@ -321,6 +473,42 @@ function validateSiteControl(input) {
   m.title = cleanOptionalText(m.title, 120) || "TEL is getting an update.";
   m.message = cleanOptionalText(m.message, 500) || "We’ll be back shortly.";
   m.eta = cleanOptionalText(m.eta, 120) || "Back shortly";
+
+  const c = config.careers;
+  c.applicationEmail = cleanOptionalText(c.applicationEmail, 200).toLowerCase();
+  if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(c.applicationEmail)) {
+    throw new HttpError(400, "Careers needs a valid application email address.");
+  }
+  if (!Array.isArray(c.vacancies) || c.vacancies.length > 30) {
+    throw new HttpError(400, "Careers can contain up to 30 vacancies.");
+  }
+  const seenVacancyIds = new Set();
+  c.vacancies = c.vacancies.map((vacancy, index) => {
+    if (!vacancy || typeof vacancy !== "object" || Array.isArray(vacancy)) {
+      throw new HttpError(400, `Opening ${index + 1} is invalid.`);
+    }
+    const role = cleanText(vacancy.role, 120, `Opening ${index + 1} role title`);
+    const department = cleanText(vacancy.department, 100, `Opening ${index + 1} department`);
+    const description = cleanText(vacancy.description, 500, `Opening ${index + 1} description`);
+    const numericOpenings = Number(vacancy.openings);
+    if (!Number.isInteger(numericOpenings) || numericOpenings < 1 || numericOpenings > 99) {
+      throw new HttpError(400, `Opening ${index + 1} needs a vacant-position count from 1 to 99.`);
+    }
+    let id = cleanOptionalText(vacancy.id, 80).toLowerCase() || slugify(role) || `opening-${index + 1}`;
+    if (!/^[a-z0-9][a-z0-9-]{1,79}$/.test(id)) throw new HttpError(400, `Opening ${index + 1} has an invalid id.`);
+    if (seenVacancyIds.has(id)) throw new HttpError(400, `Duplicate opening id: ${id}`);
+    seenVacancyIds.add(id);
+    return {
+      id,
+      role,
+      department,
+      description,
+      location: cleanOptionalText(vacancy.location, 100),
+      openings: numericOpenings,
+      active: vacancy.active !== false,
+      order: clampInteger(vacancy.order, index + 1, 1, 999)
+    };
+  }).sort((left, right) => left.order - right.order);
   return config;
 }
 function normalizeSiteControl(input) {
@@ -328,13 +516,37 @@ function normalizeSiteControl(input) {
   const source = input && typeof input === "object" && !Array.isArray(input) ? input : {};
   const visibility = { ...defaults.visibility };
   for (const key of Object.keys(visibility)) visibility[key] = source.visibility?.[key] !== false;
+  const sourceCareers = source.careers && typeof source.careers === "object" && !Array.isArray(source.careers)
+    ? source.careers
+    : {};
+  const vacancies = Array.isArray(sourceCareers.vacancies)
+    ? sourceCareers.vacancies.map((vacancy, index) => normalizeVacancy(vacancy, index)).sort((left, right) => left.order - right.order)
+    : [];
   return {
     version: 1,
     updatedAt: typeof source.updatedAt === "string" ? source.updatedAt : null,
     publishedAt: typeof source.publishedAt === "string" ? source.publishedAt : null,
     announcement: { ...defaults.announcement, ...(source.announcement && typeof source.announcement === "object" ? source.announcement : {}), enabled: source.announcement?.enabled === true },
     maintenance: { ...defaults.maintenance, ...(source.maintenance && typeof source.maintenance === "object" ? source.maintenance : {}), enabled: source.maintenance?.enabled === true },
+    careers: {
+      applicationEmail: typeof sourceCareers.applicationEmail === "string" ? sourceCareers.applicationEmail : defaults.careers.applicationEmail,
+      generalApplicationsOpen: sourceCareers.generalApplicationsOpen !== false,
+      vacancies
+    },
     visibility
+  };
+}
+function normalizeVacancy(vacancy, index) {
+  const source = vacancy && typeof vacancy === "object" && !Array.isArray(vacancy) ? vacancy : {};
+  return {
+    id: typeof source.id === "string" ? source.id : `opening-${index + 1}`,
+    role: typeof source.role === "string" ? source.role : "",
+    department: typeof source.department === "string" ? source.department : "",
+    description: typeof source.description === "string" ? source.description : "",
+    location: typeof source.location === "string" ? source.location : "",
+    openings: Number.isFinite(Number(source.openings)) ? Number(source.openings) : 1,
+    active: source.active !== false,
+    order: Number.isFinite(Number(source.order)) ? Number(source.order) : index + 1
   };
 }
 function cleanDateOrNull(value, label) { if (!value) return null; const date = new Date(value); if (Number.isNaN(date.getTime())) throw new HttpError(400, `${label} is invalid.`); return date.toISOString(); }
