@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-07T16:25:10.666Z",
-  "publishedAt": "2026-08-07T16:25:10.666Z",
+  "updatedAt": "2026-08-19T14:13:24.395Z",
+  "publishedAt": "2026-08-19T14:13:24.395Z",
   "announcement": {
     "enabled": false,
     "label": "TEL UPDATE",
@@ -21,7 +21,18 @@
   "careers": {
     "applicationEmail": "techforeasylife.operations@gmail.com",
     "generalApplicationsOpen": true,
-    "vacancies": []
+    "vacancies": [
+      {
+        "id": "opening-1787148662452",
+        "role": "Editor",
+        "department": "Media",
+        "description": "We are looking for a creative and detail-oriented Editor to review, refine, and improve written content. The ideal candidate should have strong communication skills, excellent grammar, attention to detail, and the ability to meet deadlines while maintaining high-quality, engaging content.",
+        "location": "Online",
+        "openings": 2,
+        "active": true,
+        "order": 1
+      }
+    ]
   },
   "visibility": {
     "hero": true,
