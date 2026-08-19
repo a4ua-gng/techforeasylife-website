@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-19T14:13:24.395Z",
+  "updatedAt": "2026-08-19T14:15:04.761Z",
   "publishedAt": "2026-08-19T14:13:24.395Z",
   "announcement": {
     "enabled": false,
@@ -24,9 +24,9 @@
     "vacancies": [
       {
         "id": "opening-1787148662452",
-        "role": "Editor",
+        "role": "Video Editor",
         "department": "Media",
-        "description": "We are looking for a creative and detail-oriented Editor to review, refine, and improve written content. The ideal candidate should have strong communication skills, excellent grammar, attention to detail, and the ability to meet deadlines while maintaining high-quality, engaging content.",
+        "description": "We are looking for a creative Video Editor to edit and produce engaging videos for TEL. The ideal candidate should have strong editing skills, creativity, attention to detail, and the ability to turn raw footage into high-quality, impactful content.",
         "location": "Online",
         "openings": 2,
         "active": true,
