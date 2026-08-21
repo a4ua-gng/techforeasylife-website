@@ -18,6 +18,7 @@
 html { scroll-behavior: smooth; background: #c9c5ba; }
 body {
   margin: 0;
+  overflow-x: clip;
   background: #c9c5ba;
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
@@ -29,6 +30,29 @@ button, input, select, textarea { font: inherit; }
 button { color: inherit; }
 img { display: block; max-width: 100%; }
 ::selection { background: var(--hot); color: white; }
+
+:is(
+  .header,
+  .hero,
+  .why__statement,
+  .why__body,
+  .systems__heading,
+  .systems__workspace,
+  .system-detail,
+  .applications__heading,
+  .application-gallery,
+  .quality__layout,
+  .brief__heading,
+  .brief-builder,
+  .process__heading,
+  .process-grid,
+  .responsibility__lead,
+  .responsibility__cards,
+  .location,
+  .faq__layout,
+  .contact__bottom,
+  .footer
+) > * { min-width: 0; }
 
 .skip-link {
   position: fixed;
@@ -522,7 +546,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--blue); outline-
   .hero { min-height: auto; }
   .hero__copy { min-height: 610px; padding-top: 34px; padding-bottom: 54px; }
   .hero__topline { font-size: 6px; }
-  .hero h1 { font-size: clamp(42px, 11.4vw, 61px); }
+  .hero h1 { font-size: clamp(32px, 10vw, 54px); }
   .hero__bottom > p { font-size: 15px; }
   .hero__buttons { display: grid; width: 100%; }
   .button { width: 100%; }
@@ -545,7 +569,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--blue); outline-
   .system-tabs button:nth-child(odd) { border-right: 0; }
   .system-tabs button { min-height: 96px; }
   .system-detail__copy { padding: 35px 20px; }
-  .system-detail__copy h3 { font-size: 49px; }
+  .system-detail__copy h3 { font-size: clamp(38px, 12vw, 49px); overflow-wrap: anywhere; }
   .system-detail__object { min-height: 390px; }
   .applications__heading { display: block; }
   .applications__heading .section-index { margin-bottom: 50px; }
@@ -557,7 +581,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--blue); outline-
   .test-grid article:nth-child(3n) { border-right: 1px solid rgba(255,255,255,.16); }
   .test-grid article:nth-child(2n) { border-right: 0; }
   .test-grid article { min-height: 125px; }
-  .quality-orbit { width: 265px; }
+  .quality-orbit { width: min(265px, 100%); }
   .brief-builder { margin-inline: calc(var(--gutter) * -1); border-left: 0; border-right: 0; }
   .brief-builder__steps, .brief-result { padding: 35px 20px; }
   .choice-grid, .choice-grid--three { grid-template-columns: 1fr; }
@@ -566,7 +590,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--blue); outline-
   .process-grid article { min-height: 265px; }
   .responsibility__cards { margin-top: 60px; }
   .location__map, .location__map iframe { min-height: 520px; }
-  .map-pin-card { left: 6%; bottom: 6%; width: 78%; }
+  .map-pin-card { left: 16px; bottom: 6%; width: calc(100% - 32px); padding: 22px; transform: rotate(-1.5deg); }
+  .map-pin-card strong { font-size: clamp(31px, 9.8vw, 46px); line-height: .9; }
   .location__copy { padding-top: 65px; padding-bottom: 75px; }
   .faq__layout { padding-top: 55px; }
   .faq__list button { min-height: 86px; grid-template-columns: 28px 1fr auto; gap: 10px; }
@@ -581,6 +606,25 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--blue); outline-
   .mobile-contact { position: fixed; z-index: 120; left: 0; right: 0; bottom: 0; max-width: none; height: 62px; display: grid; grid-template-columns: .8fr 1.2fr; background: var(--ink); color: white; box-shadow: 0 -10px 30px rgba(17,18,15,.18); }
   .mobile-contact a { display: grid; place-items: center; border-right: 1px solid rgba(255,255,255,.18); font-size: 9px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
   .mobile-contact a:last-child { border-right: 0; background: var(--hot); }
+}
+
+@media (max-width: 360px) {
+  :root { --gutter: 16px; }
+  .demo-bar { gap: 8px; }
+  .demo-bar a { font-size: 6px; }
+  .mega-menu nav a { min-height: 70px; }
+  .mega-menu nav strong { font-size: 20px; }
+  .hero__copy { min-height: 570px; }
+  .hero__topline { gap: 12px; }
+  .hero__topline span:last-child { text-align: right; }
+  .hero h1 { font-size: clamp(30px, 9.8vw, 35px); }
+  .hero__specimen { left: 5%; width: 64%; }
+  .hero__iso { width: 92px; }
+  .system-detail__copy h3 { font-size: 37px; }
+  .choice-grid button { padding-inline: 14px; }
+  .map-pin-card { left: 12px; width: calc(100% - 24px); padding: 20px; }
+  .faq__list button > strong { font-size: 15px; }
+  .contact h2 { font-size: 49px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
