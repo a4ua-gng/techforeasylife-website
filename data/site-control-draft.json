@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-19T14:15:11.215Z",
+  "updatedAt": "2026-08-31T18:46:17.175Z",
   "publishedAt": "2026-08-19T14:15:11.215Z",
   "announcement": {
     "enabled": false,
@@ -31,6 +31,16 @@
         "openings": 2,
         "active": true,
         "order": 1
+      },
+      {
+        "id": "opening-1788201850719",
+        "role": "Sales Manager",
+        "department": "Operations & Sales",
+        "description": "Sales managers would be responsible for sales related to the product from the responsibilities of outreaching with customers to presenting them the product,.",
+        "location": "Offline - Guwahati",
+        "openings": 2,
+        "active": true,
+        "order": 2
       }
     ]
   },
