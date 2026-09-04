@@ -2,6 +2,13 @@
   "version": 1,
   "events": [
     {
+      "id": "5a38456b-279b-4cdd-9b5e-8a6f64fe41da",
+      "at": "2026-09-04T08:18:15.035Z",
+      "type": "team.save",
+      "message": "Saved 8 team members.",
+      "commit": "e946ab913134ef217012b675cf725f9449cf884b"
+    },
+    {
       "id": "93c3f98d-ac82-41bf-8371-21e9c2a45c27",
       "at": "2026-09-04T08:17:33.345Z",
       "type": "image.upload",
