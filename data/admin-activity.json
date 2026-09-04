@@ -2,6 +2,13 @@
   "version": 1,
   "events": [
     {
+      "id": "272e2921-85e7-4eb6-82c2-ee2677865a64",
+      "at": "2026-09-04T08:22:02.160Z",
+      "type": "site.publish",
+      "message": "Published site controls: 2 career roles / 4 positions open.",
+      "commit": "2500834967b1ecf89ad241b2631554c5525d8408"
+    },
+    {
       "id": "0b59fbc6-3833-46d7-8403-9dd251c78905",
       "at": "2026-09-04T08:21:54.306Z",
       "type": "draft.save",
