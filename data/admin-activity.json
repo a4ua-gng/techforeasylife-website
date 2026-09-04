@@ -2,6 +2,13 @@
   "version": 1,
   "events": [
     {
+      "id": "93c3f98d-ac82-41bf-8371-21e9c2a45c27",
+      "at": "2026-09-04T08:17:33.345Z",
+      "type": "image.upload",
+      "message": "Uploaded team photo for kalpa-jyoti-baruah.",
+      "commit": "136f20fed1863085027dd255d811ba4d2a4361b9"
+    },
+    {
       "id": "5fd625a0-8bf3-401a-ab0c-d124d3e74fea",
       "at": "2026-08-31T18:46:27.031Z",
       "type": "site.publish",
