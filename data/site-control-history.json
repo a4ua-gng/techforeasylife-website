@@ -2,6 +2,71 @@
   "version": 1,
   "entries": [
     {
+      "id": "v-20260904082022-c12049",
+      "label": "Before publish",
+      "createdAt": "2026-09-04T08:20:22.317Z",
+      "commit": null,
+      "config": {
+        "version": 1,
+        "updatedAt": "2026-09-04T08:18:28.823Z",
+        "publishedAt": "2026-09-04T08:18:28.823Z",
+        "announcement": {
+          "enabled": false,
+          "label": "TEL UPDATE",
+          "title": "YOU TEST YOU TEST",
+          "message": "im okay!! check 1234{{}]]",
+          "linkText": "GET HELP",
+          "linkUrl": "techforeasylife.in",
+          "startAt": "2026-08-07T16:17:00.000Z",
+          "endAt": null
+        },
+        "maintenance": {
+          "enabled": false,
+          "title": "TEL is getting an update.",
+          "message": "We’ll be back shortly.",
+          "eta": "Back shortly"
+        },
+        "careers": {
+          "applicationEmail": "techforeasylife.operations@gmail.com",
+          "generalApplicationsOpen": true,
+          "vacancies": [
+            {
+              "id": "opening-1787148662452",
+              "role": "Video Editor",
+              "department": "Media",
+              "description": "We are looking for a creative Video Editor to edit and produce engaging videos for TEL. The ideal candidate should have strong editing skills, creativity, attention to detail, and the ability to turn raw footage into high-quality, impactful content.",
+              "location": "Online",
+              "openings": 2,
+              "active": true,
+              "order": 1
+            },
+            {
+              "id": "opening-1788201850719",
+              "role": "Sales Manager",
+              "department": "Operations & Sales",
+              "description": "Sales managers would be responsible for sales related to the product from the responsibilities of outreaching with customers to presenting them the product,.",
+              "location": "Offline - Guwahati",
+              "openings": 2,
+              "active": true,
+              "order": 2
+            }
+          ]
+        },
+        "visibility": {
+          "hero": true,
+          "signalStrip": true,
+          "quickStart": true,
+          "mission": true,
+          "flagship": true,
+          "pathway": true,
+          "safety": true,
+          "leadership": true,
+          "careers": true,
+          "finalCta": true
+        }
+      }
+    },
+    {
       "id": "v-20260904081827-c9a986",
       "label": "Before publish",
       "createdAt": "2026-09-04T08:18:27.039Z",
