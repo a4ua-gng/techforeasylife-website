@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-07T14:20:06.995Z",
+  "updatedAt": "2026-09-04T08:18:12.811Z",
   "members": [
     {
       "id": "harsh-das",
@@ -84,6 +84,18 @@
       "alt": "Jidan Hussain, Growth and Outreach Manager at TEL",
       "section": "team",
       "order": 7,
+      "active": true
+    },
+    {
+      "id": "kalpa-jyoti-baruah",
+      "name": "Kalpa Jyoti Baruah",
+      "role": "Visual Media Lead",
+      "quote": "Lack of Purpose leads to Romantic Obsession",
+      "label": "Social Media // 8",
+      "image": "team-images/kalpa-jyoti-baruah.jpg",
+      "alt": "Kalpa Jyoti Baruah, Visual Media Lead",
+      "section": "team",
+      "order": 8,
       "active": true
     }
   ]
