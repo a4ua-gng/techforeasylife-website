@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-24T16:53:25.533Z",
+  "updatedAt": "2026-09-25T11:36:02.268Z",
   "publishedAt": "2026-09-24T16:53:25.533Z",
   "announcement": {
     "enabled": false,
@@ -23,6 +23,16 @@
     "generalApplicationsOpen": true,
     "vacancies": [
       {
+        "id": "opening-1790336026034",
+        "role": "Brand Ambassador",
+        "department": "Media and storytelling",
+        "description": "be the face of TEL, and show what it is about through your storytelling using mass media communication.",
+        "location": "Guwahati",
+        "openings": 1,
+        "active": true,
+        "order": 1
+      },
+      {
         "id": "opening-1787148662452",
         "role": "Video Editor",
         "department": "Media",
@@ -30,7 +40,7 @@
         "location": "Online",
         "openings": 2,
         "active": true,
-        "order": 1
+        "order": 2
       },
       {
         "id": "opening-1788201850719",
@@ -40,7 +50,7 @@
         "location": "Offline - Guwahati",
         "openings": 2,
         "active": true,
-        "order": 2
+        "order": 3
       }
     ]
   },
