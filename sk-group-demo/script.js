@@ -1,7 +1,7 @@
 const cards=[...document.querySelectorAll('[data-category]')];
 const themeToggle=document.querySelector('.theme-toggle');
-function syncTheme(){const dark=document.documentElement.dataset.theme==='dark';themeToggle.setAttribute('aria-pressed',String(dark));themeToggle.setAttribute('aria-label',dark?'Switch to light theme':'Switch to dark theme');document.querySelector('meta[name="theme-color"]').content=dark?'#181b22':'#faf6ed';}
-themeToggle.addEventListener('click',()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('sk-theme',document.documentElement.dataset.theme);}catch(e){}syncTheme();});
+function syncTheme(){const dark=document.documentElement.dataset.theme==='dark';themeToggle.setAttribute('aria-pressed',String(dark));themeToggle.setAttribute('aria-label',dark?'Switch to light theme':'Switch to dark theme');document.querySelector('meta[name="theme-color"]').content=dark?'#181b22':'#ffffff';}
+themeToggle.addEventListener('click',()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('sk-theme-bright',document.documentElement.dataset.theme);}catch(e){}syncTheme();});
 syncTheme();
 document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
  document.querySelectorAll('[data-filter]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button));});
@@ -21,7 +21,7 @@ const dots=[...document.querySelectorAll('.slide-dots button')];
 const pauseButton=document.querySelector('.slide-pause');
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 let slideIndex=0,slideTimer=null,slidePaused=reducedMotion.matches;
-function showSlide(index){slideIndex=(index+slides.length)%slides.length;slides.forEach((slide,i)=>{slide.classList.toggle('is-active',i===slideIndex);slide.setAttribute('aria-hidden',String(i!==slideIndex));});dots.forEach((dot,i)=>{if(i===slideIndex)dot.setAttribute('aria-current','true');else dot.removeAttribute('aria-current');});document.querySelector('.slide-count').textContent=`${String(slideIndex+1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;}
+function showSlide(index){slideIndex=(index+slides.length)%slides.length;const active=slides[slideIndex];hero.dataset.showcase=active.dataset.colour;document.querySelector('.hero-brand-name').textContent=active.dataset.brand;document.querySelector('.hero-model').textContent=active.dataset.model;document.querySelector('.brand-source-link').href=active.dataset.source;slides.forEach((slide,i)=>{slide.classList.toggle('is-active',i===slideIndex);slide.setAttribute('aria-hidden',String(i!==slideIndex));});dots.forEach((dot,i)=>{if(i===slideIndex)dot.setAttribute('aria-current','true');else dot.removeAttribute('aria-current');});document.querySelector('.slide-count').textContent=`${String(slideIndex+1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;}
 function stopRotation(){clearInterval(slideTimer);slideTimer=null;}
 function startRotation(){stopRotation();if(!slidePaused&&!document.hidden&&!hero.matches(':hover')&&!hero.contains(document.activeElement))slideTimer=setInterval(()=>showSlide(slideIndex+1),6000);}
 function syncPlayback(){pauseButton.textContent=slidePaused?'▶':'Ⅱ';pauseButton.setAttribute('aria-label',slidePaused?'Play image slideshow':'Pause image slideshow');startRotation();}
