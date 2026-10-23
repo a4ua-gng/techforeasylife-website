@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-23T00:00:00.000Z",
+  "company": {
+    "eyebrow": "TECH FOR EASY LIFE / THE VENTURE STUDIO",
+    "headline": "Different ideas. One ambition.",
+    "intro": "TEL builds ventures where technology, creativity and purposeful execution come together.",
+    "mission": "We started with a simple belief: ideas are worth building. Today TEL brings that approach to creative services, with educational technology planned next."
+  },
+  "ventures": [
+    {
+      "id": "temark",
+      "name": "teMark",
+      "descriptor": "Creative & marketing",
+      "status": "active",
+      "statusLabel": "NOW ACTIVE",
+      "description": "Strategy, content, production and campaigns, thoughtfully brought together.",
+      "href": "temark.html"
+    },
+    {
+      "id": "education",
+      "name": "TEL Education",
+      "descriptor": "Technology & STEM",
+      "status": "planned",
+      "statusLabel": "PLANNED · EARLY 2027",
+      "description": "Learning experiences and educational technology, including the TEL Model Rocket Kit.",
+      "href": "product.html"
+    }
+  ],
+  "temark": {
+    "eyebrow": "A TEL VENTURE / CREATIVE & MARKETING",
+    "headline": "Built to be seen. Made to matter.",
+    "intro": "teMark is TEL's creative and marketing venture, bringing ideas to life through strategy, storytelling, content and on-ground execution.",
+    "statement": "An independent creative identity. Backed by TEL's builder mindset.",
+    "email": "techforeasylife.sales@gmail.com",
+    "services": [
+      {
+        "title": "Social & digital strategy",
+        "detail": "Social media planning, channel management and content direction."
+      },
+      {
+        "title": "Content & production",
+        "detail": "Photography, short-form video, creative editing and on-location production."
+      },
+      {
+        "title": "Campaign & design",
+        "detail": "Identity-led content, seasonal campaigns and branded visual communication."
+      },
+      {
+        "title": "On-ground activation",
+        "detail": "Local marketing support, event coverage and audience-focused execution."
+      }
+    ],
+    "portfolioLabel": "SK Group / associated business locations",
+    "portfolioNote": "The following are businesses and locations within the client servicing scope. Manufacturer brands are shown to identify dealerships, not to imply a direct brand-level engagement.",
+    "portfolio": [
+      {
+        "name": "GS Auto · Royal Enfield",
+        "location": "Howly",
+        "category": "Motorcycles"
+      },
+      {
+        "name": "Royal Enfield",
+        "location": "Kokrajhar",
+        "category": "Motorcycles"
+      },
+      {
+        "name": "TVS",
+        "location": "Goalpara",
+        "category": "Two-wheelers"
+      },
+      {
+        "name": "Yamaha",
+        "location": "Goalpara",
+        "category": "Two-wheelers"
+      },
+      {
+        "name": "Montra",
+        "location": "Betkuchi",
+        "category": "Electric mobility"
+      },
+      {
+        "name": "Dental Care",
+        "location": "GS Road",
+        "category": "Healthcare"
+      },
+      {
+        "name": "Ashok Leyland",
+        "location": "SK Group network",
+        "category": "Commercial vehicles"
+      },
+      {
+        "name": "SK Group OPC",
+        "location": "Business identity",
+        "category": "Group portfolio"
+      }
+    ]
+  }
+}
