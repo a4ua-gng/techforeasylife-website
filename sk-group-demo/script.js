@@ -45,12 +45,7 @@ const slides = $$('.hero-slide', showcase);
 const selectors = $$('[data-goto]');
 const pauseButton = $('.slide-pause');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const photos = slides.map(slide => ({
-  src: $('img', slide).getAttribute('src'),
-  alt: $('img', slide).alt,
-  title: slide.dataset.brand,
-  category: slide.dataset.category
-}));
+const photos = JSON.parse($('#gallery-data').textContent);
 let currentSlide = 0;
 let carouselTimer = null;
 let userPaused = reducedMotion.matches;
@@ -84,6 +79,8 @@ function setSlide(index, announce = true) {
   $('#slide-category').textContent = slide.dataset.category;
   $('#slide-title').textContent = slide.dataset.title;
   $('#slide-brand').textContent = slide.dataset.brand;
+  $('#hero-link-text').textContent = slide.dataset.cta;
+  $('#hero-link').href = slide.dataset.href;
   $('#slide-current').textContent = String(currentSlide + 1).padStart(2, '0');
   $('.view-photo').setAttribute('aria-label', `Open ${slide.dataset.brand} photograph`);
   if (announce) $('#slide-announcement').textContent = `${currentSlide + 1} of ${slides.length}: ${slide.dataset.brand}. ${slide.dataset.title}`;
@@ -141,6 +138,7 @@ function displayPhoto(index) {
   $('#expanded-photo').src = photo.src;
   $('#expanded-photo').alt = photo.alt;
   $('#photo-dialog-title').textContent = photo.title;
+  $('#photo-credit').textContent = photo.credit;
   $('#photo-count').textContent = `${String(currentPhoto + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}`;
 }
 function openPhoto(index) {
@@ -148,7 +146,7 @@ function openPhoto(index) {
   openDialog(photoDialog);
 }
 $$('[data-photo]').forEach(button => button.addEventListener('click', () => openPhoto(Number(button.dataset.photo))));
-$('.view-photo').addEventListener('click', () => openPhoto(currentSlide));
+$('.view-photo').addEventListener('click', () => openPhoto(Number(slides[currentSlide].dataset.photo)));
 $('.gallery-prev').addEventListener('click', () => displayPhoto(currentPhoto - 1));
 $('.gallery-next').addEventListener('click', () => displayPhoto(currentPhoto + 1));
 photoDialog.addEventListener('keydown', event => {
@@ -202,21 +200,6 @@ businessLink.addEventListener('click', event => {
 });
 $('.concept-details').addEventListener('click', () => openDialog($('#concept-dialog')));
 
-const businessCards = $$('.business-card');
-const businessGrid = $('.business-grid');
-$$('[data-filter]').forEach(button => button.addEventListener('click', () => {
-  const filter = button.dataset.filter;
-  $$('[data-filter]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
-  let count = 0;
-  businessCards.forEach(card => {
-    card.hidden = filter !== 'all' && card.dataset.category !== filter;
-    if (!card.hidden) count++;
-  });
-  businessGrid.classList.toggle('is-filtered', filter !== 'all');
-  businessGrid.classList.toggle('is-single', count === 1);
-  $('.filter-count').textContent = `${count} business${count === 1 ? '' : 'es'}`;
-}));
-
 const search = $('#showroom-search');
 const locations = $$('.location-row');
 search.addEventListener('input', () => {
@@ -229,3 +212,16 @@ search.addEventListener('input', () => {
   $('.location-count').textContent = `${count} showroom${count === 1 ? '' : 's'}`;
   $('.empty-state').hidden = count > 0;
 });
+
+const showroomRail = $('.showroom-rail');
+$('.rail-prev').addEventListener('click', () => showroomRail.scrollBy({left: -showroomRail.clientWidth * .75, behavior: reducedMotion.matches ? 'instant' : 'smooth'}));
+$('.rail-next').addEventListener('click', () => showroomRail.scrollBy({left: showroomRail.clientWidth * .75, behavior: reducedMotion.matches ? 'instant' : 'smooth'}));
+let touchStartX = null;
+showcase.addEventListener('pointerdown', event => { if(event.pointerType === 'touch') touchStartX = event.clientX; });
+showcase.addEventListener('pointerup', event => {
+  if(event.pointerType !== 'touch' || touchStartX === null) return;
+  const distance = event.clientX - touchStartX;
+  if(Math.abs(distance) > 60) setSlide(currentSlide + (distance < 0 ? 1 : -1));
+  touchStartX = null;
+});
+showcase.addEventListener('pointercancel', () => { touchStartX = null; });
