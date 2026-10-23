@@ -129,3 +129,32 @@ body[data-page="temark"] .space-scene{opacity:.45}
 @media(max-width:780px){.tv-shell{width:min(100% - 34px,1180px)}.tv-section{padding-block:76px}.tv-hero,.tm-hero{grid-template-columns:1fr;gap:32px;min-height:auto;padding-block:75px 30px}.tv-hero .tv-display{font-size:clamp(3.4rem,12.5vw,6rem)}.tv-stage{min-height:400px;max-width:560px;width:100%;margin-inline:auto}.tv-stage-panel--mark{left:3%}.tv-stage-panel--small{right:1%}.tv-ventures,.tv-spotlight,.tv-story{grid-template-columns:1fr}.tv-venture-card{min-height:385px}.tv-spotlight-visual{min-height:390px}.tv-spotlight-copy{padding:39px 28px}.tv-portfolio-band{grid-template-columns:1fr;gap:24px}.tv-story{gap:27px}.tv-story-photos img{height:290px}.tv-story-photos img:last-child{height:230px}.tv-cta-panel{align-items:flex-start;flex-direction:column}.tm-hero{padding-block:55px 30px}.tm-identity{min-height:420px}.tm-case-grid{grid-template-columns:repeat(2,1fr)}.tm-process{grid-template-columns:1fr;gap:0}.tm-work-head{flex-direction:column;align-items:start}}
 @media(max-width:520px){.tv-display{font-size:clamp(3.2rem,13.2vw,5rem)}.tv-headline{font-size:clamp(2.3rem,10vw,3.5rem)}.tv-hero{padding-top:53px}.tv-hero .tv-copy{font-size:15px}.tv-actions{align-items:stretch}.tv-actions .tv-cta{width:100%}.tv-stage{min-height:305px}.tv-stage-panel--mark{height:62%;width:70%}.tv-stage-panel--mark .tv-mark-paper{padding:18px}.tv-stage-panel--small{min-height:100px;width:57%;padding:16px}.tv-stage-panel--small strong{font-size:19px}.tv-stage-panel--small p{font-size:10px}.tv-stage-label{right:2%}.tv-section-head{flex-direction:column;align-items:start}.tv-venture-card{padding:23px;min-height:370px}.tv-venture-card h3{font-size:45px}.tv-portfolio-logos,.tm-services,.tm-case-grid{grid-template-columns:1fr}.tv-portfolio-pill{min-height:73px}.tv-story-photos img{height:240px}.tv-story-photos img:last-child{height:205px}.tm-identity{min-height:350px}.tm-service{min-height:215px;padding:24px}.tm-case-card{min-height:187px}.tv-cta-panel{padding:25px}}
 @media(prefers-reduced-motion:reduce){.tv-ticker-inner{animation:none}.tv-cta,.tv-venture-card,.tv-link{transition:none}}
+
+/* Overrides for structural classes inherited from the original education homepage. */
+body[data-page="home"] .quick-start.tv-section,
+body[data-page="home"] .split-section.tv-section,
+body[data-page="home"] .team-teaser.tv-section,
+body[data-page="home"] .home-discover-grid.tv-section,
+body[data-page="home"] .final-cta.tv-section{display:block;grid-template-columns:none;margin-top:0;min-height:0;overflow:visible;border-radius:0}
+body[data-page="home"] .quick-start.tv-section{background:none;border:0;backdrop-filter:none;padding-inline:0}
+body[data-page="home"] .team-teaser.tv-section{padding-block:100px}
+body[data-page="home"] .final-cta.tv-section{padding-block:0 110px;background:transparent;justify-content:initial}
+body[data-page="home"] .final-cta .tv-cta-panel{width:100%}
+body[data-page="home"] .founder-teaser-visual.tv-story-photos{width:100%;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;align-items:end;min-height:0}
+body[data-page="home"] .founder-teaser-visual.tv-story-photos>div{border-radius:12px;min-width:0}
+body[data-page="home"] .founder-teaser-visual.tv-story-photos img{width:100%;height:350px;object-fit:cover}
+body[data-page="home"] .founder-teaser-visual.tv-story-photos>div:last-child img{height:280px}
+body[data-page="home"] .signal-strip .tv-ticker-inner{display:flex;width:max-content;min-width:200%;margin:0;min-height:0;justify-content:flex-start;gap:44px;padding:20px 0;animation:tv-marquee 31s linear infinite;white-space:nowrap}
+body[data-page="home"] .signal-strip .tv-ticker-inner span{font-size:11px;letter-spacing:.19em}
+body[data-page="home"] .home-hero.tv-hero{grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);gap:40px}
+@media(max-width:780px){
+ body[data-page="home"] .home-hero.tv-hero{grid-template-columns:1fr}
+ body[data-page="home"] .team-teaser.tv-section{padding-block:75px}
+ body[data-page="home"] .founder-teaser-visual.tv-story-photos img{height:290px}
+ body[data-page="home"] .founder-teaser-visual.tv-story-photos>div:last-child img{height:230px}
+}
+@media(max-width:520px){
+ body[data-page="home"] .founder-teaser-visual.tv-story-photos img{height:235px}
+ body[data-page="home"] .founder-teaser-visual.tv-story-photos>div:last-child img{height:200px}
+}
+@media(prefers-reduced-motion:reduce){body[data-page="home"] .signal-strip .tv-ticker-inner{animation:none}}
