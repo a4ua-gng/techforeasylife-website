@@ -1,0 +1,722 @@
+[
+  {
+    "id": 1,
+    "group": "Brand & group",
+    "name": "Immersive photo homepage",
+    "status": "UI preview"
+  },
+  {
+    "id": 2,
+    "group": "Brand & group",
+    "name": "Rotating hero with pause controls",
+    "status": "UI preview"
+  },
+  {
+    "id": 3,
+    "group": "Brand & group",
+    "name": "Five brand landing views",
+    "status": "UI preview"
+  },
+  {
+    "id": 4,
+    "group": "Brand & group",
+    "name": "Group story page",
+    "status": "UI preview"
+  },
+  {
+    "id": 5,
+    "group": "Brand & group",
+    "name": "Leadership profiles",
+    "status": "Later phase"
+  },
+  {
+    "id": 6,
+    "group": "Brand & group",
+    "name": "Company milestones",
+    "status": "Later phase"
+  },
+  {
+    "id": 7,
+    "group": "Brand & group",
+    "name": "Full-screen photo gallery",
+    "status": "UI preview"
+  },
+  {
+    "id": 8,
+    "group": "Brand & group",
+    "name": "Brand film or video hero",
+    "status": "Later phase"
+  },
+  {
+    "id": 9,
+    "group": "Brand & group",
+    "name": "Press and recognition archive",
+    "status": "Later phase"
+  },
+  {
+    "id": 10,
+    "group": "Brand & group",
+    "name": "Brand resource downloads",
+    "status": "Later phase"
+  },
+  {
+    "id": 11,
+    "group": "Vehicle discovery",
+    "name": "Multi-brand collection",
+    "status": "UI preview"
+  },
+  {
+    "id": 12,
+    "group": "Vehicle discovery",
+    "name": "Model-name search",
+    "status": "UI preview"
+  },
+  {
+    "id": 13,
+    "group": "Vehicle discovery",
+    "name": "Brand filters",
+    "status": "UI preview"
+  },
+  {
+    "id": 14,
+    "group": "Vehicle discovery",
+    "name": "Category filters",
+    "status": "UI preview"
+  },
+  {
+    "id": 15,
+    "group": "Vehicle discovery",
+    "name": "Energy-type filters",
+    "status": "UI preview"
+  },
+  {
+    "id": 16,
+    "group": "Vehicle discovery",
+    "name": "Alphabetical sorting",
+    "status": "UI preview"
+  },
+  {
+    "id": 17,
+    "group": "Vehicle discovery",
+    "name": "Model detail panels",
+    "status": "UI preview"
+  },
+  {
+    "id": 18,
+    "group": "Vehicle discovery",
+    "name": "Official manufacturer links",
+    "status": "UI preview"
+  },
+  {
+    "id": 19,
+    "group": "Vehicle discovery",
+    "name": "Brochure downloads",
+    "status": "Later phase"
+  },
+  {
+    "id": 20,
+    "group": "Vehicle discovery",
+    "name": "Colour and variant selector",
+    "status": "Later phase"
+  },
+  {
+    "id": 21,
+    "group": "Decision tools",
+    "name": "Compare up to three vehicles",
+    "status": "UI preview"
+  },
+  {
+    "id": 22,
+    "group": "Decision tools",
+    "name": "Save favourite vehicles",
+    "status": "UI preview"
+  },
+  {
+    "id": 23,
+    "group": "Decision tools",
+    "name": "My Garage saved collection",
+    "status": "UI preview"
+  },
+  {
+    "id": 24,
+    "group": "Decision tools",
+    "name": "EMI calculator",
+    "status": "UI preview"
+  },
+  {
+    "id": 25,
+    "group": "Decision tools",
+    "name": "Loan repayment breakdown",
+    "status": "UI preview"
+  },
+  {
+    "id": 26,
+    "group": "Decision tools",
+    "name": "Editable loan assumptions",
+    "status": "UI preview"
+  },
+  {
+    "id": 27,
+    "group": "Decision tools",
+    "name": "Ownership cost estimator",
+    "status": "Later phase"
+  },
+  {
+    "id": 28,
+    "group": "Decision tools",
+    "name": "EV running-cost comparison",
+    "status": "UI preview"
+  },
+  {
+    "id": 29,
+    "group": "Decision tools",
+    "name": "Exchange valuation requests",
+    "status": "Later phase"
+  },
+  {
+    "id": 30,
+    "group": "Decision tools",
+    "name": "Vehicle match quiz",
+    "status": "Later phase"
+  },
+  {
+    "id": 31,
+    "group": "Showroom discovery",
+    "name": "Photo-led showroom directory",
+    "status": "UI preview"
+  },
+  {
+    "id": 32,
+    "group": "Showroom discovery",
+    "name": "Town and branch search",
+    "status": "UI preview"
+  },
+  {
+    "id": 33,
+    "group": "Showroom discovery",
+    "name": "Filter branches by brand",
+    "status": "UI preview"
+  },
+  {
+    "id": 34,
+    "group": "Showroom discovery",
+    "name": "Directions for verified branches",
+    "status": "UI preview"
+  },
+  {
+    "id": 35,
+    "group": "Showroom discovery",
+    "name": "Tap-to-call verified showrooms",
+    "status": "UI preview"
+  },
+  {
+    "id": 36,
+    "group": "Showroom discovery",
+    "name": "Individual branch profiles",
+    "status": "UI preview"
+  },
+  {
+    "id": 37,
+    "group": "Showroom discovery",
+    "name": "Confirmed opening hours",
+    "status": "Later phase"
+  },
+  {
+    "id": 38,
+    "group": "Showroom discovery",
+    "name": "Location-based nearest branch",
+    "status": "Later phase"
+  },
+  {
+    "id": 39,
+    "group": "Showroom discovery",
+    "name": "360-degree showroom tours",
+    "status": "Later phase"
+  },
+  {
+    "id": 40,
+    "group": "Showroom discovery",
+    "name": "Live branch inventory",
+    "status": "Later phase"
+  },
+  {
+    "id": 41,
+    "group": "Enquiries & sales",
+    "name": "General enquiry preview",
+    "status": "UI preview"
+  },
+  {
+    "id": 42,
+    "group": "Enquiries & sales",
+    "name": "Callback request preview",
+    "status": "UI preview"
+  },
+  {
+    "id": 43,
+    "group": "Enquiries & sales",
+    "name": "Fleet enquiry preview",
+    "status": "UI preview"
+  },
+  {
+    "id": 44,
+    "group": "Enquiries & sales",
+    "name": "Business partnership enquiry",
+    "status": "UI preview"
+  },
+  {
+    "id": 45,
+    "group": "Enquiries & sales",
+    "name": "Automatic branch lead routing",
+    "status": "Later phase"
+  },
+  {
+    "id": 46,
+    "group": "Enquiries & sales",
+    "name": "Enquiry attachments",
+    "status": "Later phase"
+  },
+  {
+    "id": 47,
+    "group": "Enquiries & sales",
+    "name": "Contact consent preferences",
+    "status": "Later phase"
+  },
+  {
+    "id": 48,
+    "group": "Enquiries & sales",
+    "name": "Email acknowledgements",
+    "status": "Later phase"
+  },
+  {
+    "id": 49,
+    "group": "Enquiries & sales",
+    "name": "Opt-in WhatsApp updates",
+    "status": "Later phase"
+  },
+  {
+    "id": 50,
+    "group": "Enquiries & sales",
+    "name": "Spam and abuse protection",
+    "status": "Later phase"
+  },
+  {
+    "id": 51,
+    "group": "Bookings",
+    "name": "Test-ride request wizard",
+    "status": "UI preview"
+  },
+  {
+    "id": 52,
+    "group": "Bookings",
+    "name": "Service request wizard",
+    "status": "UI preview"
+  },
+  {
+    "id": 53,
+    "group": "Bookings",
+    "name": "Preferred date and time selection",
+    "status": "UI preview"
+  },
+  {
+    "id": 54,
+    "group": "Bookings",
+    "name": "Request review screen",
+    "status": "UI preview"
+  },
+  {
+    "id": 55,
+    "group": "Bookings",
+    "name": "Reschedule confirmed appointments",
+    "status": "Later phase"
+  },
+  {
+    "id": 56,
+    "group": "Bookings",
+    "name": "Cancel confirmed appointments",
+    "status": "Later phase"
+  },
+  {
+    "id": 57,
+    "group": "Bookings",
+    "name": "Live slot capacity",
+    "status": "Later phase"
+  },
+  {
+    "id": 58,
+    "group": "Bookings",
+    "name": "Booking reminders",
+    "status": "Later phase"
+  },
+  {
+    "id": 59,
+    "group": "Bookings",
+    "name": "Pickup and drop requests",
+    "status": "Later phase"
+  },
+  {
+    "id": 60,
+    "group": "Bookings",
+    "name": "Calendar invitation delivery",
+    "status": "Later phase"
+  },
+  {
+    "id": 61,
+    "group": "Ownership & support",
+    "name": "Ownership and service hub",
+    "status": "UI preview"
+  },
+  {
+    "id": 62,
+    "group": "Ownership & support",
+    "name": "Spare-parts enquiry preview",
+    "status": "UI preview"
+  },
+  {
+    "id": 63,
+    "group": "Ownership & support",
+    "name": "Official ownership information links",
+    "status": "UI preview"
+  },
+  {
+    "id": 64,
+    "group": "Ownership & support",
+    "name": "Official brand resource links",
+    "status": "UI preview"
+  },
+  {
+    "id": 65,
+    "group": "Ownership & support",
+    "name": "Service progress tracking",
+    "status": "Later phase"
+  },
+  {
+    "id": 66,
+    "group": "Ownership & support",
+    "name": "Digital service history",
+    "status": "Later phase"
+  },
+  {
+    "id": 67,
+    "group": "Ownership & support",
+    "name": "Repeat-service quick booking",
+    "status": "Later phase"
+  },
+  {
+    "id": 68,
+    "group": "Ownership & support",
+    "name": "Roadside assistance directory",
+    "status": "Later phase"
+  },
+  {
+    "id": 69,
+    "group": "Ownership & support",
+    "name": "Verified customer feedback",
+    "status": "Later phase"
+  },
+  {
+    "id": 70,
+    "group": "Ownership & support",
+    "name": "Complaint reference tracking",
+    "status": "Later phase"
+  },
+  {
+    "id": 71,
+    "group": "Community & growth",
+    "name": "Riding inspiration gallery",
+    "status": "UI preview"
+  },
+  {
+    "id": 72,
+    "group": "Community & growth",
+    "name": "Upcoming events calendar",
+    "status": "Later phase"
+  },
+  {
+    "id": 73,
+    "group": "Community & growth",
+    "name": "Ride registration and attendance",
+    "status": "Later phase"
+  },
+  {
+    "id": 74,
+    "group": "Community & growth",
+    "name": "News and editorial CMS",
+    "status": "Later phase"
+  },
+  {
+    "id": 75,
+    "group": "Community & growth",
+    "name": "Verified owner stories",
+    "status": "Later phase"
+  },
+  {
+    "id": 76,
+    "group": "Community & growth",
+    "name": "Approved customer testimonials",
+    "status": "Later phase"
+  },
+  {
+    "id": 77,
+    "group": "Community & growth",
+    "name": "Newsletter subscriptions",
+    "status": "Later phase"
+  },
+  {
+    "id": 78,
+    "group": "Community & growth",
+    "name": "Confirmed social-channel links",
+    "status": "Later phase"
+  },
+  {
+    "id": 79,
+    "group": "Community & growth",
+    "name": "Campaign landing pages",
+    "status": "Later phase"
+  },
+  {
+    "id": 80,
+    "group": "Community & growth",
+    "name": "Dated seasonal offers",
+    "status": "Later phase"
+  },
+  {
+    "id": 81,
+    "group": "Corporate & expansion",
+    "name": "Careers and team pages",
+    "status": "Later phase"
+  },
+  {
+    "id": 82,
+    "group": "Corporate & expansion",
+    "name": "Job applications",
+    "status": "Later phase"
+  },
+  {
+    "id": 83,
+    "group": "Corporate & expansion",
+    "name": "Department introductions",
+    "status": "Later phase"
+  },
+  {
+    "id": 84,
+    "group": "Corporate & expansion",
+    "name": "Partner enquiry preview",
+    "status": "UI preview"
+  },
+  {
+    "id": 85,
+    "group": "Corporate & expansion",
+    "name": "Fleet solution enquiry",
+    "status": "UI preview"
+  },
+  {
+    "id": 86,
+    "group": "Corporate & expansion",
+    "name": "Supplier onboarding",
+    "status": "Later phase"
+  },
+  {
+    "id": 87,
+    "group": "Corporate & expansion",
+    "name": "Verified community-impact stories",
+    "status": "Later phase"
+  },
+  {
+    "id": 88,
+    "group": "Corporate & expansion",
+    "name": "Media and press resources",
+    "status": "Later phase"
+  },
+  {
+    "id": 89,
+    "group": "Corporate & expansion",
+    "name": "Downloadable group profile",
+    "status": "Later phase"
+  },
+  {
+    "id": 90,
+    "group": "Corporate & expansion",
+    "name": "English, Hindi and Assamese content",
+    "status": "Later phase"
+  },
+  {
+    "id": 91,
+    "group": "Customer accounts",
+    "name": "Secure customer sign-in",
+    "status": "Later phase"
+  },
+  {
+    "id": 92,
+    "group": "Customer accounts",
+    "name": "OTP account verification",
+    "status": "Later phase"
+  },
+  {
+    "id": 93,
+    "group": "Customer accounts",
+    "name": "Customer profiles",
+    "status": "Later phase"
+  },
+  {
+    "id": 94,
+    "group": "Customer accounts",
+    "name": "Saved vehicles across devices",
+    "status": "Later phase"
+  },
+  {
+    "id": 95,
+    "group": "Customer accounts",
+    "name": "Booking history",
+    "status": "Later phase"
+  },
+  {
+    "id": 96,
+    "group": "Customer accounts",
+    "name": "Quotation history",
+    "status": "Later phase"
+  },
+  {
+    "id": 97,
+    "group": "Customer accounts",
+    "name": "Invoices and receipts",
+    "status": "Later phase"
+  },
+  {
+    "id": 98,
+    "group": "Customer accounts",
+    "name": "Secure document storage",
+    "status": "Later phase"
+  },
+  {
+    "id": 99,
+    "group": "Customer accounts",
+    "name": "Support conversations",
+    "status": "Later phase"
+  },
+  {
+    "id": 100,
+    "group": "Customer accounts",
+    "name": "Notification centre",
+    "status": "Later phase"
+  },
+  {
+    "id": 101,
+    "group": "Sales operations",
+    "name": "Sample admin dashboard",
+    "status": "UI preview"
+  },
+  {
+    "id": 102,
+    "group": "Sales operations",
+    "name": "Lead pipeline board",
+    "status": "UI preview"
+  },
+  {
+    "id": 103,
+    "group": "Sales operations",
+    "name": "Change sample lead stages",
+    "status": "UI preview"
+  },
+  {
+    "id": 104,
+    "group": "Sales operations",
+    "name": "Sample enquiry details",
+    "status": "UI preview"
+  },
+  {
+    "id": 105,
+    "group": "Sales operations",
+    "name": "Assign leads to staff",
+    "status": "Later phase"
+  },
+  {
+    "id": 106,
+    "group": "Sales operations",
+    "name": "Follow-up tasks and reminders",
+    "status": "Later phase"
+  },
+  {
+    "id": 107,
+    "group": "Sales operations",
+    "name": "Campaign source attribution",
+    "status": "Later phase"
+  },
+  {
+    "id": 108,
+    "group": "Sales operations",
+    "name": "Sales funnel reports",
+    "status": "Later phase"
+  },
+  {
+    "id": 109,
+    "group": "Sales operations",
+    "name": "Branch performance dashboards",
+    "status": "Later phase"
+  },
+  {
+    "id": 110,
+    "group": "Sales operations",
+    "name": "Controlled CSV exports",
+    "status": "Later phase"
+  },
+  {
+    "id": 111,
+    "group": "Content & platform",
+    "name": "Hero and media management",
+    "status": "Later phase"
+  },
+  {
+    "id": 112,
+    "group": "Content & platform",
+    "name": "Vehicle content management",
+    "status": "Later phase"
+  },
+  {
+    "id": 113,
+    "group": "Content & platform",
+    "name": "Branch content management",
+    "status": "Later phase"
+  },
+  {
+    "id": 114,
+    "group": "Content & platform",
+    "name": "Offer publishing and expiry",
+    "status": "Later phase"
+  },
+  {
+    "id": 115,
+    "group": "Content & platform",
+    "name": "Staff roles and permissions",
+    "status": "Later phase"
+  },
+  {
+    "id": 116,
+    "group": "Content & platform",
+    "name": "Administrative audit trail",
+    "status": "Later phase"
+  },
+  {
+    "id": 117,
+    "group": "Content & platform",
+    "name": "Privacy and deletion workflows",
+    "status": "Later phase"
+  },
+  {
+    "id": 118,
+    "group": "Content & platform",
+    "name": "Backups and restoration",
+    "status": "Later phase"
+  },
+  {
+    "id": 119,
+    "group": "Content & platform",
+    "name": "Production SEO and sitemap",
+    "status": "Later phase"
+  },
+  {
+    "id": 120,
+    "group": "Content & platform",
+    "name": "Performance and uptime monitoring",
+    "status": "Later phase"
+  }
+]
