@@ -140,6 +140,7 @@ const el = {
   publishDraft: $("#publishDraft"),
   publishStatus: $("#publishStatus"),
   previewFrame: $("#previewFrame"),
+  previewPage: $("#previewPage"),
   visibilityGrid: $("#visibilityGrid"),
   visualPageFilter: $("#visualPageFilter"),
   reloadVisuals: $("#reloadVisuals"),
@@ -276,6 +277,8 @@ function bindEvents() {
       el.careerPreviewFrame.style.width = button.dataset.careerWidth;
     });
   });
+
+  el.previewPage?.addEventListener("change", refreshPreview);
 
   el.previewFrame.addEventListener("load", () => {
     setTimeout(sendPreview, 120);
@@ -571,7 +574,11 @@ async function publishMaintenanceState() {
 }
 
 function refreshPreview() {
-  const base = `${PREVIEW_PREFIX}/?tel-admin-preview=1`;
+  const selected = el.previewPage?.value || "index.html";
+  const allowed = ["index.html", "education.html", "temark.html", "about.html", "careers.html", "contact.html", "business-details.html"];
+  const page = allowed.includes(selected) ? selected : "index.html";
+  const base = `${PREVIEW_PREFIX}/${page}?tel-admin-preview=1`;
+  el.previewFrame.title = `TEL draft preview: ${page.replace(".html", "")}`;
   el.previewFrame.src = `${base}&v=${Date.now()}`;
 }
 
@@ -1184,6 +1191,7 @@ async function saveVisuals() {
 
 function openVisualPreview(visual) {
   state.visualPage = visual.page;
+  if (el.previewPage && [...el.previewPage.options].some(option => option.value === visual.page)) el.previewPage.value = visual.page;
   const pagePath = visual.page === "index.html" ? "" : visual.page;
   el.previewFrame.src = `${PREVIEW_PREFIX}/${pagePath}?tel-admin-preview=1&v=${Date.now()}`;
   switchView("publish");

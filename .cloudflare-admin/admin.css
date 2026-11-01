@@ -428,3 +428,5 @@
 }
 
 .admin-operation-progress{display:none;position:fixed;top:0;left:0;right:0;z-index:2000;background:#101014;color:#f3eef9;box-shadow:0 6px 26px #0004;text-align:center;padding:12px;font-size:12px}.busy .admin-operation-progress{display:block}.admin-operation-track{position:absolute;left:0;right:0;top:0;height:3px;overflow:hidden;background:#bba0dd22}.admin-operation-track i{display:block;width:35%;height:100%;background:#d9c5f4;animation:admin-request-progress 1.2s ease-in-out infinite}@keyframes admin-request-progress{from{transform:translateX(-110%)}to{transform:translateX(390%)}}@media(prefers-reduced-motion:reduce){.admin-operation-track i{animation:none;width:100%;opacity:.7}}
+
+.admin-preview-page{display:flex;align-items:center;gap:10px;font-size:11px;color:#d9d1e3}.admin-preview-page select{padding:8px 28px 8px 10px;background:#141119;color:#f5effb;border:1px solid #a68bb745;border-radius:7px;min-width:140px;max-width:100%}@media(max-width:600px){.preview-toolbar{flex-wrap:wrap;gap:12px}.admin-preview-page{width:100%;justify-content:space-between}}

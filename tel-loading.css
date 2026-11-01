@@ -10,3 +10,28 @@
 body[data-page=temark] .tel-loader{background:radial-gradient(ellipse at center,#4b392a55,transparent 55%),#0a0908}body[data-page=temark] .tel-loader-progress>span{background:linear-gradient(90deg,#b99a77,#f0dfc5)}body[data-page=temark] .tel-loader-kicker{color:#d5c2a6}
 @media(max-width:520px){.tel-loader-core{width:180px;height:180px}.tel-loader-inner{gap:20px}.tel-loader-label{font-size:19px}}
 @media(prefers-reduced-motion:reduce){.tel-loader,.tel-loader-progress>span{transition:none}.tel-loader-space{animation:none}}
+
+/* A flat, centred identity with two lightweight orbital paths. */
+.tel-loader{height:100dvh;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);box-sizing:border-box}
+.tel-loader .tel-loader-inner{box-sizing:border-box;width:min(420px,calc(100vw - 48px));max-width:100%;padding:0;gap:22px;transform:none}
+.tel-loader .tel-loader-kicker{font-size:9px;line-height:1.6;letter-spacing:.19em;text-wrap:balance}
+.tel-loader .tel-loader-core{position:relative;isolation:isolate;flex:none;width:252px;height:216px;max-width:100%;border-radius:0;background:none;animation:none;transform:none;cursor:default}
+.tel-loader .tel-loader-core>img{position:relative;z-index:2;width:126px;max-width:52%;height:auto;filter:none!important;box-shadow:none;opacity:1!important;transition:none}
+.tel-loader .tel-loader-electric{display:none!important}
+.tel-loader .tel-loader-label{font:400 clamp(17px,4.5vw,21px)/1.4 system-ui,sans-serif;letter-spacing:-.025em;margin:0;text-wrap:balance;max-width:100%;color:#f1e9f9}
+.tel-loader .tel-loader-progress,.tel-loader .tel-loader-readout{width:min(300px,100%);flex:none}
+.tel-loader .tel-loader-readout{align-items:baseline;font-size:8px;line-height:1.6;letter-spacing:.09em;margin-top:-10px}
+.tel-loader .tel-loader-readout>span:last-child{text-align:right}
+.tel-loader .tel-loader-progress>span{box-shadow:none}
+.tel-loader .tel-loader-space:after{display:none}
+.tel-loading-orbit{position:absolute;inset:0;border:1px solid #cbb8e34d;border-radius:50%;transform:rotate(-24deg) scaleY(.55);z-index:0;pointer-events:none}
+.tel-loading-orbit.secondary{inset:12px -8px;border-color:#cbb8e329;transform:rotate(28deg) scaleY(.7)}
+.tel-loading-orbit>i{position:absolute;inset:0;border-radius:50%;animation:tel-loading-orbit-travel 4s linear infinite}
+.tel-loading-orbit>i:after{content:'';position:absolute;left:-3px;top:calc(50% - 3px);width:6px;height:6px;border-radius:50%;background:#e7dcf6;transform:scaleY(1.6)}
+.tel-loading-orbit.secondary>i{animation-duration:6s;animation-direction:reverse;animation-delay:-1.5s}
+.tel-loading-orbit.secondary>i:after{width:4px;height:4px;left:-2px;top:calc(50% - 2px);background:#b9a3d2}
+@keyframes tel-loading-orbit-travel{to{transform:rotate(360deg)}}
+body[data-page=temark] .tel-loading-orbit{border-color:#d8c1a34d}body[data-page=temark] .tel-loading-orbit>i:after{background:#e8d4b8}
+@media(max-width:520px){.tel-loader .tel-loader-inner{gap:22px;width:calc(100vw - 56px)}.tel-loader .tel-loader-core{width:232px;height:204px}.tel-loader .tel-loader-core>img{width:122px}}
+@media(max-height:500px){.tel-loader .tel-loader-inner{gap:12px}.tel-loader .tel-loader-core{width:190px;height:126px}.tel-loader .tel-loader-core>img{width:104px}}
+@media(prefers-reduced-motion:reduce){.tel-loading-orbit>i{animation:none}}
