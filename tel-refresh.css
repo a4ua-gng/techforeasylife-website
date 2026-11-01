@@ -1,0 +1,93 @@
+/* TEL: a venture-focused front page. Company history lives in About. */
+.telh-hero{display:grid;grid-template-columns:1.08fr 1fr;gap:70px;align-items:center;padding:55px 0 65px;min-height:700px}
+.telh-title{font:500 clamp(82px,9vw,128px)/.98 "Space Grotesk",Inter,sans-serif;letter-spacing:-.075em;margin:0 0 30px;color:#f2f2f2}
+.telh-title .telv-outline{color:transparent;-webkit-text-stroke:1px #d1d1d1ba}
+.telh-hero-copy>.telv-copy{font-size:15px;max-width:450px;line-height:1.85}
+.telh-hub{min-width:0;max-width:540px;width:100%;margin-inline:auto}
+.telh-orbit-stage{position:relative;width:100%;aspect-ratio:1.12;min-height:370px;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at center,#4a4a4a21,transparent 66%)}
+.telh-orbit-ellipse{position:absolute;inset:34px;border:1px solid #adadad29;border-radius:50%;pointer-events:none}
+.telh-orbit-ellipse.one{transform:rotate(35deg) scaleY(.57)}
+.telh-orbit-ellipse.two{transform:rotate(-35deg) scaleY(.57);border-color:#a5a5a519}
+.telh-spinning-ring{position:absolute;inset:38px;border:1px solid #a4a4a422;border-top-color:#b8b8b850;border-radius:50%;animation:telh-orbit-spin 42s linear infinite;pointer-events:none}
+.telh-spinning-ring:after{content:"";position:absolute;top:13.7%;left:13.7%;height:5px;width:5px;background:#bebebe;border-radius:50%;box-shadow:0 0 15px #a8a8a855}
+@keyframes telh-orbit-spin{to{transform:rotate(360deg)}}
+.telc-motion-paused .telh-spinning-ring{animation-play-state:paused}
+.telh-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:155px;height:155px;display:grid;place-items:center;background:radial-gradient(ellipse at 35% 20%,#1a1a1a,#070707 80%);border:1px solid #94949446;border-radius:50%;box-shadow:0 0 60px #57575716}
+.telh-core img{width:112px;height:52px;object-fit:contain}
+.telh-venture-node{position:absolute;display:grid;grid-template-columns:23px 1fr 14px;align-items:center;gap:11px;border:1px solid #9898982c;border-radius:14px;background:#0b0b0bed;padding:15px 17px;min-height:70px;width:218px;color:#bdbdbd;cursor:pointer;text-align:left;box-shadow:0 12px 40px #02020244;transition:border-color .2s,background .2s}
+.telh-venture-node.education{left:15px;top:24px}
+.telh-venture-node.temark{right:15px;bottom:35px;width:205px}
+.telh-venture-node[aria-pressed=true]{border-color:#b2b2b299;background:#1c1c1c;color:#f6f6f6}
+.telh-venture-node:hover{border-color:#bdbdbda8}
+.telh-venture-node>span:nth-child(2){font-size:13px;font-weight:500;line-height:1.5}
+.telh-venture-node small{display:block;font-size:8px;font-weight:400;color:#939393;margin-top:4px;letter-spacing:.025em}
+.telh-venture-node>span:last-child{font-size:18px;color:#a9a9a9;transition:transform .2s}
+.telh-venture-node:hover>span:last-child{transform:rotate(35deg)}
+.telh-node-index{font-size:9px;line-height:1;color:#808080}
+.telh-orbit-caption{position:absolute;left:0;right:0;bottom:5px;font-size:8px;color:#797979;letter-spacing:.11em;text-align:center;line-height:1.5;margin:0;text-transform:uppercase}
+.telh-hub-preview{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:20px;align-items:center;border:1px solid #a3a3a32c;border-radius:17px;background:linear-gradient(110deg,#131313,#0a0a0a);padding:23px 25px;min-height:152px}
+.telh-hub-preview small{font-size:8px;letter-spacing:.07em;text-transform:uppercase;color:#a6a6a6;line-height:1.7;display:block}
+.telh-hub-preview h2{font:500 23px/1.25 "Space Grotesk",Inter,sans-serif;letter-spacing:-.035em;margin:10px 0 8px;color:#e8e8e8}
+.telh-hub-preview p{font-size:11px;color:#959595;line-height:1.75;margin:0;max-width:340px}
+.telh-hub-preview>a{display:grid;place-items:center;width:44px;height:44px;border:1px solid #adadad43;border-radius:50%;font-size:22px;color:#c5c5c5;transition:transform .2s}
+.telh-hub-preview>a:hover{transform:rotate(35deg)}
+.telh-school-notice{display:flex;justify-content:space-between;align-items:center;gap:30px;padding:19px 0;border-block:1px solid #ffffff16;color:#a1a1a1;font-size:11px;line-height:1.7}
+.telh-school-notice>span:first-child{display:flex;align-items:center;gap:11px}
+.telh-school-notice strong{font-size:11px;font-weight:500;color:#d5d5d5}
+.telh-school-notice i{width:5px;height:5px;border-radius:50%;background:#bbbbbb;box-shadow:0 0 12px #b0b0b033;flex-shrink:0}
+.telh-school-notice b{font-size:17px;font-weight:400;margin-left:12px}
+.telh-venture-portals .telv-venture-meta{flex-wrap:wrap;gap:12px}
+.telh-open-status,.telh-open-badge{color:#cbcbcb;border-color:#adadad40;background:#9d9d9d09}
+.telh-featured-client{display:grid;grid-template-columns:1.15fr 1fr;gap:70px;padding:42px;border:1px solid #a9a9a92e;border-radius:23px;background:radial-gradient(ellipse at 0 0,#5d5d5d12,transparent 60%),#0e0e0e}
+.telh-client-kicker{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:#949494;line-height:1.8;display:block}
+.telh-featured-client h3{font:500 clamp(38px,4vw,56px)/1.08 "Space Grotesk",Inter,sans-serif;letter-spacing:-.05em;margin:25px 0 22px;color:#eaeaea}
+.telh-featured-client p{font-size:13px;line-height:1.85;color:#9f9f9f;margin:0;max-width:560px}
+.telh-service-stack{display:flex;flex-direction:column;gap:0;margin-top:20px}
+.telh-service-stack>span{display:block;font-size:12px;line-height:1.65;color:#b9b9b9;padding:11px 0;border-bottom:1px solid #ffffff0e}
+.telh-service-stack>span:before{content:"↗";font-size:12px;color:#7f7f7f;margin-right:12px}
+.telh-featured-client .telv-text-link{margin-top:25px}
+.telh-client-name-strip{display:flex;justify-content:space-between;align-items:center;gap:20px 35px;flex-wrap:wrap;border-bottom:1px solid #ffffff11;padding:25px 0;color:#919191;font:500 15px/1.5 "Space Grotesk",Inter,sans-serif;letter-spacing:-.02em}
+.telh-client-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px;margin-bottom:21px}
+.telh-client-tabs button{display:flex;flex-direction:column;align-items:start;justify-content:center;gap:11px;min-height:112px;padding:20px;border:1px solid #a9a9a924;border-radius:13px;background:#0d0d0d;color:#b6b6b6;cursor:pointer;text-align:left;transition:border-color .2s,background .2s;min-width:0}
+.telh-client-tabs button[aria-selected=true]{border-color:#aeaeae81;background:#1f1f1f;color:#ebebeb}
+.telh-client-tabs button:hover{border-color:#acacac69}
+.telh-client-tabs button>span{font:500 19px/1.25 "Space Grotesk",Inter,sans-serif;letter-spacing:-.035em}
+.telh-client-tabs button>small{font-size:8px;letter-spacing:.08em;line-height:1.5;text-transform:uppercase;color:#7f7f7f}
+.telh-client-profile{display:grid;grid-template-columns:1.15fr 1fr;gap:80px;padding:45px;border:1px solid #a2a2a235;border-radius:22px;background:linear-gradient(115deg,#131313,#090909);min-height:350px;align-items:start}
+.telh-client-profile h3{font:500 clamp(37px,4vw,54px)/1.12 "Space Grotesk",Inter,sans-serif;letter-spacing:-.045em;margin:24px 0 22px;color:#e8e8e8}
+.telh-client-profile>div>p{font-size:13px;line-height:1.9;color:#9f9f9f;margin:0;max-width:570px}
+.telh-dealership-network{border-top:1px solid #ffffff14;margin-top:37px;padding-top:25px}
+.telh-dealership-network>p{font-size:10px;color:#838383;line-height:1.7;margin:0 0 18px}
+.telh-manufacturer-logos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px}
+.telh-manufacturer-logos .telc-network-logo{min-height:96px;background:transparent;border-color:#ffffff0e;border-radius:12px;padding:23px}
+.telh-manufacturer-logos .telc-network-logo>img{filter:brightness(0) invert(1);opacity:.85;max-width:160px;height:43px}
+.telh-manufacturer-logos .telc-network-logo>img[data-brand=montra]{height:52px}
+.telh-origin-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.telh-origin-grid .telv-copy+.telv-copy{margin-top:20px}
+.telh-origin-photo{margin:0;min-width:0}
+.telh-origin-photo>img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:19px;border:1px solid #ffffff16;filter:saturate(.8) brightness(.88)}
+.telh-origin-photo>figcaption{font-size:10px;color:#868686;line-height:1.75;margin-top:17px}
+[data-smart-home-video]:not(:empty){margin-top:28px}
+.telh-about-page #team .founder-card.with-photo{min-height:0}
+.telh-about-page #team .founder-photo{height:300px}
+.telh-about-page #team .team-grid .founder-photo{height:285px}
+.telh-about-page #team .founder-info{min-height:200px}
+.telh-enquiry-panel{display:grid;grid-template-columns:1.05fr 1fr;gap:65px;border:1px solid #b9b9b92a;border-radius:22px;padding:42px;background:radial-gradient(ellipse at 0 0,#71717112,transparent 60%),#0e0e0e}
+.telh-open-badge{display:inline-block;font-size:9px;line-height:1.7;letter-spacing:.035em;border:1px solid #afafaf40;border-radius:25px;padding:7px 12px;margin-bottom:26px}
+.telh-enquiry-panel .telv-heading{font-size:clamp(34px,3.7vw,52px)}
+.telh-enquiry-panel .telv-copy{font-size:13px}
+.telh-enquiry-note{font-size:10px!important;line-height:1.8!important;color:#858585!important;margin:18px 0 0!important;letter-spacing:0!important}
+@media(max-width:1100px){.telh-hero{gap:35px;min-height:640px;padding-top:45px}.telh-title{font-size:clamp(76px,9vw,110px)}.telh-orbit-stage{min-height:350px}.telh-core{width:135px;height:135px}.telh-venture-node{width:198px;padding:13px 15px}.telh-venture-node.temark{width:184px}.telh-client-tabs button{padding:17px}.telh-client-tabs button>span{font-size:17px}.telh-featured-client,.telh-client-profile{gap:40px;padding:36px}.telh-enquiry-panel{gap:35px}.telh-origin-grid{gap:40px}}
+@media(max-width:820px){.telh-hero{grid-template-columns:1fr;gap:28px;min-height:0;padding:60px 0 45px}.telh-hero-copy>.telv-copy{max-width:570px;font-size:14px}.telh-title{font-size:clamp(80px,14vw,112px)}.telh-hub{max-width:510px}.telh-orbit-stage{min-height:380px}.telh-core{width:150px;height:150px}.telh-venture-node{width:218px}.telh-venture-node.temark{width:205px}.telh-school-notice{align-items:start;flex-direction:column;gap:8px}.telh-school-notice>span:last-child{padding-left:17px;font-size:10px}.telh-featured-client,.telh-client-profile,.telh-origin-grid,.telh-enquiry-panel{grid-template-columns:1fr;gap:30px}.telh-client-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.telh-client-tabs button{min-height:98px}.telh-client-profile{min-height:0}.telh-client-name-strip{justify-content:start;gap:16px 28px}.telh-origin-photo{max-width:620px;width:100%}.telh-hub-preview{min-height:145px}.telh-about-page #team .founder-photo{height:300px}.telh-about-page #team .team-grid .founder-photo{height:280px}}
+@media(max-width:520px){.telh-hero{padding-top:48px;gap:22px}.telh-title{font-size:clamp(58px,16vw,82px);margin-bottom:26px}.telh-hero-copy>.telv-copy{font-size:13px}.telh-hero-copy .telc-hero-links{font-size:9px;gap:10px 20px}.telh-orbit-stage{aspect-ratio:1;min-height:300px}.telh-spinning-ring{inset:24px}.telh-orbit-ellipse{inset:18px}.telh-core{width:126px;height:126px}.telh-core img{width:94px;height:46px}.telh-venture-node{grid-template-columns:17px 1fr 13px;width:205px;min-height:62px;padding:11px 14px;gap:9px;border-radius:12px}.telh-venture-node.education{top:14px;left:2px}.telh-venture-node.temark{bottom:31px;right:2px;width:183px}.telh-venture-node>span:nth-child(2){font-size:12px}.telh-venture-node small{font-size:7px;margin-top:3px}.telh-node-index{font-size:8px}.telh-orbit-caption{font-size:7px;letter-spacing:.08em;bottom:5px}.telh-hub-preview{padding:21px;grid-template-columns:minmax(0,1fr) 39px;gap:15px;min-height:155px}.telh-hub-preview h2{font-size:22px}.telh-hub-preview small{font-size:7px}.telh-hub-preview p{font-size:10px}.telh-hub-preview>a{width:39px;height:39px;font-size:20px}.telh-school-notice strong{font-size:10px}.telh-school-notice{padding-block:17px}.telh-venture-portals .telv-venture-meta{font-size:8px}.telh-featured-client,.telh-client-profile{padding:26px;border-radius:18px;gap:29px}.telh-featured-client h3,.telh-client-profile h3{font-size:37px;margin-top:20px;margin-bottom:18px;overflow-wrap:anywhere}.telh-featured-client p,.telh-client-profile>div>p{font-size:12px}.telh-client-kicker{font-size:8px}.telh-service-stack{margin-top:13px}.telh-service-stack>span{font-size:11px;padding-block:10px}.telh-client-name-strip{font-size:13px;gap:15px 24px;padding-block:22px}.telh-client-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.telh-client-tabs button{padding:16px;min-height:104px;gap:10px}.telh-client-tabs button>span{font-size:18px}.telh-client-tabs button>small{font-size:7px}.telh-client-tabs button:first-child{grid-column:1/-1;min-height:85px}.telh-manufacturer-logos{grid-template-columns:1fr;gap:10px}.telh-manufacturer-logos .telc-network-logo{min-height:85px;padding:19px}.telh-origin-grid{gap:30px}.telh-origin-photo>figcaption{font-size:9px}.telh-about-page #team .leadership-grid,.telh-about-page #team .team-grid{grid-template-columns:1fr}.telh-about-page #team .founder-photo,.telh-about-page #team .team-grid .founder-photo{height:280px}.telh-about-page #team .founder-info{min-height:160px}.telh-enquiry-panel{padding:26px;gap:27px;border-radius:18px}.telh-enquiry-panel .telv-heading{font-size:34px}.telh-enquiry-panel .telv-copy{font-size:12px}.telh-open-badge{font-size:8px;padding:7px 10px;margin-bottom:23px}.telh-enquiry-note{font-size:9px!important}}
+@media(prefers-reduced-motion:reduce){.telh-spinning-ring{animation:none!important}.telh-venture-node,.telh-venture-node>span:last-child,.telh-hub-preview>a,.telh-client-tabs button{transition:none!important}}
+
+/* Supplied TEL Education artwork: display the mark without its outer margins. */
+svg.telc-education-mark{display:block;width:205px;height:auto;aspect-ratio:1261/481;mix-blend-mode:screen;overflow:hidden}
+.telc-education-identity>svg{display:block;flex-shrink:0;width:180px;height:auto;aspect-ratio:1261/481;mix-blend-mode:screen;overflow:hidden}
+@media(max-width:520px){svg.telc-education-mark{width:185px}.telc-education-identity>svg{width:154px}.telc-education-identity{flex-wrap:wrap;gap:18px}}
+
+/* Team data supplies its own text; retire older CSS text substitutions here. */
+.telh-about-page #team .team-quote::after,.telh-about-page #team .team-section-heading>p:last-child::after{content:none}
+.telh-about-page #team .leadership-grid .founder-card:nth-child(2) .team-quote{font:500 clamp(1rem,1.3vw,1.18rem)/1.55 var(--font-display);letter-spacing:-.015em}
+.telh-about-page #team .team-section-heading>p:last-child{font:400 14px/1.8 Inter,sans-serif;color:#9f9f9f}

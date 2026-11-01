@@ -1,0 +1,130 @@
+/* Shared motion direction: charcoal, silver and soft lavender. */
+:root{--tel-motion-ease:cubic-bezier(.22,1,.36,1);--tel-reading-progress:0}
+.tel-page main>section{position:relative;isolation:isolate}
+.tel-art-layer{position:absolute!important;inset:0!important;z-index:-1;pointer-events:none;overflow:hidden;border-radius:24px;opacity:.17;mask-image:radial-gradient(ellipse at 77% 44%,#000,transparent 73%);min-width:0!important;max-width:none!important;margin:0!important;padding:0!important;animation:none!important}
+.tel-art-layer>div{position:absolute;inset:0;width:100%;height:100%}
+.tel-art-layer canvas{max-width:100%;opacity:.85}
+.tel-art-layer[data-tel-visual=waves]{opacity:.12;mask-image:linear-gradient(90deg,transparent 28%,#0008 90%)}
+.tel-art-hero{inset:4% 0 2% 32%!important;border-radius:50%;opacity:.23;mask-image:radial-gradient(ellipse,#000b,transparent 70%)}
+.tel-art-hero[data-tel-visual=waves]{opacity:.13}
+.tel-page main>section:has(>.tel-art-layer):not(:first-child){--scene-progress:.5}
+.tel-site-ready main>section:first-of-type h1{animation:tel-title-enter 1.05s var(--tel-motion-ease) both}
+.tel-site-ready main>section:first-of-type .telv-eyebrow{animation:tel-copy-enter .8s .06s var(--tel-motion-ease) both}
+.tel-site-ready main>section:first-of-type .telv-copy,.tel-site-ready main>section:first-of-type .telv-buttons{animation:tel-copy-enter .9s .15s var(--tel-motion-ease) both}
+@keyframes tel-title-enter{from{opacity:0;transform:translateY(25px);clip-path:inset(0 0 15%)}to{opacity:1;transform:none;clip-path:inset(0)}}
+@keyframes tel-copy-enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.tel-page .tel-header:after{content:'';position:absolute;bottom:-1px;left:16px;right:16px;height:1px;background:linear-gradient(90deg,#b49bc900,#d9c4f0,#e9dcec);transform:scaleX(var(--tel-reading-progress));transform-origin:left;pointer-events:none;opacity:.8}
+/* Real marks remain upright as their centres travel around the planet. */
+[data-tel-orbit]{--orbit-mark-width:164px;min-height:440px;overflow:visible}
+[data-tel-orbit] .tel-hero-planet{width:57%;top:50%;box-shadow:inset -35px -28px 65px #030205,0 -14px 45px #d0b3ec14,0 0 75px #b9a3ff09}
+[data-tel-orbit] .tel-planet-orbit.outer{width:calc(100% - var(--orbit-mark-width) - 20px);height:66%;top:50%;transform:translate(-50%,-50%);border-color:#c4acd34d}
+[data-tel-orbit] .tel-planet-orbit.inner{width:94%;height:44%;top:50%;transform:translate(-50%,-50%) rotate(-24deg);border-color:#c4acd32b}
+[data-tel-orbit] .tel-orbit-venture{position:absolute;left:50%;top:50%;right:auto;bottom:auto;width:var(--orbit-mark-width);height:82px;min-height:0;padding:6px 5px;gap:6px;align-items:center;justify-content:center;border:0;border-radius:12px;background:transparent;box-shadow:none;transform:translate(calc(-50% + var(--orbit-x,110px)),calc(-50% + var(--orbit-y,-110px)));transition:color .25s,filter .25s;will-change:transform;z-index:3}
+[data-tel-orbit] .tel-orbit-temark{--orbit-x:-110px;--orbit-y:110px}
+[data-tel-orbit] .tel-orbit-education>svg{width:151px;height:58px;max-width:100%;mix-blend-mode:normal;color:#f2eaf9;filter:drop-shadow(0 2px 9px #08060cf2)}
+[data-tel-orbit] .tel-orbit-temark-brand{min-height:50px;gap:10px;filter:drop-shadow(0 2px 8px #08060c)}
+[data-tel-orbit] .tel-orbit-temark-brand strong{font-size:28px}
+[data-tel-orbit] .tel-orbit-temark-brand svg{width:41px;height:41px}
+[data-tel-orbit] .tel-orbit-venture>span:last-child{justify-content:center;gap:7px;color:#dacbe7;font-size:9px;line-height:1.5;text-shadow:0 1px 5px #08060c}
+[data-tel-orbit] .tel-orbit-venture>span:last-child b{font-size:13px}
+[data-tel-orbit] .tel-orbit-venture:hover,[data-tel-orbit] .tel-orbit-venture:focus-visible{background:#100b1875;filter:drop-shadow(0 0 13px #cfabe92b)}
+[data-tel-orbit] .tel-orbit-venture:after{display:none}
+[data-tel-orbit] .tel-orbit-caption{right:3%;bottom:0;color:#b8a4c8;font-size:7px;letter-spacing:.18em}
+.tel-horizon-glow{top:24%;left:14%;width:72%;height:26%;opacity:.75}
+.telc-education-mark,.telc-education-identity>svg,.tel-real-education-mark{mix-blend-mode:normal!important;color:#f4edf9}
+.tel-contact-art{height:225px}
+.tel-contact-shader{opacity:.2;mask-image:radial-gradient(ellipse,#000,transparent 90%)}
+.tel-contact-edu-fallback{z-index:0;opacity:1!important;background:radial-gradient(ellipse at center,#a78cc01a,transparent 70%)}
+.tel-contact-edu-fallback>.tel-real-education-mark{width:55%;max-width:275px;height:auto;z-index:1;filter:drop-shadow(0 3px 10px #09060f)}
+.tel-contact-edu-fallback i{width:65%;height:54%;border-color:#bda2d42b;animation:tel-logo-ring 34s linear infinite}
+.tel-contact-edu-fallback i:last-child{width:76%;height:65%;animation-direction:reverse;animation-duration:43s}
+@keyframes tel-logo-ring{from{transform:rotate(-20deg)}to{transform:rotate(340deg)}}
+.tel-contact-art-education:has(.shape-waves[data-ready=true]) .tel-contact-edu-fallback{opacity:1}
+.tel-media-depth{transform:scale(var(--media-scale,1));transform-origin:50% 50%;will-change:transform}
+.tel-media-depth img{filter:none}
+.telv-cta,.telh-enquiry-panel{position:relative;isolation:isolate;overflow:hidden}
+.telv-cta:before,.telh-enquiry-panel:before{content:'';position:absolute;width:440px;height:140px;right:-130px;top:-50px;border:1px solid #c8a7e129;border-radius:50%;transform:rotate(-25deg);pointer-events:none;z-index:-1;box-shadow:0 0 0 18px #c8a7e105,0 0 0 58px #c8a7e104}
+.tel-motion-surface{position:relative;--hover-x:50%;--hover-y:50%}
+.tel-motion-surface:after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(340px circle at var(--hover-x) var(--hover-y),#d3b2ee11,transparent 68%);opacity:0;transition:opacity .35s}
+.tel-motion-surface.tel-surface-active:after{opacity:1}
+.telv-service-row{transition:padding .35s,border-color .35s,background .35s;border-radius:0}
+.telv-service-row:hover{border-color:#c0a2d966;background:#b69bc908;padding-inline:15px}
+.telv-service-row h3,.telv-job h3,.telh-client-tabs button{transition:color .25s}
+.telv-service-row:hover h3,.telv-job:hover h3{color:#ddc9ef}
+.telv-job{transition:border-color .3s,background .3s}
+.telv-job:hover{border-color:#cbb0df5c;background:#bfa1d306}
+.tel-school-format>summary{position:relative}
+.tel-school-format>summary:after{content:'';position:absolute;left:0;bottom:-1px;width:100%;height:1px;background:#c6a4e5;transform:scaleX(0);transform-origin:left;transition:transform .6s var(--tel-motion-ease);pointer-events:none}
+.tel-school-format[open]>summary:after,.tel-school-format>summary:hover:after{transform:scaleX(1)}
+.tel-school-format[open] .tel-school-format-body{animation:tel-detail-open .55s var(--tel-motion-ease)}
+@keyframes tel-detail-open{from{opacity:.5;transform:translateY(9px)}to{opacity:1;transform:none}}
+.tel-client-profile-enter{animation:tel-detail-open .4s var(--tel-motion-ease)}
+.tel-home-client-loop{margin-top:30px;display:block!important;min-width:0}
+[data-tel-brand-loop]{display:block!important;width:100%;min-width:0;overflow:hidden;min-height:94px;padding:22px 0;border-block:1px solid #d4b7e326;margin:24px 0 18px;background:transparent}
+.tel-brand-logo-loop{min-height:53px;color:#e7ddec}
+.tel-loop-brand-mark{display:block;width:160px;height:57px;overflow:visible;color:#e7ddec}
+.tel-loop-brand-entry{display:grid;grid-template-rows:auto 15px;gap:5px;justify-items:center;align-items:center}
+.tel-loop-brand-status{display:block;min-height:15px;font:400 9px/15px 'DM Sans',sans-serif;letter-spacing:.08em;color:#d0badf}
+.tel-brand-logo-loop .logoloop__node{display:flex;align-items:center;justify-content:center}
+[data-tel-brand-loop]:not([data-motion-mounted]){display:flex!important;gap:22px;flex-wrap:wrap}
+[data-tel-brand-loop]:not([data-motion-mounted])>.telc-network-logo{flex:1;min-height:90px}
+.tel-page .tel-footer{position:relative;isolation:isolate}
+.tel-page .tel-footer:before{content:'';position:absolute;width:420px;height:115px;border:1px solid #bda2d71a;border-radius:50%;left:-220px;top:22%;transform:rotate(-24deg);pointer-events:none;z-index:-1}
+.tel-site-still .tel-art-layer,.tel-site-still .tel-contact-shader{opacity:.1}
+.tel-site-still .tel-media-depth{transform:none;will-change:auto}
+.tel-site-still .tel-site-ready main>section:first-of-type h1,.tel-site-still main>section:first-of-type h1,.tel-site-still main>section:first-of-type .telv-eyebrow,.tel-site-still main>section:first-of-type .telv-copy,.tel-site-still main>section:first-of-type .telv-buttons,.tel-site-still .tel-contact-edu-fallback i,.tel-site-still .tel-school-format[open] .tel-school-format-body,.tel-site-still .tel-client-profile-enter{animation:none}
+.tel-site-still .telv-service-row:hover{padding-inline:0}
+@media(max-width:1100px){[data-tel-orbit]{--orbit-mark-width:150px;min-height:380px}[data-tel-orbit] .tel-orbit-education>svg{width:138px;height:53px}[data-tel-orbit] .tel-orbit-temark-brand strong{font-size:25px}.tel-art-hero{inset:4% 0 4% 20%!important}}
+@media(max-width:820px){[data-tel-orbit]{--orbit-mark-width:150px;min-height:350px;max-width:470px}[data-tel-orbit] .tel-orbit-caption{bottom:0}.tel-art-layer{opacity:.11}.tel-art-hero{opacity:.16}.tel-art-hero[data-tel-visual=waves]{opacity:.1}.telv-service-row:hover{padding-inline:0}.tel-page .tel-footer:before{left:-290px}}
+@media(max-width:520px){[data-tel-orbit]{--orbit-mark-width:116px;min-height:310px;max-width:370px;aspect-ratio:1.04}[data-tel-orbit] .tel-orbit-venture{height:73px;padding:4px;gap:3px}[data-tel-orbit] .tel-orbit-education>svg{width:112px;height:44px}[data-tel-orbit] .tel-orbit-temark-brand{gap:7px;min-height:44px}[data-tel-orbit] .tel-orbit-temark-brand svg{width:31px;height:31px}[data-tel-orbit] .tel-orbit-temark-brand strong{font-size:21px}[data-tel-orbit] .tel-orbit-venture>span:last-child{font-size:7px;gap:5px}[data-tel-orbit] .tel-orbit-venture b{font-size:10px}[data-tel-orbit] .tel-hero-planet{width:60%}[data-tel-orbit] .tel-orbit-caption{font-size:6px;right:2%;bottom:-2px}.tel-contact-art{height:205px}.tel-contact-edu-fallback>.tel-real-education-mark{width:62%}.tel-loop-brand-mark{width:130px;height:49px}[data-tel-brand-loop]{padding-block:19px}.tel-home-client-loop{margin-top:23px}.tel-art-hero{inset:10% 0 3% 10%!important}.telv-cta:before{right:-250px}}
+@media(prefers-reduced-motion:reduce){.tel-page main>section:first-of-type h1,.tel-page main>section:first-of-type .telv-eyebrow,.tel-page main>section:first-of-type .telv-copy,.tel-page main>section:first-of-type .telv-buttons,.tel-contact-edu-fallback i,.tel-school-format[open] .tel-school-format-body,.tel-client-profile-enter{animation:none!important}.tel-media-depth{transform:none!important;will-change:auto}.tel-motion-surface:after{display:none}.telv-service-row,.telv-job,.tel-school-format>summary:after{transition:none}.telv-service-row:hover{padding-inline:0}[data-tel-orbit] .tel-orbit-venture{will-change:auto}.tel-art-layer{opacity:.1}}
+/* Short, automatic ElectricLogo intro; no continue interaction is required. */
+.tel-loader{transition:opacity .22s ease,transform .22s var(--tel-motion-ease)}
+.tel-loader-inner{gap:17px}
+.tel-loader-core{width:min(360px,82vw);height:195px;cursor:default;border-radius:0;background:transparent;transform:none}
+.tel-loader-core>img{width:230px;max-width:78%;height:auto;filter:drop-shadow(0 0 17px #c3a4df55);transition:opacity .18s ease}
+.tel-loader-electric{position:absolute;inset:0;pointer-events:none}
+.tel-loader-core:has([data-electric-ready=true])>img{opacity:0}
+.tel-loader-label{font-size:16px;color:#e9dcf3}
+.tel-loader-progress{width:140px}
+@media(max-width:520px){.tel-loader-core{height:170px;width:min(310px,86vw)}.tel-loader-core>img{width:200px}.tel-loader-kicker{font-size:8px;letter-spacing:.17em}.tel-loader-label{font-size:15px}}
+.tel-loader{background:#08070c;isolation:isolate}
+.tel-loader-space{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 50% 54%,#39264b38,transparent 60%),#08070c}
+.tel-loader-space i{position:absolute;inset:-5%;background-image:radial-gradient(circle,#f2e9fc 1px,transparent 1.5px),radial-gradient(circle,#bba9d4 .65px,transparent 1.2px),radial-gradient(circle,#ece1f9 .8px,transparent 1.4px);background-size:173px 139px,107px 211px,241px 193px;background-position:27px 43px,81px 22px,121px 96px;opacity:.55;animation:tel-intro-twinkle 1.8s ease-in-out infinite alternate}
+.tel-loader-space i:nth-child(2){background-size:239px 173px,193px 127px,311px 223px;background-position:73px 127px,15px 74px,201px 35px;opacity:.3;animation-delay:-.8s;animation-duration:2.1s}
+.tel-loader-space:after{content:'';position:absolute;left:50%;top:86%;width:min(1000px,160vw);aspect-ratio:1;border-radius:50%;transform:translateX(-50%);border:1px solid #c4abdf55;background:#07060b;box-shadow:0 -9px 32px #b79ac82e,0 -1px 5px #ddc5f25c}
+.tel-loader-space>span{position:absolute;left:19%;top:30%;width:9px;height:9px;clip-path:polygon(50% 0,62% 39%,100% 50%,62% 61%,50% 100%,39% 61%,0 50%,39% 39%);background:#dfc9f2;opacity:.7;animation:tel-intro-twinkle 1.5s ease-in-out infinite alternate}
+.tel-loader-core{animation:tel-electric-arrive .75s var(--tel-motion-ease) both}
+.tel-loader-finished .tel-loader-inner{transform:scale(1.04);transition:transform .22s ease}
+@keyframes tel-intro-twinkle{from{opacity:.25}to{opacity:.75}}
+@keyframes tel-electric-arrive{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+/* TeMark uses a restrained champagne accent; Education retains TEL lavender. */
+body[data-page=temark]{--tel-accent:#d9b799;--tel-accent-soft:#ead6c2}
+body[data-page=temark] .tel-universe{background:radial-gradient(ellipse at 86% 10%,#d8b4950c,transparent 49%),radial-gradient(ellipse at 0 70%,#cbb3a106,transparent 48%),linear-gradient(145deg,#09080b,#100e12 52%,#08080b)}
+body[data-page=temark] .tel-nebula.violet{background:radial-gradient(ellipse,#cda98a37,#5d465019 58%,transparent 74%)}
+body[data-page=temark] .tel-nebula.blue{background:radial-gradient(ellipse,#d4bd9f28,#6b555011 60%,transparent 72%)}
+body[data-page=temark] .telv-outline{color:#dcc2ab!important}
+body[data-page=temark] .telv-eyebrow,body[data-page=temark] .telv-service-number{color:#cdb7a7!important}
+body[data-page=temark] .telv-eyebrow:before{background:#d3b294}
+body[data-page=temark] .telv-button.primary{background:#f1e5da;border-color:#f1e5da;color:#191214}
+body[data-page=temark] .telv-button.primary:hover{background:#e7cdb6}
+body[data-page=temark] .tel-photo-filters button[aria-pressed=true]{background:#eadbcd;color:#21171c;border-color:#eadbcd}
+body[data-page=temark] .telh-client-tabs button[aria-selected=true]{background:#30252a;border-color:#b8947670}
+body[data-page=temark] .telh-client-profile,body[data-page=temark] .telv-cta{background:linear-gradient(145deg,#19141cf0,#0e0b12eb);border-color:#c7a38730}
+body[data-page=temark] .tel-section-nav a,body[data-page=temark] .tel-client-wordmark small{color:#c4afa1}
+body[data-page=temark] .tel-client-wordmark strong,body[data-page=temark] .tel-loop-brand-mark{color:#e8d9cd}
+body[data-page=temark] .tel-loop-brand-status{color:#d7bba2}
+body[data-page=temark] .telv-service-row:hover{border-color:#d0ac8a66;background:#bda08b08}
+body[data-page=temark] .telv-service-row:hover h3{color:#e6c9ad}
+body[data-page=temark] .tel-hover-surface:after,body[data-page=temark] .tel-motion-surface:after{background:radial-gradient(340px circle at var(--hover-x) var(--hover-y),#dec0a515,transparent 68%)}
+body[data-page=temark] .tel-nav-disclosure:hover,body[data-page=temark] .tel-nav-disclosure[aria-expanded=true]{background:#d5b89e13;color:#f1e4d7}
+body[data-page=temark] .tel-nav-submenu{border-color:#d6b39530}
+body[data-page=temark] .tel-header .tel-nav-submenu a:hover{background:#d8b49812}
+#enquiry-temark .telv-eyebrow{color:#d7bba4!important}
+#enquiry-temark .telv-button.primary{background:#f1e5da;border-color:#f1e5da}
+@media(prefers-reduced-motion:reduce){.tel-loader-space i,.tel-loader-space>span,.tel-loader-core{animation:none!important}}
+.tel-portfolio-businesses-block{display:flex;align-items:baseline;gap:25px;flex-wrap:wrap;padding:13px 0 4px}
+.tel-portfolio-businesses-block>p{margin:0;color:#bba695;font-size:9px;text-transform:uppercase;letter-spacing:.1em}
+.tel-portfolio-businesses{display:flex;align-items:center;gap:14px 25px;flex-wrap:wrap;color:#dcc9ba;font-size:12px;line-height:1.7}
+.tel-client-loop-section>.tel-rights-note{max-width:900px;line-height:1.8;margin-top:17px;font-size:10px}
+@media(max-width:520px){.tel-portfolio-businesses-block{gap:9px;padding-top:10px}.tel-portfolio-businesses{font-size:11px;gap:8px 18px}.tel-client-loop-section>.tel-rights-note{font-size:9px}.tel-client-loop-heading .telv-eyebrow{font-size:7px}.tel-client-loop-heading>a{font-size:9px}}

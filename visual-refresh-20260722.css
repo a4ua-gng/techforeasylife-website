@@ -60,7 +60,7 @@ body[data-page]:not([data-page="home"]) .space-scene {
   background:
     radial-gradient(circle at var(--page-glow-position), rgba(var(--page-accent), .18), transparent 37%),
     radial-gradient(circle at 12% 86%, rgba(var(--page-secondary), .08), transparent 33%),
-    linear-gradient(180deg, #050506 0%, #06060a 52%, #08070d 100%);
+    linear-gradient(180deg, #050505 0%, #060606 52%, #080808 100%);
 }
 
 body[data-page]:not([data-page="home"]) .space-scene::before,
@@ -78,8 +78,8 @@ body[data-page]:not([data-page="home"]) .space-scene::after {
     radial-gradient(circle, rgba(var(--page-secondary),.8) 0 .7px, transparent 1.05px);
   background-position: 14px 32px, 93px 58px;
   background-size: 235px 235px, 151px 151px;
-  mask-image: linear-gradient(180deg, #000, transparent 92%);
-  -webkit-mask-image: linear-gradient(180deg, #000, transparent 92%);
+  mask-image: linear-gradient(180deg, #000000, transparent 92%);
+  -webkit-mask-image: linear-gradient(180deg, #000000, transparent 92%);
 }
 
 body[data-page="product"] .space-scene::before {
@@ -92,8 +92,8 @@ body[data-page="schools"] .space-scene::before {
     linear-gradient(rgba(var(--page-secondary),.055) 1px, transparent 1px),
     linear-gradient(90deg, rgba(var(--page-secondary),.045) 1px, transparent 1px);
   background-size: 118px 118px;
-  mask-image: radial-gradient(ellipse at 12% 54%, #000 0, transparent 58%);
-  -webkit-mask-image: radial-gradient(ellipse at 12% 54%, #000 0, transparent 58%);
+  mask-image: radial-gradient(ellipse at 12% 54%, #000000 0, transparent 58%);
+  -webkit-mask-image: radial-gradient(ellipse at 12% 54%, #000000 0, transparent 58%);
   transform: perspective(700px) rotateX(63deg) scale(1.55) translateY(30%);
   transform-origin: center bottom;
 }
@@ -180,8 +180,8 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
 .site-nav .nav-cta.active,
 .site-nav .nav-cta:hover,
 .site-nav .nav-cta:focus-visible {
-  color: #08080c;
-  -webkit-text-fill-color: #08080c;
+  color: #080808;
+  -webkit-text-fill-color: #080808;
 }
 
 .site-nav .nav-cta.active {
@@ -193,8 +193,8 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
 .button-light,
 .button-primary:hover,
 .button-light:hover {
-  color: #060608;
-  -webkit-text-fill-color: #060608;
+  color: #060606;
+  -webkit-text-fill-color: #060606;
 }
 
 /* Home discovery card: keep Careers prominent without a secondary Play destination. */
@@ -227,7 +227,7 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
   overflow: hidden;
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 28px;
-  background: linear-gradient(145deg, rgba(19,18,29,.84), rgba(7,7,11,.9));
+  background: linear-gradient(145deg, rgba(19,19,19,.84), rgba(7,7,7,.9));
   box-shadow: inset 0 1px rgba(255,255,255,.04), 0 28px 85px rgba(0,0,0,.3);
 }
 
@@ -243,9 +243,9 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
   height: 330px;
   right: -90px;
   top: -90px;
-  border: 1px solid rgba(203,188,255,.18);
+  border: 1px solid rgba(196,196,196,.18);
   border-radius: 50%;
-  box-shadow: 0 0 90px rgba(203,188,255,.07), inset 0 0 60px rgba(203,188,255,.03);
+  box-shadow: 0 0 90px rgba(196,196,196,.07), inset 0 0 60px rgba(196,196,196,.03);
 }
 
 .home-discover-card::after {
@@ -253,37 +253,37 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
   height: 9px;
   right: 18%;
   top: 16%;
-  background: #cbbcff;
+  background: #c4c4c4;
   border-radius: 50%;
-  box-shadow: 0 0 24px #cbbcff;
+  box-shadow: 0 0 24px #c4c4c4;
 }
 
 .home-discover-card.play-card {
   background:
-    radial-gradient(circle at 82% 18%, rgba(130,184,255,.12), transparent 37%),
-    linear-gradient(145deg, rgba(17,17,29,.88), rgba(6,6,10,.92));
+    radial-gradient(circle at 82% 18%, rgba(178,178,178,.12), transparent 37%),
+    linear-gradient(145deg, rgba(18,18,18,.88), rgba(6,6,6,.92));
 }
 
 .home-discover-card.careers-card {
   background:
-    radial-gradient(circle at 84% 16%, rgba(211,157,255,.13), transparent 38%),
-    linear-gradient(145deg, rgba(22,17,28,.88), rgba(7,6,10,.92));
+    radial-gradient(circle at 84% 16%, rgba(176,176,176,.13), transparent 38%),
+    linear-gradient(145deg, rgba(19,19,19,.88), rgba(7,7,7,.92));
 }
 
 .home-discover-card > * { position: relative; z-index: 1; }
-.home-discover-card .card-kicker { color: #c9c9d3; font-size: .66rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.home-discover-card .card-kicker { color: #cacaca; font-size: .66rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
 .home-discover-card h2 { max-width: 480px; margin: auto 0 18px; font-size: clamp(2.5rem, 4.8vw, 4.8rem); }
 .home-discover-card p { max-width: 480px; }
 .home-discover-card .text-link { margin-top: 24px; }
 .home-discover-tags { margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 7px; }
-.home-discover-tags span { padding: 7px 9px; color: #bcbcc7; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.09); border-radius: 999px; font-size: .58rem; letter-spacing: .07em; text-transform: uppercase; }
+.home-discover-tags span { padding: 7px 9px; color: #bdbdbd; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.09); border-radius: 999px; font-size: .58rem; letter-spacing: .07em; text-transform: uppercase; }
 
 /* Contact controls: dark in normal, open, focused, and browser-autofilled states. */
 [data-page="contact"] .contact-form {
   color-scheme: dark;
   background:
     radial-gradient(circle at 100% 0, rgba(var(--page-secondary),.075), transparent 32%),
-    linear-gradient(145deg, rgba(22,21,30,.92), rgba(9,9,14,.86));
+    linear-gradient(145deg, rgba(22,22,22,.92), rgba(9,9,9,.86));
   border-color: rgba(var(--page-accent), .2);
 }
 
@@ -292,10 +292,10 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
 [data-page="contact"] .field textarea {
   min-height: 54px;
   padding: 14px 16px;
-  color: #f7f7fb;
-  -webkit-text-fill-color: #f7f7fb;
+  color: #f7f7f7;
+  -webkit-text-fill-color: #f7f7f7;
   caret-color: rgb(var(--page-secondary));
-  background-color: rgba(7,7,12,.76);
+  background-color: rgba(7,7,7,.76);
   border: 1px solid rgba(255,255,255,.15);
   border-radius: 13px;
   box-shadow: inset 0 1px rgba(255,255,255,.025);
@@ -308,23 +308,23 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
 
 [data-page="contact"] .field input::placeholder,
 [data-page="contact"] .field textarea::placeholder {
-  color: #777785;
+  color: #787878;
   opacity: 1;
-  -webkit-text-fill-color: #777785;
+  -webkit-text-fill-color: #787878;
 }
 
 [data-page="contact"] .field input:hover,
 [data-page="contact"] .field select:hover,
 [data-page="contact"] .field textarea:hover {
   border-color: rgba(var(--page-accent),.38);
-  background-color: rgba(11,10,17,.9);
+  background-color: rgba(11,11,11,.9);
 }
 
 [data-page="contact"] .field input:focus,
 [data-page="contact"] .field select:focus,
 [data-page="contact"] .field textarea:focus {
   border-color: rgba(var(--page-secondary),.82);
-  background-color: #0b0b12;
+  background-color: #0c0c0c;
   box-shadow: 0 0 0 3px rgba(var(--page-secondary),.09), inset 0 1px rgba(255,255,255,.035);
 }
 
@@ -342,13 +342,13 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
 
 [data-page="contact"] .field select option,
 [data-page="contact"] .field select optgroup {
-  color: #f7f7fb;
-  background: #0b0b12;
+  color: #f7f7f7;
+  background: #0c0c0c;
 }
 
 [data-page="contact"] .field select option:checked {
-  color: #09090d;
-  background: #cbbcff;
+  color: #090909;
+  background: #c4c4c4;
 }
 
 [data-page="contact"] .field input:-webkit-autofill,
@@ -356,10 +356,10 @@ body[data-page]:not([data-page="home"]) main > .section:nth-of-type(even):not(.f
 [data-page="contact"] .field input:-webkit-autofill:focus,
 [data-page="contact"] .field textarea:-webkit-autofill,
 [data-page="contact"] .field select:-webkit-autofill {
-  -webkit-text-fill-color: #f7f7fb !important;
-  caret-color: #f7f7fb;
+  -webkit-text-fill-color: #f7f7f7 !important;
+  caret-color: #f7f7f7;
   border-color: rgba(var(--page-secondary),.52);
-  box-shadow: 0 0 0 1000px #0b0b12 inset, 0 0 0 3px rgba(var(--page-secondary),.07);
+  box-shadow: 0 0 0 1000px #0c0c0c inset, 0 0 0 3px rgba(var(--page-secondary),.07);
   transition: background-color 9999s ease-out 0s;
 }
 

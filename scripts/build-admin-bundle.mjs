@@ -1,0 +1,10 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+const root=resolve(import.meta.dirname,'..'),dir=resolve(root,'.cloudflare-admin');
+const files=['index.html','admin.css','admin.js','brand-site-model.js','brand-site-editor.css','brand-site-editor.js','brand-admin-integration.js'];
+const assets={};
+for(const name of files)assets['/'+name]={body:await readFile(resolve(dir,name),'utf8'),type:name.endsWith('.html')?'text/html; charset=utf-8':name.endsWith('.css')?'text/css; charset=utf-8':'text/javascript; charset=utf-8'};
+let source=await readFile(resolve(dir,'_worker.js'),'utf8');
+source='const ADMIN_BUNDLED_ASSETS='+JSON.stringify(assets)+';\n'+source.replace('const response = await env.ASSETS.fetch(request);',`const asset = ADMIN_BUNDLED_ASSETS[url.pathname === "/" ? "/index.html" : url.pathname];
+      const response = !["GET", "HEAD"].includes(request.method) ? new Response("Method not allowed", {status:405,headers:{Allow:"GET, HEAD"}}) : asset ? new Response(request.method === "HEAD" ? null : asset.body, {headers:{"Content-Type":asset.type}}) : new Response("Not found", {status:404});`);
+const out=resolve(root,'.admin-deploy');await mkdir(out,{recursive:true});await writeFile(resolve(out,'_worker.js'),source);console.log('Built standalone admin Worker with '+files.length+' assets.');

@@ -1,0 +1,75 @@
+.tel-contact-hero{padding-top:clamp(135px,12vw,180px);padding-bottom:62px}
+.tel-contact-hero h1{font-family:Sora,'Space Grotesk',sans-serif;font-size:clamp(40px,6.3vw,82px);font-weight:500;line-height:1.12;letter-spacing:-.06em;margin:24px 0 30px;max-width:1120px}
+.tel-contact-hero h1>span{color:#bfb0ce}
+.tel-contact-intro{display:flex;justify-content:space-between;align-items:end;gap:40px}
+.tel-contact-intro>p{max-width:570px;color:#bdb5c9;line-height:1.85;font-size:16px;margin:0}
+.tel-contact-intro nav{display:flex;gap:10px;flex-shrink:0}
+.tel-contact-intro nav a{display:flex;align-items:center;gap:25px;padding:13px 17px;border:1px solid #d4bce032;border-radius:8px;color:#e5d6f2;font-size:12px;transition:background .25s,border-color .25s}
+.tel-contact-intro nav a:hover{background:#b59bd31a;border-color:#cfb0ec70}
+.tel-contact-intro nav a span{font-size:17px}
+.tel-contact-ventures{display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:stretch}
+.tel-contact-venture{min-width:0;display:flex;flex-direction:column;border:1px solid #d9c0ef29;border-radius:22px;background:linear-gradient(155deg,#16121bf2,#0d0b10f7);overflow:hidden}
+.tel-contact-art{position:relative;height:245px;flex-shrink:0;isolation:isolate;overflow:hidden;background:#100e16;border-bottom:1px solid #cbb2df24}
+.tel-contact-shader,.tel-contact-other-visual{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.tel-contact-shader>div,.tel-contact-other-visual>div{width:100%;height:100%}
+.tel-contact-art-index{position:absolute;top:25px;left:30px;font-size:9px;color:#d2c0e1;letter-spacing:.15em;z-index:2}
+.tel-contact-art-brand{position:absolute;inset:0;display:flex;gap:21px;align-items:center;justify-content:center}
+.tel-contact-art-brand svg{filter:brightness(0) invert(1);width:64px;height:64px}
+.tel-contact-art-brand strong{font:500 47px/1 Sora,sans-serif;letter-spacing:-.06em;color:#f8f1ff}
+.tel-contact-art-caption{position:absolute;left:30px;right:25px;bottom:22px;color:#c7b7d4;font-size:10px;letter-spacing:.02em}
+.tel-contact-art-static{position:absolute;inset:0;z-index:-2;background:repeating-linear-gradient(90deg,transparent 0 11px,#b6a1cf0d 12px 13px),radial-gradient(ellipse at 65% 90%,#b29bce30,transparent 70%)}
+.tel-contact-edu-fallback{position:absolute;inset:0;display:grid;place-items:center;z-index:-2;background:radial-gradient(ellipse at 50% 65%,#8d72ba2a,transparent 67%)}
+.tel-contact-edu-fallback span{font:500 78px/1 Sora,sans-serif;color:#b9a5cf80;letter-spacing:-.06em}
+.tel-contact-edu-fallback i{position:absolute;width:215px;height:100px;border:1px solid #b89bdf36;border-radius:50%;transform:rotate(-25deg)}
+.tel-contact-edu-fallback i:last-child{transform:rotate(30deg);width:245px;height:120px}
+.tel-contact-art-education:has(.shape-waves[data-ready=true]) .tel-contact-edu-fallback{opacity:0}
+.tel-contact-edu-label{position:absolute;right:27px;top:22px;font:500 13px/1.4 Sora,sans-serif;color:#e3d7ed}
+.tel-contact-body{padding:32px;display:flex;flex:1;flex-direction:column}
+.tel-contact-body>.telv-eyebrow{font-size:9px;margin:0 0 14px}
+.tel-contact-body h2{font:500 clamp(27px,2.6vw,38px)/1.2 Sora,sans-serif;letter-spacing:-.045em;margin:0 0 20px;min-height:92px}
+.tel-contact-description{color:#c1b8cb;font-size:14px;line-height:1.85;margin:0 0 22px;min-height:78px}
+.tel-contact-mini-tags{display:flex;gap:7px;flex-wrap:wrap;min-height:29px;margin-bottom:15px}
+.tel-contact-mini-tags span{font-size:10px;color:#d1bedf;border:1px solid #bfa1d72b;border-radius:6px;padding:5px 9px}
+.tel-contact-business-email{display:flex;flex-direction:column;gap:5px;min-height:84px;margin-bottom:24px}
+.tel-contact-business-email>span{font-size:10px;color:#a996b8}
+.tel-contact-business-email strong{font-size:13px;font-weight:500;overflow-wrap:anywhere;color:#e3d7ed}
+.tel-contact-business-email small{font-size:10px;color:#b6a4c4;line-height:1.6}
+.tel-contact-school-status{min-height:29px;display:flex;align-items:center;gap:9px;font-size:11px;color:#e1d1ed;margin-bottom:15px;line-height:1.5}
+.tel-contact-school-status i{width:5px;height:5px;background:#ddc8f2;border-radius:50%;flex-shrink:0;box-shadow:0 0 10px #d1b0f547}
+.tel-contact-education-note{font-size:11px;color:#b7a6c5;line-height:1.9;margin:0 0 24px;min-height:84px}
+.tel-contact-education-note a{display:block;color:#e1d0f0;text-decoration:underline;text-underline-offset:4px;margin-top:5px}
+.tel-enquiry-form{border-top:1px solid #d6b8eb25;padding-top:27px;margin-top:auto}
+.tel-enquiry-form .form-grid{gap:21px 15px;display:grid;grid-template-columns:1fr 1fr}
+.tel-enquiry-form .field{min-width:0;display:flex;flex-direction:column;gap:9px}
+.tel-enquiry-form .field.full{grid-column:1/-1}
+.tel-enquiry-form label{font-size:11px;color:#e6ddeb;line-height:1.5}
+.tel-enquiry-form label>span{color:#b2a3be}
+.tel-enquiry-form input:not([type=checkbox]),.tel-enquiry-form textarea{width:100%;min-width:0;border:1px solid #cfb6e032;border-radius:8px;background:#09070d80;color:#f5edfa;font:400 13px/1.6 'DM Sans',sans-serif;padding:12px 13px;outline:none;box-sizing:border-box;transition:border-color .2s,background .2s}
+.tel-enquiry-form input::placeholder,.tel-enquiry-form textarea::placeholder{color:#9c8fa8;opacity:1}
+.tel-enquiry-form input:not([type=checkbox]){min-height:47px}
+.tel-enquiry-form textarea{resize:vertical;min-height:135px}
+.tel-enquiry-form input:focus-visible,.tel-enquiry-form textarea:focus-visible{border-color:#d5b9f0;outline:2px solid #c6a0e22e;outline-offset:3px;background:#0d0913}
+.tel-enquiry-form .tel-form-note{font-size:10px;line-height:1.85;color:#b6a5c3;margin:13px 0}
+.tel-enquiry-form .tel-form-consent{display:flex;align-items:start;gap:11px;margin:22px 0;color:#cbbdd7;font-size:10px;line-height:1.85}
+.tel-enquiry-form .tel-form-consent input{width:17px;height:17px;flex-shrink:0;margin:2px 0 0;accent-color:#c9ace2}
+.tel-enquiry-form .tel-form-consent>span{color:inherit}
+.tel-enquiry-form .tel-form-consent a{color:#eee2f6;text-decoration:underline;text-underline-offset:3px}
+.tel-enquiry-form .tel-form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:26px}
+.tel-enquiry-form .telv-button{font-size:11px;padding:13px 15px;min-height:45px;gap:16px}
+.tel-form-route{font-size:9px;line-height:1.85;color:#ad9abb;margin:20px 0 0}
+.tel-form-route strong{font-weight:400;color:#d4c2e1;overflow-wrap:anywhere}
+.tel-enquiry-form .tel-form-status{font-size:11px;color:#eadcf4;line-height:1.75;margin:0}
+.tel-form-status:not(:empty){padding-top:14px}
+.tel-contact-other{padding-block:36px 110px}
+.tel-contact-other-panel{position:relative;isolation:isolate;display:grid;grid-template-columns:1.5fr 1fr;gap:55px;padding:42px;border:1px solid #d2b6e32b;border-radius:22px;overflow:hidden;background:#100d16}
+.tel-contact-other-visual{left:37%;opacity:.55;mask-image:linear-gradient(90deg,transparent,#000)}
+.tel-contact-other-panel>div:not(.tel-contact-other-visual){position:relative}
+.tel-contact-other-panel .telv-eyebrow{font-size:9px;margin-bottom:15px}
+.tel-contact-other-panel h2{font:500 clamp(25px,2.5vw,35px)/1.25 Sora,sans-serif;letter-spacing:-.04em;margin:0 0 16px}
+.tel-contact-other-panel p:not(.telv-eyebrow){font-size:13px;line-height:1.9;max-width:470px;color:#c4b5d0;margin:0 0 19px}
+.tel-contact-operations{font-size:12px;color:#eddef7;overflow-wrap:anywhere;text-decoration:underline;text-underline-offset:5px;line-height:1.8}
+.tel-contact-socials{display:flex;flex-direction:column;justify-content:center}
+.tel-contact-socials a{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:18px 0;border-bottom:1px solid #d7b8ee29;font-size:11px;color:#e3d3ee}
+@media(max-width:1100px){.tel-contact-intro{align-items:start;flex-direction:column;gap:25px}.tel-contact-body{padding:26px}.tel-contact-art-index{left:25px}.tel-contact-description{min-height:105px}.tel-contact-other-panel{gap:30px;padding:32px}.tel-enquiry-form .form-grid{grid-template-columns:1fr}.tel-enquiry-form .field{grid-column:1/-1}}
+@media(max-width:760px){.tel-contact-hero{padding-top:130px;padding-bottom:40px}.tel-contact-hero h1{font-size:clamp(37px,8.7vw,60px);line-height:1.16;letter-spacing:-.055em;margin:23px 0}.tel-contact-intro>p{font-size:14px;line-height:1.8}.tel-contact-ventures{grid-template-columns:1fr;gap:30px}.tel-contact-art{height:225px}.tel-contact-body{padding:28px}.tel-contact-body h2{font-size:34px;min-height:0;margin-bottom:18px}.tel-contact-description{min-height:0;margin-bottom:20px}.tel-contact-business-email,.tel-contact-education-note{min-height:0;margin-bottom:27px}.tel-enquiry-form{margin-top:0}.tel-enquiry-form .form-grid{grid-template-columns:1fr 1fr}.tel-enquiry-form .field{grid-column:auto}.tel-contact-other{padding-block:30px 70px}.tel-contact-other-panel{grid-template-columns:1fr;gap:25px;padding:28px}.tel-contact-other-visual{left:0;opacity:.3}.tel-contact-other-panel p:not(.telv-eyebrow){font-size:12px}.tel-contact-hero .telv-eyebrow{font-size:9px}.tel-contact-intro nav{flex-wrap:wrap}.tel-contact-intro nav a{gap:21px;font-size:11px}}
+@media(max-width:420px){.tel-contact-body{padding:24px}.tel-contact-art-brand{gap:17px}.tel-contact-art-brand strong{font-size:42px}.tel-enquiry-form .form-grid{grid-template-columns:1fr}.tel-enquiry-form .field{grid-column:1/-1}.tel-contact-art-index{left:24px;font-size:8px;letter-spacing:.1em}.tel-contact-edu-label{font-size:11px;right:22px}.tel-contact-art-caption{left:24px;font-size:9px}.tel-contact-other-panel{padding:25px}.tel-contact-body h2{font-size:31px}.tel-contact-hero h1{font-size:35px}.tel-enquiry-form .telv-button{font-size:10px;padding-inline:12px;gap:10px}}

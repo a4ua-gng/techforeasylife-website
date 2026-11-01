@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tsx": false,
+  "tailwind": {"config": "", "css": "tel-motion.css", "baseColor": "neutral", "cssVariables": true, "prefix": ""},
+  "aliases": {"components": "@/motion-src", "ui": "@/motion-src", "lib": "@/motion-src", "utils": "@/motion-src/utils"},
+  "registries": {
+    "@react-bits": "https://reactbits.dev/r/{name}.json",
+    "@reactbits-starter": {
+      "url": "https://pro.reactbits.dev/api/r/starter/{name}.json",
+      "headers": {"Authorization": "Bearer ${REACTBITS_LICENSE_KEY}"}
+    },
+    "@reactbits-pro": {
+      "url": "https://pro.reactbits.dev/api/r/pro/{name}.json",
+      "headers": {"Authorization": "Bearer ${REACTBITS_LICENSE_KEY}"}
+    }
+  }
+}

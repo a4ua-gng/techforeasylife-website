@@ -309,7 +309,7 @@
       "assetPath": "tel-logo.webp",
       "defaultAssetPath": "tel-logo.webp",
       "imageSelector": ".about-brand-panel > img",
-      "alt": "TEL — Tech for Easy Life",
+      "alt": "TEL \u2014 Tech for Easy Life",
       "note": "Large TEL brand image in the About-page hero.",
       "fit": "contain",
       "positionX": 50,

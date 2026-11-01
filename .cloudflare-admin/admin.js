@@ -8,6 +8,7 @@ const DEFAULT_SITE_CONTROL = {
   version: 1,
   updatedAt: null,
   publishedAt: null,
+  brandSite: globalThis.TELBrandModel.defaults(),
   announcement: {
     enabled: false,
     label: "TEL UPDATE",
@@ -45,7 +46,9 @@ const DEFAULT_SITE_CONTROL = {
 
 const VISUAL_PAGES = [
   ["all", "All"],
-  ["index.html", "Home"],
+  ["index.html", "TEL Home"],
+  ["education.html", "TEL Education"],
+  ["temark.html", "TeMark"],
   ["product.html", "Product"],
   ["schools.html", "Schools"],
   ["safety.html", "Safety"],
@@ -59,16 +62,17 @@ const VISIBILITY_ITEMS = [
   ["signalStrip", "Principles strip", "Accessible by design / learning through experience strip"],
   ["quickStart", "Start here", "Institution, product and help quick paths"],
   ["mission", "Mission", "TEL mission section"],
-  ["flagship", "Mission & flagship", "Flagship and future-build cards"],
+  ["flagship", "TEL ventures", "TEL Education first, then TeMark"],
   ["pathway", "Choose your path", "Institution and individual pathway"],
   ["safety", "Safety teaser", "SafeFlight learning-system teaser"],
   ["leadership", "Leadership teaser", "Founder-led, team-built section"],
   ["careers", "Careers", "Build-with-us section"],
-  ["finalCta", "Final CTA", "Institution proposal call to action"]
+  ["finalCta", "Final CTA", "TEL project and partnership contact"]
 ];
 
 const VIEW_META = {
   overview: ["CONTROL CENTER", "Mission Control."],
+  brand: ["TEL & VENTURES", "The TEL website & our clients."],
   publish: ["PUBLISH STUDIO", "Preview. Publish. Recover."],
   announcement: ["HOMEPAGE CONTENT", "Announcement control."],
   visibility: ["VISUAL CMS", "Website visual editor."],
@@ -416,6 +420,7 @@ function syncFieldsFromDraft() {
     if (input) input.checked = state.draft.visibility[key] !== false;
   });
 
+  document.dispatchEvent(new CustomEvent("tel-admin-draft-synced"));
   updateAnnouncementPreview();
   renderVacancies();
   updateCareerSummary();
@@ -467,6 +472,7 @@ function syncDraftFromFields() {
 }
 
 function validateDraft(config) {
+  globalThis.TELBrandModel.validate(config.brandSite);
   const a = config.announcement;
   if (a.enabled && !a.title.trim()) throw new Error("An enabled announcement needs a headline.");
   if (a.linkText && !a.linkUrl) throw new Error("Add a CTA link or remove the CTA text.");
@@ -486,6 +492,7 @@ function validateDraft(config) {
   }
   c.vacancies.forEach((vacancy, index) => {
     const number = index + 1;
+    if (!["education", "temark", "both"].includes(vacancy.venture)) throw new Error(`Opening ${number} needs a valid venture.`);
     if (!vacancy.role.trim()) throw new Error(`Opening ${number} needs a role title.`);
     if (!vacancy.department.trim()) throw new Error(`Opening ${number} needs a department.`);
     if (!vacancy.description.trim()) throw new Error(`Opening ${number} needs a short description.`);
@@ -664,6 +671,7 @@ function renderVacancies() {
       </div>
       <div class="vacancy-fields">
         <label class="v-role">Role title *<input maxlength="120" placeholder="e.g. Front-end Developer" value="${escapeHtml(vacancy.role)}"></label>
+        <label class="v-venture">Recruiting venture *<select><option value="both" ${vacancy.venture === "both" ? "selected" : ""}>Both ventures</option><option value="education" ${vacancy.venture === "education" ? "selected" : ""}>TEL Education</option><option value="temark" ${vacancy.venture === "temark" ? "selected" : ""}>TeMark</option></select></label>
         <label class="v-department">Department *<input maxlength="100" placeholder="e.g. Design & Technology" value="${escapeHtml(vacancy.department)}"></label>
         <label class="v-openings">Vacant positions *<input type="number" min="1" max="99" step="1" value="${vacancy.openings}"></label>
         <label class="v-location">Location / format<input maxlength="100" placeholder="e.g. Remote · Guwahati" value="${escapeHtml(vacancy.location)}"></label>
@@ -672,6 +680,7 @@ function renderVacancies() {
 
     const update = () => {
       vacancy.role = $(".v-role input", card).value;
+      vacancy.venture = $(".v-venture select", card).value;
       vacancy.department = $(".v-department input", card).value;
       vacancy.openings = Math.max(1, Math.min(99, Number($(".v-openings input", card).value) || 1));
       vacancy.location = $(".v-location input", card).value;
@@ -684,7 +693,7 @@ function renderVacancies() {
       sendPreview();
     };
 
-    $$("input, textarea", card).forEach(input => {
+    $$("input, textarea, select", card).forEach(input => {
       input.addEventListener(input.type === "checkbox" ? "change" : "input", update);
     });
     $(".v-move-up", card).disabled = index === 0;
@@ -701,6 +710,7 @@ function syncVacanciesFromCards() {
     const vacancy = state.draft.careers.vacancies[index];
     if (!vacancy) return;
     vacancy.role = $(".v-role input", card).value;
+    vacancy.venture = $(".v-venture select", card).value;
     vacancy.department = $(".v-department input", card).value;
     vacancy.openings = Math.max(1, Math.min(99, Number($(".v-openings input", card).value) || 1));
     vacancy.location = $(".v-location input", card).value;
@@ -1652,6 +1662,7 @@ function switchView(view) {
 function setBusy(value) {
   state.busy = value;
   document.body.classList.toggle("busy", value);
+  document.querySelector(".shell")?.setAttribute("aria-busy", String(value));
   [
     el.refreshAll,
     el.quickPublish,
@@ -1736,6 +1747,7 @@ function normalizeVacancy(vacancy, index = 0) {
   return {
     id: String(source.id || slugify(source.role || `opening-${index + 1}`)),
     role: String(source.role || ""),
+    venture: ["education", "temark", "both"].includes(source.venture) ? source.venture : "both",
     department: String(source.department || ""),
     description: String(source.description || ""),
     location: String(source.location || ""),
@@ -1758,6 +1770,7 @@ function normalizeSiteControl(input) {
     announcement: { ...DEFAULT_SITE_CONTROL.announcement, ...(source.announcement || {}) },
     maintenance: { ...DEFAULT_SITE_CONTROL.maintenance, ...(source.maintenance || {}) },
     careers,
+    brandSite: globalThis.TELBrandModel.normalize(source.brandSite),
     visibility: { ...DEFAULT_SITE_CONTROL.visibility, ...(source.visibility || {}) }
   };
 }

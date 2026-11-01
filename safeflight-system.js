@@ -188,21 +188,11 @@ if (safeFlight) {
     }
   }
 
-  safeFlight.querySelector("[data-weather-location-button]")?.addEventListener("click", () => {
-    if (!("geolocation" in navigator)) {
-      weatherStatus.textContent = "Location services are unavailable. Search for the city instead.";
-      return;
-    }
-    weatherStatus.textContent = "Requesting location permission…";
-    navigator.geolocation.getCurrentPosition(
-      (position) => loadWeather(position.coords.latitude, position.coords.longitude, "Current location"),
-      () => { weatherStatus.textContent = "Location was not shared. Search for the city instead."; },
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
-    );
-  });
+
 
   safeFlight.querySelector("[data-weather-search]")?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (!event.currentTarget.reportValidity()) return;
     const city = weatherCity.value.trim();
     if (!city) return;
     weatherStatus.textContent = "Finding that location…";
@@ -215,7 +205,7 @@ if (safeFlight) {
       const label = [result.name, result.admin1, result.country].filter(Boolean).join(", ");
       await loadWeather(result.latitude, result.longitude, label);
     } catch (error) {
-      weatherStatus.textContent = "Location not found. Check the spelling or use your current location.";
+      weatherStatus.textContent = "Location not found. Check the spelling or use another weather source.";
       weatherBox.classList.add("caution");
     }
   });

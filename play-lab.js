@@ -62,7 +62,7 @@ if (flightGame) {
   rocketSprite.src = "tel-rocket-real.webp";
   const input = { left: false, right: false };
   let storedBest = 0;
-  try { storedBest = Number(window.localStorage.getItem("telSkywayBest") || 0); } catch (error) { storedBest = 0; }
+  storedBest = 0;
 
   const game = {
     running: false,
@@ -225,7 +225,7 @@ if (flightGame) {
     game.running = false;
     if (game.score > game.best) {
       game.best = game.score;
-      try { window.localStorage.setItem("telSkywayBest", String(game.best)); } catch (error) { /* Local score saving is optional. */ }
+      /* The score is kept only in this page session. */
       bestText.textContent = String(game.best);
     }
     overlay.classList.remove("hidden");

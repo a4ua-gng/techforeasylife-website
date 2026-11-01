@@ -253,7 +253,7 @@ if (quiz) {
 }
 
 const contactForm = document.querySelector("[data-contact-form]");
-if (contactForm) {
+if (contactForm && !contactForm.hasAttribute("data-careful-contact")) {
   const params = new URLSearchParams(window.location.search);
   const topicParam = params.get("topic");
   const topicField = contactForm.querySelector("[name='topic']");
@@ -264,7 +264,7 @@ if (contactForm) {
     if (!contactForm.reportValidity()) return;
     const data = new FormData(contactForm);
     const topic = data.get("topic");
-    const salesTopics = ["Institution proposal", "Product or kit sales"];
+    const salesTopics = ["TeMark project enquiry", "TEL Education updates", "Institution proposal", "Product or kit sales"];
     const recipient = salesTopics.includes(topic)
       ? "techforeasylife.sales@gmail.com"
       : "techforeasylife.operations@gmail.com";

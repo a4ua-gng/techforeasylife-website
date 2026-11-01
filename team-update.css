@@ -12,7 +12,7 @@
 #team .team-subsection {
   margin-top: clamp(72px, 9vw, 120px);
   padding-top: clamp(48px, 6vw, 78px);
-  border-top: 1px solid rgba(255, 255, 255, .11);
+  border-top: 1px solid rgba(255,255,255, .11);
 }
 
 #team .team-section-heading {
@@ -65,8 +65,8 @@
 #team .team-quote {
   margin: auto 0 0;
   padding-top: 22px;
-  color: #d4d4dc;
-  border-top: 1px solid rgba(255, 255, 255, .11);
+  color: #d5d5d5;
+  border-top: 1px solid rgba(255,255,255, .11);
   font: 500 clamp(1rem, 1.3vw, 1.18rem)/1.55 var(--font-display);
   letter-spacing: -.015em;
 }
@@ -104,7 +104,7 @@
 
 #team .leadership-grid .founder-card:nth-child(2) .team-quote::after {
   content: "“comfort kills”";
-  color: #d4d4dc;
+  color: #d5d5d5;
   font: 500 clamp(1rem, 1.3vw, 1.18rem)/1.55 var(--font-display);
   letter-spacing: -.015em;
 }

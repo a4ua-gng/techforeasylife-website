@@ -151,7 +151,7 @@
 [data-page="schools"] .school-fit-media {
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  background: #08080a;
+  background: #080808;
 }
 
 [data-page="schools"] .school-fit-media img {
@@ -509,7 +509,7 @@
   top: 12px;
   z-index: 2005;
   padding: 10px 14px;
-  color: #050506;
+  color: #050505;
   background: white;
   border-radius: 14px;
   box-shadow: 0 10px 35px rgba(0,0,0,.28);
