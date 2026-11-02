@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-09-25T11:36:08.910Z",
+  "updatedAt": "2026-11-02T09:44:27.023Z",
   "publishedAt": "2026-09-25T11:36:08.910Z",
   "announcement": {
     "enabled": false,
@@ -15,7 +15,7 @@
   "maintenance": {
     "enabled": false,
     "title": "TEL is getting an update.",
-    "message": "We\u2019ll be back shortly.",
+    "message": "We’ll be back shortly.",
     "eta": "Back shortly"
   },
   "careers": {
@@ -25,6 +25,7 @@
       {
         "id": "opening-1790336026034",
         "role": "Brand Ambassador",
+        "venture": "both",
         "department": "Media and storytelling",
         "description": "be the face of TEL, and show what it is about through your storytelling using mass media communication.",
         "location": "Guwahati",
@@ -35,6 +36,7 @@
       {
         "id": "opening-1787148662452",
         "role": "Video Editor",
+        "venture": "both",
         "department": "Media",
         "description": "We are looking for a creative Video Editor to edit and produce engaging videos for TEL. The ideal candidate should have strong editing skills, creativity, attention to detail, and the ability to turn raw footage into high-quality, impactful content.",
         "location": "Online",
@@ -45,6 +47,7 @@
       {
         "id": "opening-1788201850719",
         "role": "Sales Manager",
+        "venture": "both",
         "department": "Operations & Sales",
         "description": "Sales managers would be responsible for sales related to the product from the responsibilities of outreaching with customers to presenting them the product,.",
         "location": "Offline - Guwahati",
@@ -53,18 +56,6 @@
         "order": 3
       }
     ]
-  },
-  "visibility": {
-    "hero": true,
-    "signalStrip": true,
-    "quickStart": true,
-    "mission": true,
-    "flagship": true,
-    "pathway": true,
-    "safety": true,
-    "leadership": true,
-    "careers": true,
-    "finalCta": true
   },
   "brandSite": {
     "version": 1,
@@ -85,20 +76,34 @@
       "opening": "Coming soon",
       "launchNote": "First flight complete. Our public opening date will be announced here.",
       "flightVideo": "https://youtu.be/c0egvCz12nI",
-      "schoolEnquiriesOpen": true,
-      "schoolYear": "2027"
+      "schoolYear": "2027",
+      "schoolEnquiriesOpen": true
     },
     "temark": {
       "name": "TeMark by TEL",
       "instagram": "temarkk__",
+      "email": "business.telmark@gmail.com",
       "intro": "The creative and marketing venture of TEL. We learn how your business works, then bring strategy, campaigns, content and design together around it.",
-      "approach": "Every business has its own customers, location and ambitions. We take time to understand those details, shape a content plan, create the work and keep learning as the business grows."
+      "approach": "Every business has its own customers, location and ambitions. We take time to understand those details, shape a content plan, create the work and keep learning as the business grows.",
+      "ctaTitle": "Become our client today.",
+      "ctaIntro": "Tell us about your business, your audience and what you want to achieve. Let’s discuss where TeMark can help.",
+      "ctaLabel": "Start a project enquiry",
+      "emailVerified": false
+    },
+    "business": {
+      "legalName": "",
+      "address": "",
+      "registration": "",
+      "privacyEmail": "techforeasylife.operations@gmail.com",
+      "grievanceName": "",
+      "grievanceEmail": "",
+      "phone": ""
     },
     "services": [
       {
         "id": "strategy",
         "title": "Marketing strategy & campaigns",
-        "detail": "Business understanding, marketing direction, campaign planning and coordination across the brand\u2019s communication."
+        "detail": "Business understanding, marketing direction, campaign planning and coordination across the brand’s communication."
       },
       {
         "id": "social",
@@ -196,11 +201,11 @@
       },
       {
         "id": "sk-resort",
-        "name": "Upcoming resort \u00b7 SK Group",
+        "name": "Upcoming resort · SK Group",
         "sector": "Hospitality",
         "status": "upcoming",
         "visible": true,
-        "detail": "SK Group\u2019s upcoming resort is a future addition to our work. It is shown here as an upcoming engagement.",
+        "detail": "SK Group’s upcoming resort is a future addition to our work. It is shown here as an upcoming engagement.",
         "services": [
           "Planned brand communication",
           "Planned social media presence"
@@ -220,7 +225,7 @@
         "id": "beginnings",
         "year": "2022",
         "title": "A first idea. A habit of building.",
-        "detail": "TEL\u2019s first smart-home project begins the journey, with a simple ambition: make useful technology easier to experience."
+        "detail": "TEL’s first smart-home project begins the journey, with a simple ambition: make useful technology easier to experience."
       },
       {
         "id": "first-flight",
@@ -238,14 +243,26 @@
         "id": "rocket-kit",
         "year": "2025",
         "title": "From a prototype to a product.",
-        "detail": "The TEL Rocket Kit becomes the flagship learning product, turning the team\u2019s practical experience into a clearer product direction."
+        "detail": "The TEL Rocket Kit becomes the flagship learning product, turning the team’s practical experience into a clearer product direction."
       },
       {
         "id": "two-ventures",
         "year": "2026",
         "title": "Different paths. One TEL.",
-        "detail": "TEL prepares its school learning module and SafeFlight pathway, while TeMark grows its work with businesses across strategy, campaigns, social media and design. TEL Education\u2019s public launch is still ahead."
+        "detail": "TEL prepares its school learning module and SafeFlight pathway, while TeMark grows its work with businesses across strategy, campaigns, social media and design. TEL Education’s public launch is still ahead."
       }
     ]
+  },
+  "visibility": {
+    "hero": true,
+    "signalStrip": true,
+    "quickStart": true,
+    "mission": true,
+    "flagship": true,
+    "pathway": true,
+    "safety": true,
+    "leadership": true,
+    "careers": true,
+    "finalCta": true
   }
 }
