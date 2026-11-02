@@ -2,6 +2,280 @@
   "version": 1,
   "entries": [
     {
+      "id": "v-20261102094433-757546",
+      "label": "Before publish",
+      "createdAt": "2026-11-02T09:44:33.597Z",
+      "commit": null,
+      "config": {
+        "version": 1,
+        "updatedAt": "2026-09-25T11:36:08.910Z",
+        "publishedAt": "2026-09-25T11:36:08.910Z",
+        "announcement": {
+          "enabled": false,
+          "label": "TEL UPDATE",
+          "title": "YOU TEST YOU TEST",
+          "message": "im okay!! check 1234{{}]]",
+          "linkText": "GET HELP",
+          "linkUrl": "techforeasylife.in",
+          "startAt": "2026-08-07T16:17:00.000Z",
+          "endAt": null
+        },
+        "maintenance": {
+          "enabled": false,
+          "title": "TEL is getting an update.",
+          "message": "We’ll be back shortly.",
+          "eta": "Back shortly"
+        },
+        "careers": {
+          "applicationEmail": "techforeasylife.operations@gmail.com",
+          "generalApplicationsOpen": true,
+          "vacancies": [
+            {
+              "id": "opening-1790336026034",
+              "role": "Brand Ambassador",
+              "venture": "both",
+              "department": "Media and storytelling",
+              "description": "be the face of TEL, and show what it is about through your storytelling using mass media communication.",
+              "location": "Guwahati",
+              "openings": 1,
+              "active": true,
+              "order": 1
+            },
+            {
+              "id": "opening-1787148662452",
+              "role": "Video Editor",
+              "venture": "both",
+              "department": "Media",
+              "description": "We are looking for a creative Video Editor to edit and produce engaging videos for TEL. The ideal candidate should have strong editing skills, creativity, attention to detail, and the ability to turn raw footage into high-quality, impactful content.",
+              "location": "Online",
+              "openings": 2,
+              "active": true,
+              "order": 2
+            },
+            {
+              "id": "opening-1788201850719",
+              "role": "Sales Manager",
+              "venture": "both",
+              "department": "Operations & Sales",
+              "description": "Sales managers would be responsible for sales related to the product from the responsibilities of outreaching with customers to presenting them the product,.",
+              "location": "Offline - Guwahati",
+              "openings": 2,
+              "active": true,
+              "order": 3
+            }
+          ]
+        },
+        "brandSite": {
+          "version": 1,
+          "tel": {
+            "headline": "Ideas.",
+            "outline": "Made real.",
+            "intro": "Learning worth experiencing. Businesses worth building. We turn curiosity into useful work through TEL Education and TeMark.",
+            "mission": "Make meaningful technology and thoughtful ideas easier to understand, experience and use.",
+            "instagram": "techforeasylife.in",
+            "journeyIntro": "TEL started with a smart-home idea. Each project, prototype and fresh start has shaped the company we are building today.",
+            "smartHomeVideo": ""
+          },
+          "education": {
+            "name": "TEL Education",
+            "status": "coming_soon",
+            "intro": "Our first rocket has flown. TEL Education brings model rocket products, practical STEM and the SafeFlight learning system together. Our public launch is coming soon.",
+            "detail": "From the model rocket kit to guided preparation through SafeFlight, we are building experiences that make classroom ideas tangible. Our first flight is complete; now we are preparing to share TEL Education with the public.",
+            "opening": "Coming soon",
+            "launchNote": "First flight complete. Our public opening date will be announced here.",
+            "flightVideo": "https://youtu.be/c0egvCz12nI",
+            "schoolYear": "2027",
+            "schoolEnquiriesOpen": true
+          },
+          "temark": {
+            "name": "TeMark by TEL",
+            "instagram": "temarkk__",
+            "email": "business.telmark@gmail.com",
+            "intro": "The creative and marketing venture of TEL. We learn how your business works, then bring strategy, campaigns, content and design together around it.",
+            "approach": "Every business has its own customers, location and ambitions. We take time to understand those details, shape a content plan, create the work and keep learning as the business grows.",
+            "ctaTitle": "Become our client today.",
+            "ctaIntro": "Tell us about your business, your audience and what you want to achieve. Let’s discuss where TeMark can help.",
+            "ctaLabel": "Start a project enquiry",
+            "emailVerified": false
+          },
+          "business": {
+            "legalName": "",
+            "address": "",
+            "registration": "",
+            "privacyEmail": "techforeasylife.operations@gmail.com",
+            "grievanceName": "",
+            "grievanceEmail": "",
+            "phone": ""
+          },
+          "services": [
+            {
+              "id": "strategy",
+              "title": "Marketing strategy & campaigns",
+              "detail": "Business understanding, marketing direction, campaign planning and coordination across the brand’s communication."
+            },
+            {
+              "id": "social",
+              "title": "Social media management",
+              "detail": "Content planning, calendars, publishing and a consistent presence across business accounts."
+            },
+            {
+              "id": "content",
+              "title": "Reels & content production",
+              "detail": "Short-form video, photography, editing and content shaped around the business."
+            },
+            {
+              "id": "design",
+              "title": "Graphic design & campaigns",
+              "detail": "Branded creatives, launch communication, seasonal posts and campaign visuals."
+            },
+            {
+              "id": "web",
+              "title": "Websites & digital presence",
+              "detail": "Clear websites and digital touchpoints that help people understand a business and make enquiries."
+            },
+            {
+              "id": "reporting",
+              "title": "Performance tracking & reporting",
+              "detail": "Following marketing and social performance, reviewing campaign activity and using the findings to shape the next plan."
+            }
+          ],
+          "clients": [
+            {
+              "id": "sk-group",
+              "name": "SK Group",
+              "sector": "Business group",
+              "status": "current",
+              "visible": true,
+              "detail": "We manage overall marketing strategy and coordination for SK Group, including campaign planning, social media, content, branded creatives and performance tracking.",
+              "services": [
+                "Marketing strategy",
+                "Campaign planning",
+                "Social media management",
+                "Content & design",
+                "Performance tracking & reporting"
+              ]
+            },
+            {
+              "id": "gs-motors",
+              "name": "GS Motors",
+              "sector": "Automotive",
+              "status": "current",
+              "visible": true,
+              "detail": "Social media management and creative content that introduce the business, its offerings and its customer experience.",
+              "services": [
+                "Social media management",
+                "Reels & content",
+                "Graphic design"
+              ]
+            },
+            {
+              "id": "gs-riders",
+              "name": "GS Riders",
+              "sector": "Automotive",
+              "status": "current",
+              "visible": true,
+              "detail": "Social media management, business-led storytelling and visual content for its online presence.",
+              "services": [
+                "Social media management",
+                "Reels & content",
+                "Branded creatives"
+              ]
+            },
+            {
+              "id": "osom-motors",
+              "name": "OSOM Motors",
+              "sector": "Automotive",
+              "status": "current",
+              "visible": true,
+              "detail": "Content planning and social media management, with creatives built around the business and its audience.",
+              "services": [
+                "Social media management",
+                "Content planning",
+                "Graphic design"
+              ]
+            },
+            {
+              "id": "dental-care",
+              "name": "Dental Care, GS Road",
+              "sector": "Healthcare",
+              "status": "current",
+              "visible": true,
+              "detail": "Social media content and graphic design that introduce the practice and communicate its services clearly.",
+              "services": [
+                "Social media content",
+                "Graphic design",
+                "Digital communication"
+              ]
+            },
+            {
+              "id": "sk-resort",
+              "name": "Upcoming resort · SK Group",
+              "sector": "Hospitality",
+              "status": "upcoming",
+              "visible": true,
+              "detail": "SK Group’s upcoming resort is a future addition to our work. It is shown here as an upcoming engagement.",
+              "services": [
+                "Planned brand communication",
+                "Planned social media presence"
+              ]
+            }
+          ],
+          "dealershipBrands": [
+            "tvs",
+            "royal-enfield",
+            "montra"
+          ],
+          "upcomingBrands": [
+            "yamaha"
+          ],
+          "milestones": [
+            {
+              "id": "beginnings",
+              "year": "2022",
+              "title": "A first idea. A habit of building.",
+              "detail": "TEL’s first smart-home project begins the journey, with a simple ambition: make useful technology easier to experience."
+            },
+            {
+              "id": "first-flight",
+              "year": "2023",
+              "title": "Try. Learn. Fly.",
+              "detail": "Early rocket prototyping brings a setback and then a breakthrough. The first attempt fails; the second flies."
+            },
+            {
+              "id": "new-horizons",
+              "year": "2024",
+              "title": "New horizons. A fresh team.",
+              "detail": "TEL reaches Delhi, receives seed support and rebuilds with a new student team."
+            },
+            {
+              "id": "rocket-kit",
+              "year": "2025",
+              "title": "From a prototype to a product.",
+              "detail": "The TEL Rocket Kit becomes the flagship learning product, turning the team’s practical experience into a clearer product direction."
+            },
+            {
+              "id": "two-ventures",
+              "year": "2026",
+              "title": "Different paths. One TEL.",
+              "detail": "TEL prepares its school learning module and SafeFlight pathway, while TeMark grows its work with businesses across strategy, campaigns, social media and design. TEL Education’s public launch is still ahead."
+            }
+          ]
+        },
+        "visibility": {
+          "hero": true,
+          "signalStrip": true,
+          "quickStart": true,
+          "mission": true,
+          "flagship": true,
+          "pathway": true,
+          "safety": true,
+          "leadership": true,
+          "careers": true,
+          "finalCta": true
+        }
+      }
+    },
+    {
       "id": "v-20260925113607-607402",
       "label": "Before publish",
       "createdAt": "2026-09-25T11:36:07.623Z",
