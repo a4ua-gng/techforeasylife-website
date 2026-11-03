@@ -47,7 +47,7 @@ const grid=$('#business-grid');if(!grid)return;
 const visible=business.filter(x=>filter==='all'||x.group===filter);
 grid.innerHTML=visible.map(x=>{
 const visual=x.id==='mahamandi'
-?'<div class="future-visual" role="img" aria-label="Mahamandi upcoming venture identity"><span>SK GROUP X · NEW VENTURE</span><strong>Mahamandi</strong><span>THE NEXT CHAPTER</span></div>'
+?'<div class="future-visual" role="img" aria-label="Mahamandi upcoming venture identity"><strong>Mahamandi</strong><span>THE NEXT CHAPTER</span></div>'
 :'<img src="'+escapeHTML(x.image)+'" data-fallback="'+escapeHTML(x.fallback)+'" alt="'+escapeHTML(x.name+(x.image.startsWith('media/ai-')?' illustrative sector concept image (AI-generated)':' sector or business imagery'))+'" loading="lazy" decoding="async">';
 return '<article class="business-card"><div class="card-image">'+visual+'<span class="card-sector">'+escapeHTML(LT(x.sector))+'</span>'+businessLogo(x,'card-brand-logo')+(x.upcoming?'<span class="card-status">UPCOMING</span>':'')+'</div><div class="card-body"><small>'+escapeHTML(LT(x.city))+'</small><h3>'+escapeHTML(x.name)+'</h3><p>'+escapeHTML(BT(x,'desc'))+'</p><button type="button" class="card-button" data-business="'+escapeHTML(x.id)+'" aria-label="Explore '+escapeHTML(x.name)+'"><span class="card-action">Discover business <span aria-hidden="true">↗</span></span></button>'+callCardAction(x)+'</div></article>';
 }).join('');
