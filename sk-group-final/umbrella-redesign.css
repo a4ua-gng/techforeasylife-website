@@ -321,3 +321,20 @@ body{background:var(--sk-ivory);color:var(--sk-ink)}
 @media(prefers-reduced-motion:reduce){
 .umbrella-tile img,.business-card,.portfolio-logo-item{transition:none!important;transform:none!important}
 }
+
+/* Complete six-image mosaic, eliminating an awkward blank corner. */
+.umbrella-tile-tvs{grid-column:7/9;grid-row:5/7}
+.umbrella-tile-tvs span{font-size:8px;letter-spacing:.045em;left:7px;right:7px;bottom:7px}
+.umbrella-tile-tvs span b{font-size:11px}
+@media(max-width:540px){
+ .umbrella-tile-tvs{grid-column:7/9;grid-row:4/6}
+ .umbrella-tile-tvs span{font-size:7px}
+ .umbrella-tile-tvs span b{display:none}
+}
+/* An upcoming company gets an honest identity treatment, not a fictitious product photograph. */
+.business-card .card-image:has(.future-visual){background:#0c2031}
+.business-card .card-image .future-visual{display:flex;position:absolute;inset:0;padding:26px;flex-direction:column;align-items:start;justify-content:space-between;background:radial-gradient(circle at 110% 110%,rgba(185,150,101,.28),transparent 53%),linear-gradient(145deg,#10283b,#091c2b);color:#f9f4e7;overflow:hidden}
+.business-card .card-image .future-visual:after{content:"";position:absolute;width:270px;height:270px;right:-140px;top:-115px;border:1px solid rgba(206,178,139,.19);border-radius:50%}
+.business-card .card-image .future-visual span{position:relative;z-index:1;font-size:9px;font-weight:850;letter-spacing:.16em;color:#d6b889}
+.business-card .card-image .future-visual strong{position:relative;z-index:1;font:400 clamp(32px,3.6vw,51px)/1.1 Georgia,serif;letter-spacing:-.055em;color:#f5f1e9}
+.business-card .card-image:has(.future-visual):after{display:none}
