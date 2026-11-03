@@ -14,7 +14,7 @@ const w=key=>words[locale()]?.[key]||words.en[key];
 let previousFocus=null;
 const chips=$$('.enquiry-chip');
 function markChoice(value){chips.forEach(button=>{const active=button.dataset.quick===value;button.classList.toggle('selected',active);button.setAttribute('aria-pressed',String(active));});}
-function setChoice(value){if(!$$('option',purpose).some(o=>o.value===value))value='montra-auto';purpose.value=value;markChoice(value);const isOther=value==='other';const wa=$('#welcome-whatsapp');wa.disabled=isOther;wa.title=isOther?w('waOther'):'';wa.setAttribute('aria-disabled',String(isOther));}
+function setChoice(value){if(!$$('option',purpose).some(o=>o.value===value))value='montra-auto';purpose.value=value;markChoice(value);const isOther=!value.startsWith('montra-');const wa=$('#welcome-whatsapp');wa.disabled=isOther;wa.title=isOther?w('waOther'):'';wa.setAttribute('aria-disabled',String(isOther));}
 function openEnquiry(value='montra-auto'){
 previousFocus=document.activeElement;
 if($('#business-dialog')?.open)$('#business-dialog').close();
@@ -30,7 +30,7 @@ function message(){const name=$('#welcome-name').value.trim(),phone=cleanDigits(
 return {title,body:['Hello SK Group X,','I would like information about: '+title,'','Name: '+name,'Phone: +91 '+phone,'Town / District: '+(city||'Not specified'),note?'Message: '+note:'Please contact me with the details.','','Enquiry prepared from SK Group X website.'].filter(Boolean).join('\n')};}
 function showFallback(url,kind){const feedback=$('#welcome-feedback');feedback.textContent=w(kind==='email'?'readyEmail':'readyWA');feedback.classList.remove('error');feedback.classList.add('success');let existing=$('#welcome-fallback');if(existing)existing.remove();const a=document.createElement('a');a.id='welcome-fallback';a.href=url;a.textContent=w(kind==='email'?'openEmail':'openWhatsApp');a.className='welcome-fallback';if(kind==='wa'){a.target='_blank';a.rel='noopener noreferrer';}feedback.insertAdjacentElement('afterend',a);}
 function goEmail(){if(!valid())return;const item=message();const url='mailto:skgroupx@gmail.com?subject='+encodeURIComponent('Website enquiry: '+item.title+' | SK Group X')+'&body='+encodeURIComponent(item.body);showFallback(url,'email');window.location.href=url;}
-function goWhatsApp(){if(purpose.value==='other'){const e=$('#welcome-feedback');e.textContent=w('waOther');e.classList.add('error');return;}if(!valid())return;const item=message();const url='https://wa.me/918071441068?text='+encodeURIComponent(item.body);showFallback(url,'wa');window.open(url,'_blank','noopener,noreferrer');}
+function goWhatsApp(){if(!purpose.value.startsWith('montra-')){const e=$('#welcome-feedback');e.textContent=w('waOther');e.classList.add('error');return;}if(!valid())return;const item=message();const url='https://wa.me/918071441068?text='+encodeURIComponent(item.body);showFallback(url,'wa');window.open(url,'_blank','noopener,noreferrer');}
 form.addEventListener('submit',e=>{e.preventDefault();goEmail();});
 $('#welcome-whatsapp').addEventListener('click',goWhatsApp);
 $('#welcome-phone').addEventListener('input',e=>e.target.setCustomValidity(''));
