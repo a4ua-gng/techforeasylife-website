@@ -3,6 +3,8 @@
 const $=(s,root=document)=>root.querySelector(s);
 const $$=(s,root=document)=>Array.from(root.querySelectorAll(s));
 const EMAIL='skgroupx@gmail.com';
+const LT=x=>window.SKXLocale?.t(x)||x;
+const BT=(x,field)=>window.SKXLocale?.businessField(x.id,field,x[field])||x[field];
 const BASE='../sk-group-demo/assets/';
 const UNSPLASH='https://images.unsplash.com/';
 const business=[
@@ -32,18 +34,21 @@ function mailto(subject,body){return 'mailto:'+EMAIL+'?subject='+encodeURICompon
 function renderCards(filter){
 const grid=$('#business-grid');if(!grid)return;
 const visible=business.filter(x=>filter==='all'||x.group===filter);
-grid.innerHTML=visible.map(x=>'<article class="business-card"><div class="card-image"><img src="'+escapeHTML(x.image)+'" data-fallback="'+escapeHTML(x.fallback)+'" alt="'+escapeHTML(x.name+' business category imagery')+'" loading="lazy"><span class="card-sector">'+escapeHTML(x.sector)+'</span>'+(x.upcoming?'<span class="card-status">UPCOMING</span>':'')+'</div><div class="card-body"><small>'+escapeHTML(x.city)+'</small><h3>'+escapeHTML(x.name)+'</h3><p>'+escapeHTML(x.desc)+'</p><button type="button" class="card-button" data-business="'+escapeHTML(x.id)+'" aria-label="Explore '+escapeHTML(x.name)+'"><span class="card-action">Discover business <span aria-hidden="true">↗</span></span></button></div></article>').join('');
+grid.innerHTML=visible.map(x=>'<article class="business-card"><div class="card-image"><img src="'+escapeHTML(x.image)+'" data-fallback="'+escapeHTML(x.fallback)+'" alt="'+escapeHTML(x.name+' business category imagery')+'" loading="lazy"><span class="card-sector">'+escapeHTML(LT(x.sector))+'</span>'+(x.upcoming?'<span class="card-status">UPCOMING</span>':'')+'</div><div class="card-body"><small>'+escapeHTML(LT(x.city))+'</small><h3>'+escapeHTML(x.name)+'</h3><p>'+escapeHTML(BT(x,'desc'))+'</p><button type="button" class="card-button" data-business="'+escapeHTML(x.id)+'" aria-label="Explore '+escapeHTML(x.name)+'"><span class="card-action">Discover business <span aria-hidden="true">↗</span></span></button></div></article>').join('');
+window.SKXLocale?.translate(grid);
 }
 function renderLocations(){
 const target=$('#location-list');if(!target)return;
 target.innerHTML=locations.map((x,i)=>'<article class="location"><span class="location-num">'+String(i+1).padStart(2,'0')+'</span><div><h3>'+escapeHTML(x.name)+'</h3><p>'+escapeHTML(x.kind)+'</p></div><div class="location-address">'+escapeHTML(x.address)+'</div><div class="location-phone">'+(x.phone?'<a href="tel:+91'+escapeHTML(x.phone)+'">+91 '+escapeHTML(x.phone)+'</a>':'<a href="'+mailto('Branch enquiry: '+x.name,'Hello SK Group X,\n\nI would like the address and phone number for '+x.name+'.\n\nThank you.')+'">Email for details ↗</a>')+'</div><div class="location-link">'+(x.map?'<a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(x.map)+'" target="_blank" rel="noopener noreferrer" aria-label="Find '+escapeHTML(x.name)+' on maps">Directions ↗</a>':'<a href="'+mailto('Branch enquiry: '+x.name,'Hello SK Group X,\n\nPlease share the location of '+x.name+'.')+'">Enquire ↗</a>')+'</div></article>').join('');
+window.SKXLocale?.translate(target);
 }
 const dialog=$('#business-dialog');
 function openBusiness(id){
 const x=business.find(z=>z.id===id);if(!x||!dialog)return;
 const link=x.link?'<a href="'+escapeHTML(x.link)+'" class="line-link" target="_blank" rel="noopener noreferrer">Visit brand website <span>↗</span></a>':'';
 const phone=x.phone?'<a href="tel:+91'+x.phone+'" class="line-link">Call this branch <span>↗</span></a>':'';
-$('#dialog-content').innerHTML='<div class="dialog-visual"><img src="'+escapeHTML(x.image)+'" data-fallback="'+escapeHTML(x.fallback)+'" alt="'+escapeHTML(x.name)+' image"></div><div class="dialog-inner"><p class="section-index"><span class="bar"></span>'+escapeHTML(x.sector)+'</p><h2 id="dialog-title">'+escapeHTML(x.name)+'</h2><p>'+escapeHTML(x.detail)+'</p><div class="dialog-meta"><div><span>LOCATION / PRESENCE</span><strong>'+escapeHTML(x.city)+'</strong></div><div><span>BUSINESS FOCUS</span><strong>'+escapeHTML(x.note)+'</strong></div></div><div class="dialog-actions"><a class="btn btn-dark" href="'+mailto('Enquiry: '+x.name+' | SK Group X','Hello SK Group X,\n\nI am interested in '+x.name+'. Please contact me with the relevant details.\n\nMy name:\nMy contact number:\nMy enquiry:')+'">Enquire by email <span>↗</span></a>'+phone+link+'</div></div>';
+$('#dialog-content').innerHTML='<div class="dialog-visual"><img src="'+escapeHTML(x.image)+'" data-fallback="'+escapeHTML(x.fallback)+'" alt="'+escapeHTML(x.name)+' image"></div><div class="dialog-inner"><p class="section-index"><span class="bar"></span>'+escapeHTML(LT(x.sector))+'</p><h2 id="dialog-title">'+escapeHTML(x.name)+'</h2><p>'+escapeHTML(BT(x,'detail'))+'</p><div class="dialog-meta"><div><span>LOCATION / PRESENCE</span><strong>'+escapeHTML(LT(x.city))+'</strong></div><div><span>BUSINESS FOCUS</span><strong>'+escapeHTML(LT(x.note))+'</strong></div></div><div class="dialog-actions"><a class="btn btn-dark" href="'+mailto('Enquiry: '+x.name+' | SK Group X','Hello SK Group X,\n\nI am interested in '+x.name+'. Please contact me with the relevant details.\n\nMy name:\nMy contact number:\nMy enquiry:')+'">Enquire by email <span>↗</span></a>'+phone+link+'</div></div>';
+window.SKXLocale?.translate($('#dialog-content'));
 if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
 document.body.style.overflow='hidden';
 }
