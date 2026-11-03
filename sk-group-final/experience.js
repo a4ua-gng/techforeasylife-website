@@ -61,12 +61,12 @@ window.addEventListener('scroll',()=>{if(!scrollScheduled){scrollScheduled=true;
 window.addEventListener('resize',onScroll,{passive:true});onScroll();
 if('IntersectionObserver'in window){
 const chapterObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;const id=entry.target.id;navLinks.forEach(link=>{if(link.getAttribute('href')==='#'+id)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');});});},{rootMargin:'-35% 0px -58% 0px',threshold:0});
-['auto-owners','about','businesses','presence','story','contact'].forEach(id=>{const el=document.getElementById(id);if(el)chapterObserver.observe(el);});
+['auto-owners','about','businesses','gallery-expanded','presence','story','contact'].forEach(id=>{const el=document.getElementById(id);if(el)chapterObserver.observe(el);});
 if(!reduced.matches){
 document.body.classList.add('motion-enabled');
 const photoObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');photoObserver.unobserve(entry.target);}}),{threshold:.05,rootMargin:'0px 0px 80px 0px'});
 const scan=()=>{
-$$('.business-card,.gallery-tile,.journal-grid figure').forEach((el,i)=>{if(el.dataset.scrollBound)return;el.dataset.scrollBound='yes';el.style.transitionDelay=(i%3)*85+'ms';photoObserver.observe(el);});
+$('.business-card,.gallery-tile,.journal-grid figure,.picture-tile').forEach((el,i)=>{if(el.dataset.scrollBound)return;el.dataset.scrollBound='yes';el.style.transitionDelay=(i%3)*85+'ms';photoObserver.observe(el);});
 };
 scan();
 const grid=$('#business-grid');if(grid){new MutationObserver(scan).observe(grid,{childList:true});}
