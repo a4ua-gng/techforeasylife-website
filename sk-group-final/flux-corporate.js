@@ -33,6 +33,14 @@
   },{passive:true});
   floating.addEventListener('pointerleave',()=>{active=false;setShift(0,0);},{passive:true});
   if(typeof reduced.addEventListener==='function')reduced.addEventListener('change',()=>{if(reduced.matches){active=false;setShift(0,0);}});
+  // Each sector tile filters the actual live portfolio, rather than being a decorative link.
+  document.querySelectorAll('a[data-filter-target]').forEach(link=>{
+    link.addEventListener('click',()=>{
+      const code=link.getAttribute('data-filter-target');
+      const target=Array.from(document.querySelectorAll('.filters .filter')).find(el=>el.dataset.filter===code);
+      if(target)target.click();
+    });
+  });
   // Subtle, accessible in-page highlighting for glass section links.
   const links=Array.from(document.querySelectorAll('.site-header .nav a[href^="#"]'));
   if('IntersectionObserver' in window){
