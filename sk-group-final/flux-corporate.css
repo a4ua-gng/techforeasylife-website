@@ -304,16 +304,16 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .fx-hero-intro h1{font-size:clamp(48px,9.5vw,72px);line-height:1.07}
 .fx-hero-intro>p{font-size:13px;margin-bottom:21px;max-width:540px}
 .fx-overline{font-size:9px;letter-spacing:.15em}
-.fx-showcase{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(11,40px);gap:8px;margin-top:38px}
+.fx-showcase{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(12,40px);gap:8px;margin-top:38px}
 .fx-float-royal{grid-column:1/4;grid-row:1/4}
 .fx-float-tvs{grid-column:4/7;grid-row:1/4}
 .fx-float-yamaha{grid-column:1/3;grid-row:4/7}
 .fx-float-montra{grid-column:3/7;grid-row:4/7}
 .fx-float-ashok{grid-column:1/4;grid-row:7/10}
 .fx-float-resort{grid-column:4/7;grid-row:7/10}
-.fx-float-jewels{grid-column:1/3;grid-row:10/12}
-.fx-float-food{grid-column:3/5;grid-row:10/12}
-.fx-float-maha{grid-column:5/7;grid-row:10/12}
+.fx-float-jewels{grid-column:1/3;grid-row:10/13}
+.fx-float-food{grid-column:3/5;grid-row:10/13}
+.fx-float-maha{grid-column:5/7;grid-row:10/13}
 .fx-maha-symbol{width:30px;height:30px;margin-bottom:35px}
 .fx-maha-symbol span{font-size:20px}
 .fx-showcase-caption{bottom:1px}
@@ -336,7 +336,7 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,te
 .fx-hero-intro>p{line-height:1.65;font-size:12.5px}
 .fx-hero-actions{gap:8px}
 .fx-button{min-height:45px;padding:10px 13px;gap:9px;font-size:11px}
-.fx-showcase{grid-template-rows:repeat(11,34px);gap:6px;margin-top:35px;padding-bottom:55px}
+.fx-showcase{grid-template-rows:repeat(12,34px);gap:6px;margin-top:35px;padding-bottom:55px}
 .fx-float-card{border-radius:11px;transform:none!important;box-shadow:0 6px 20px rgba(0,10,26,.27)}
 .fx-float-card:hover{transform:translateY(-3px)!important}
 .fx-float-glass{left:5px;right:5px;bottom:5px;padding:5px 6px;border-radius:6px}
