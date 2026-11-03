@@ -12,7 +12,7 @@
     {name:'GS Auto',city:'Howly · Barpeta',brand:'Royal Enfield',logo:logos.royal,number:'8291203209',display:'82912 03209',location:'NH 31 · HOWLY',index:'02'},
     {name:'GS Auto',city:'Sonkuchi · Barpeta',brand:'Royal Enfield',logo:logos.royal,number:'9167288263',display:'91672 88263',location:'DEWRIKUCHI · SONKUCHI',index:'03'},
     {name:'GS Riders',city:'Kokrajhar',brand:'Royal Enfield',logo:logos.royal,number:'9167782629',display:'91677 82629',location:'JD ROAD · KOKRAJHAR',index:'04'},
-    {name:'Osom Motors',city:'Agia · Goalpara',brand:'TVS Motor',logo:logos.tvs,number:'8071406735',display:'80714 06735',location:'AGIA · GOALPARA',index:'05'}
+    {name:'Osom Motors',city:'Agia · Goalpara',brand:'TVS Motor',logo:logos.tvs,number:'9870259695',display:'98702 59695',location:'AGIA · GOALPARA',index:'05'}
   ];
   const cards=verified.map(x=>'<article class="cd-card"><div class="cd-card-top"><span>'+x.index+' / '+x.brand.toUpperCase()+'</span><img src="'+x.logo+'" loading="lazy" decoding="async" alt="'+x.brand+' logo"></div><div class="cd-main"><h3>'+x.name+'</h3><p>'+x.city+'</p><span>'+x.location+'</span></div><a class="cd-call-link" href="'+phone(x.number)+'" aria-label="Call '+x.name+' '+x.city+' on '+x.display+'"><span>☎ &nbsp;'+x.display+'</span><b aria-hidden="true">↗</b></a></article>').join('');
   section.innerHTML='<div class="wrap">'
