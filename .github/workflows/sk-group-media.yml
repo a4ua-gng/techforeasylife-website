@@ -16,7 +16,7 @@ jobs:
         with:
           persist-credentials: true
       - name: Prepare media conversion
-        run: python -m pip install --upgrade pillow requests
+        run: python -m pip install --upgrade pillow requests imageio-ffmpeg
       - name: Download AI visuals as permanent optimized website assets
         run: |
           python - <<'PY'
@@ -71,11 +71,13 @@ jobs:
         run: |
           set -e
           mkdir -p sk-group-final/media
+          FFMPEG="$(python -c 'import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())')"
+          echo "Using video encoder: $FFMPEG"
           make_motion () {
             SOURCE="$1"
             OUTPUT="$2"
             if [ -f "$SOURCE" ]; then
-              ffmpeg -hide_banner -loglevel error -y -loop 1 -framerate 24 -i "$SOURCE" -vf "scale=1440:810:force_original_aspect_ratio=increase,crop=1440:810,zoompan=z='min(zoom+0.0007,1.09)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1280x720:fps=24,format=yuv420p" -t 6 -an -c:v libx264 -preset veryfast -crf 28 -pix_fmt yuv420p -movflags +faststart "$OUTPUT"
+              "$FFMPEG" -hide_banner -loglevel error -y -loop 1 -framerate 24 -i "$SOURCE" -vf "scale=1440:810:force_original_aspect_ratio=increase,crop=1440:810,zoompan=z='min(zoom+0.0007,1.09)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1280x720:fps=24,format=yuv420p" -t 6 -an -c:v libx264 -preset veryfast -crf 28 -pix_fmt yuv420p -movflags +faststart "$OUTPUT"
               ls -lh "$OUTPUT"
             fi
           }
