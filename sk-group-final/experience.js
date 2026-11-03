@@ -44,7 +44,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dialog.open)closeEn
 const params=new URLSearchParams(location.search);
 const force=params.get('enquire');
 let shown=false;try{shown=sessionStorage.getItem('skx-welcome-seen')==='yes';}catch(_){}
-function showWelcome(){if(!shown||force){openEnquiry(force||'montra-auto');try{sessionStorage.setItem('skx-welcome-seen','yes');}catch(_){}}}
+function showWelcome(){if(force){openEnquiry(force);try{sessionStorage.setItem('skx-welcome-seen','yes');}catch(_){}}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',showWelcome,{once:true});else requestAnimationFrame(showWelcome);
 /* Scroll feedback, accessible section discovery and staggered editorial transitions. */
 const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
