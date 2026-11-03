@@ -1,0 +1,94 @@
+name: Import SK Group media
+on:
+  push:
+    paths:
+      - 'sk-group-final/media/import.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import-and-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout media source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Prepare media conversion
+        run: python -m pip install --upgrade pillow requests
+      - name: Download AI visuals as permanent optimized website assets
+        run: |
+          python - <<'PY'
+          import json,io,os,time
+          from pathlib import Path
+          import requests
+          from PIL import Image,ImageOps
+          directory=Path('sk-group-final/media')
+          manifest=directory/'import.json'
+          if not manifest.exists():
+              print('No import manifest; nothing to do.')
+              raise SystemExit(0)
+          items=json.loads(manifest.read_text())
+          success=[]
+          failed=[]
+          session=requests.Session()
+          for item in items:
+              filename=item['file']
+              if not filename.startswith('ai-') or not filename.endswith('.webp') or '/' in filename:
+                  failed.append((filename,'unsafe filename'))
+                  continue
+              for attempt in range(3):
+                  try:
+                      response=session.get(item['url'],timeout=45)
+                      response.raise_for_status()
+                      if len(response.content)>17000000:
+                          raise ValueError('image too large')
+                      im=Image.open(io.BytesIO(response.content))
+                      im=ImageOps.exif_transpose(im)
+                      im.load()
+                      im.thumbnail((1700,1080),Image.Resampling.LANCZOS)
+                      if im.mode!='RGB':
+                          im=im.convert('RGB')
+                      destination=directory/filename
+                      im.save(destination,'WEBP',quality=83,method=5)
+                      if destination.stat().st_size<10000:
+                          raise ValueError('result suspiciously small')
+                      success.append(filename)
+                      print('Imported',filename,im.size,destination.stat().st_size)
+                      break
+                  except Exception as e:
+                      if attempt==2:
+                          failed.append((filename,str(e)[:180]))
+                      else:
+                          time.sleep(2)
+          (directory/'import-report.json').write_text(json.dumps({'saved':success,'failed':failed},indent=2))
+          print('TOTAL SAVED',len(success),'FAILED',len(failed))
+          if len(success)<20:
+              raise SystemExit('Not enough generated images imported; leave manifest for retry')
+          PY
+      - name: Generate lightweight silent motion reels from still images
+        run: |
+          set -e
+          mkdir -p sk-group-final/media
+          make_motion () {
+            SOURCE="$1"
+            OUTPUT="$2"
+            if [ -f "$SOURCE" ]; then
+              ffmpeg -hide_banner -loglevel error -y -loop 1 -framerate 24 -i "$SOURCE" -vf "scale=1440:810:force_original_aspect_ratio=increase,crop=1440:810,zoompan=z='min(zoom+0.0007,1.09)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=1:s=1280x720:fps=24,format=yuv420p" -t 6 -an -c:v libx264 -preset veryfast -crf 28 -pix_fmt yuv420p -movflags +faststart "$OUTPUT"
+              ls -lh "$OUTPUT"
+            fi
+          }
+          make_motion sk-group-demo/assets/montra-mobility.webp sk-group-final/media/montra-brand-motion.mp4
+          make_motion sk-group-final/media/ai-05.webp sk-group-final/media/motorcycle-concept-motion.mp4
+          make_motion sk-group-final/media/ai-17.webp sk-group-final/media/electric-mobility-concept-motion.mp4
+      - name: Commit permanent photos and video backgrounds
+        run: |
+          git config user.name "SK Group X Media Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sk-group-final/media/*.webp sk-group-final/media/*.mp4 sk-group-final/media/import-report.json
+          git rm --ignore-unmatch sk-group-final/media/import.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Store 30+ AI editorial images and cinematic image-animated motion assets"
+            git push origin HEAD:main
+          fi
