@@ -1,0 +1,58 @@
+name: Import official Montra product media
+on:
+  push:
+    paths:
+      - 'sk-group-final/official-assets.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  bring-in-official-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Fetch manufacturer-authorized product images
+        run: |
+          python -m pip -q install requests pillow
+          python - <<'PY'
+          import json,io,time
+          from pathlib import Path
+          import requests
+          from PIL import Image
+          target=Path('sk-group-final/media')
+          target.mkdir(exist_ok=True)
+          entries=json.loads(Path('sk-group-final/official-assets.json').read_text())
+          s=requests.Session()
+          for item in entries:
+            if item['name'] not in ['official-super-auto.png','official-three-wheeler-02.jpg','official-three-wheeler-07.jpg','official-three-wheeler-09.jpg']:
+              raise ValueError('unexpected output filename')
+            error=None
+            for attempt in range(3):
+              try:
+                r=s.get(item['url'],timeout=35,headers={'User-Agent':'Mozilla/5.0'})
+                r.raise_for_status()
+                if len(r.content)<10000 or len(r.content)>12000000: raise ValueError('unexpected image file length')
+                im=Image.open(io.BytesIO(r.content))
+                im.verify()
+                (target/item['name']).write_bytes(r.content)
+                print('Verified original manufacturer image:',item['name'],'size:',len(r.content))
+                error=None
+                break
+              except Exception as exc:
+                error=exc
+                if attempt!=2: time.sleep(2)
+            if error: raise error
+          PY
+      - name: Commit official assets
+        run: |
+          git config user.name 'SK Group X Media Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add sk-group-final/media/official-*
+          git rm -f sk-group-final/official-assets.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Store authentic manufacturer Montra Super Auto photos at original quality'
+            git push origin HEAD:main
+          fi
