@@ -156,3 +156,14 @@
 .cd-card{transition:none!important;transform:none!important}
 .hero-slide-super-auto img{transform:none!important}
 }
+
+/* Business portfolio: a call action takes priority over an extra detail click. */
+.card-body{display:flex;flex-direction:column;align-items:stretch;min-height:245px}
+.card-body .card-call-cta{margin-top:15px;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:47px;background:#1b292e;color:#fff;padding:11px 13px;font-weight:850;font-size:12px;letter-spacing:.004em;text-decoration:none}
+.card-body .card-call-cta:hover{background:#a68050}
+.card-body .card-call-cta b{font-weight:500;font-size:19px}
+.card-body .card-call-routed{background:#e6dfd2;color:#1e292b}
+.card-body .card-call-routed:hover{color:#fff}
+.card-image:has(img[src$="official-super-auto.png"]){background:#eeece7}
+.card-image img[src$="official-super-auto.png"]{object-fit:contain;object-position:center center;filter:none;transform:none!important}
+@media(max-width:690px){.card-body{min-height:auto}.card-body .card-call-cta{margin-top:17px}}
