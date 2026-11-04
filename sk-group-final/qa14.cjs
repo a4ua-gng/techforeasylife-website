@@ -139,6 +139,19 @@ const run=async()=>{
     assert((await page.locator('#business-dialog .skx-dialog-social .skx-social-link').count())>=2,'Brand detail missing social channels');
     await page.keyboard.press('Escape');
    }
+   // Prove changing the custom language actually updates the page and the URL.
+   if(i===0||i===4||i===12){
+     const nextLang=t.lang==='as'?'hi':'as';
+     await page.locator('#skx-language-toggle').click();
+     await page.locator('#skx-language-menu .skx-language-option[data-lang="'+nextLang+'"]').click();
+     await page.waitForURL(url=>new URL(url).searchParams.get('lang')===nextLang,{timeout:10000});
+     await page.locator('.business-card .skx-social-links').first().waitFor({timeout:18000});
+     assert.equal(await page.locator('html').getAttribute('lang'),nextLang,'Selected language did not change');
+     assert.equal(await page.locator('#skx-language-toggle').getAttribute('aria-expanded'),'false','Language menu did not close on navigation');
+     const expected=nextLang==='as'?'অসমীয়া':'हिन्दी';
+     assert.equal((await page.locator('#skx-language-label').textContent()).trim(),expected,'Wrong language label after translation');
+     assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','Changing language lost the saved theme');
+   }
    assert.equal(errors.length,0,'JavaScript runtime errors: '+errors.join(' | '));
    if([0,4,8,10,12,13].includes(i)){
     await page.screenshot({path:path.join(reportDir,id+'.png'),fullPage:false});
