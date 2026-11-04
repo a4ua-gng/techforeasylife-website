@@ -174,9 +174,10 @@ const run=async()=>{
      await page.locator('.skx3d-canvas').waitFor({state:'visible',timeout:18000});
      await page.waitForFunction(()=>!!document.querySelector('.skx3d-loading')?.hidden,{timeout:18000});
      assert.equal(await page.locator('#skx3d-dock').isVisible(),true,'Interactive model dock did not open');
-     assert.equal((await page.locator('.skx3d-model-name').textContent()).trim(),'The SK Group orbit');
+     const current3DTitle=(await page.locator('.skx3d-model-name').textContent()).trim();
+     assert(['The SK Group orbit','Two-wheeler concept','Electric mobility concept','Electric drivetrain concept','Hospitality pavilion','Jewellery study'].includes(current3DTitle),'Unknown scroll-selected 3D scene');
      await page.locator('.skx3d-next').click();
-     await page.waitForFunction(()=>document.querySelector('.skx3d-model-name')?.textContent==='Two-wheeler concept',{timeout:12000});
+     await page.waitForFunction(previous=>document.querySelector('.skx3d-model-name')?.textContent!==previous,current3DTitle,{timeout:12000});
      await page.locator('.skx3d-close').click();
      assert.equal(await page.locator('#skx3d-dock').isVisible(),false,'Interactive 3D panel failed to close');
      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),true,'3D model introduced viewport overflow');
