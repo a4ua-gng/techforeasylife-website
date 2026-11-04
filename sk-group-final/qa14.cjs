@@ -124,7 +124,10 @@ const run=async()=>{
     await page.locator('.fx-hero-actions button[data-open-enquiry="other"]').click();
     const box=await page.locator('#enquiry-dialog').boundingBox();
     const send=await page.locator('.welcome-submit').boundingBox();
-    assert(box&&box.x>=-1&&box.x+box.width<=t.width+1&&box.y>=-1&&box.y+box.height<=t.height+1,'Enquiry popup outside viewport');
+    if(!box||box.x<-1||box.x+box.width>t.width+1||box.y<-1||box.y+box.height>t.height+1){
+      const detailed=await page.locator('#enquiry-dialog').evaluate(e=>{const st=getComputedStyle(e),r=e.getBoundingClientRect();return{pos:st.position,top:st.top,left:st.left,transform:st.transform,margin:st.margin,maxHeight:st.maxHeight,scrollHeight:e.scrollHeight,clientHeight:e.clientHeight,rect:{x:r.x,y:r.y,w:r.width,h:r.height},visual:{w:visualViewport.width,h:visualViewport.height,offsetTop:visualViewport.offsetTop}}});
+      throw new Error('Enquiry popup outside viewport; '+JSON.stringify({detailed,box,send,viewport:t}));
+    }
     assert(send&&send.y+send.height<=box.y+box.height+3,'Submit action hidden in modal');
     assert.equal(await page.locator('#welcome-whatsapp').isDisabled(),true,'Non-Montra enquiries wrongly routed to Montra');
     await page.keyboard.press('Escape');
