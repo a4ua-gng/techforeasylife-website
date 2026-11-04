@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080807">
+<script>(function(){try{document.documentElement.dataset.theme=localStorage.getItem('skx-color-mode')==='light'?'light':'dark';}catch(_){document.documentElement.dataset.theme='dark';}})();</script>
 <meta name="robots" content="noindex,nofollow">
 <meta name="description" content="SK Group X is an Assam-based diversified business group spanning automotive retail, electric mobility, energy, hospitality, tourism, jewellery and new ventures.">
 <meta property="og:title" content="SK Group X | Built on ambition. Rooted in Assam.">
@@ -12,8 +13,8 @@
 <title>SK Group X | A diversified enterprise rooted in Assam</title>
 <link rel="icon" href="../sk-group-demo/assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="../sk-group-demo/assets/royal-journey-2.webp" as="image" fetchpriority="high">
-<link rel="stylesheet" href="site.css?v=20261103-1"><link rel="stylesheet" href="experience.css?v=2"><link rel="stylesheet" href="logo-gallery.css?v=4"><link rel="stylesheet" href="conversion.css?v=2"><link rel="stylesheet" href="umbrella-redesign.css?v=3"><link rel="stylesheet" href="skx-gold-core.css?v=1"><link rel="stylesheet" href="skx-gold-polish.css?v=1"><link rel="stylesheet" href="skx-premium-ready.css?v=2">
-<script src="locales.js?v=8" defer></script><script src="site.js?v=20261104-social1" defer></script><script src="experience.js?v=4" defer></script><script src="conversion.js?v=2" defer></script><script src="flux-corporate.js?v=2" defer></script>
+<link rel="stylesheet" href="site.css?v=20261103-1"><link rel="stylesheet" href="experience.css?v=2"><link rel="stylesheet" href="logo-gallery.css?v=4"><link rel="stylesheet" href="conversion.css?v=2"><link rel="stylesheet" href="umbrella-redesign.css?v=3"><link rel="stylesheet" href="skx-gold-core.css?v=1"><link rel="stylesheet" href="skx-gold-polish.css?v=1"><link rel="stylesheet" href="skx-premium-ready.css?v=2"><link rel="stylesheet" href="skx-theme-switch.css?v=1">
+<script src="locales.js?v=8" defer></script><script src="site.js?v=20261104-social1" defer></script><script src="experience.js?v=4" defer></script><script src="conversion.js?v=2" defer></script><script src="flux-corporate.js?v=2" defer></script><script src="theme-controls.js?v=1" defer></script>
 </head>
 <body><div id="reading-progress" class="reading-progress" aria-hidden="true"></div>
 <a class="skip" href="#content">Skip to content</a>
@@ -21,7 +22,20 @@
 <header class="site-header" id="site-header">
 <a class="brand" href="#home" aria-label="SK Group X home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-word">SK <strong>GROUP X</strong><small>ENTERPRISE &amp; POSSIBILITIES</small></span></a>
 <nav class="nav" id="nav" aria-label="Primary navigation"><a href="#about">About</a><a href="#verticals">Our World</a><a href="#businesses">Businesses</a><a href="#gallery-expanded">Gallery</a><a href="#presence">Locations</a><a href="#contact">Contact</a></nav>
-<div class="header-right"><label class="language-picker" aria-label="Choose website language"><svg class="language-globe" viewBox="0 0 24 24" width="18" height="18" role="img" aria-label="Language"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18M12 3c-3.1 3-3.1 15 0 18M12 3c3.1 3 3.1 15 0 18" fill="none" stroke="currentColor" stroke-width="1.25"/></svg><span class="sr-only">Website language</span><select id="site-language" aria-label="Choose language: English, Assamese or Hindi"><option value="en">English</option><option value="as">অসমীয়া</option><option value="hi">हिन्दी</option></select></label><a class="header-contact" href="#contact">Get in touch <span aria-hidden="true">↗</span></a><button class="menu-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="nav"><span></span><span></span></button></div>
+<div class="header-right">
+<button id="skx-theme-toggle" class="skx-theme-toggle" type="button" role="switch" aria-label="Switch to white mode" aria-checked="false" title="Switch to white mode"><svg class="skx-mode-icon skx-sun" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><svg class="skx-mode-icon skx-moon" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false"><path d="M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5a8.5 8.5 0 1 0 10.9 10.9z" transform="translate(.5 -.5)" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only">Change colour mode</span></button>
+<div class="language-picker skx-custom-language" aria-label="Choose website language">
+<button id="skx-language-toggle" class="skx-language-button" type="button" aria-label="Choose website language" aria-haspopup="true" aria-expanded="false" aria-controls="skx-language-menu"><svg class="language-globe" viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.55"/><path d="M3 12h18M12 3c-3 3-3 15 0 18M12 3c3 3 3 15 0 18" fill="none" stroke="currentColor" stroke-width="1.3"/></svg><span id="skx-language-label">English</span><svg class="skx-language-chevron" viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" focusable="false"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<div id="skx-language-menu" class="skx-language-menu" role="group" aria-label="Website languages" hidden>
+<button type="button" class="skx-language-option" data-lang="en" lang="en"><span>English</span><span class="skx-language-check" aria-hidden="true">✓</span></button>
+<button type="button" class="skx-language-option" data-lang="as" lang="as"><span>অসমীয়া</span><span class="skx-language-check" aria-hidden="true">✓</span></button>
+<button type="button" class="skx-language-option" data-lang="hi" lang="hi"><span>हिन्दी</span><span class="skx-language-check" aria-hidden="true">✓</span></button>
+</div>
+<select id="site-language" class="skx-native-language-select" aria-hidden="true" tabindex="-1"><option value="en">English</option><option value="as">অসমীয়া</option><option value="hi">हिन्दी</option></select>
+</div>
+<a class="header-contact" href="#contact">Get in touch <span aria-hidden="true">↗</span></a>
+<button class="menu-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="nav"><span></span><span></span></button>
+</div>
 </header>
 <main id="content">
 <section class="hero fx-hero" id="home" aria-label="SK Group X corporate introduction">
