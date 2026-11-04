@@ -119,18 +119,18 @@ const run=async()=>{
     assert.equal(await page.locator('.site-header .nav').evaluate(e=>e.classList.contains('open')),true,'Menu does not open');
     await toggle.click();
    }
-   // Check the enquiry interaction at three extreme sizes and locales.
+   // The rejected intrusive logo-filled enquiry popup must never be present.
+   assert.equal(await page.locator('#enquiry-dialog').count(),0,'Removed popup is still in the document');
+   assert.equal(await page.locator('.skx-contact-launcher').count(),0,'Removed popup launcher returned');
+   assert.equal(await page.locator('[data-open-enquiry]').count(),0,'An orphan popup trigger remains');
+   // Enquiry CTAs should go to the inline group contact form instead.
    if(i===0||i===4||i===12){
-    await page.locator('.fx-hero-actions button[data-open-enquiry="other"]').click();
-    const box=await page.locator('#enquiry-dialog').boundingBox();
-    const send=await page.locator('.welcome-submit').boundingBox();
-    if(!box||box.x<-1||box.x+box.width>t.width+1||box.y<-1||box.y+box.height>t.height+1){
-      const detailed=await page.locator('#enquiry-dialog').evaluate(e=>{const st=getComputedStyle(e),r=e.getBoundingClientRect();return{pos:st.position,top:st.top,left:st.left,transform:st.transform,margin:st.margin,maxHeight:st.maxHeight,scrollHeight:e.scrollHeight,clientHeight:e.clientHeight,rect:{x:r.x,y:r.y,w:r.width,h:r.height},visual:{w:visualViewport.width,h:visualViewport.height,offsetTop:visualViewport.offsetTop}}});
-      throw new Error('Enquiry popup outside viewport; '+JSON.stringify({detailed,box,send,viewport:t}));
-    }
-    assert(send&&send.y+send.height<=box.y+box.height+3,'Submit action hidden in modal');
-    assert.equal(await page.locator('#welcome-whatsapp').isDisabled(),true,'Non-Montra enquiries wrongly routed to Montra');
-    await page.keyboard.press('Escape');
+     const cta=page.locator('.fx-hero-actions .fx-button-secondary');
+     assert.equal(await cta.getAttribute('href'),'#contact','Hero enquiry CTA must use inline contact');
+     await cta.click();
+     assert.equal(await page.evaluate(()=>location.hash),'#contact','Enquiry CTA did not navigate to contact section');
+     assert.equal(await page.locator('.contact-panel').count(),1,'Inline contact form missing');
+     assert.equal(await page.locator('.contact-panel .btn-dark').count()>=1,true,'Inline contact submit action missing');
    }
    if(i===4||i===12){
     await page.locator('.fx-vertical-hospitality').click();
