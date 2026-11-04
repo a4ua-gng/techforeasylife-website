@@ -8,6 +8,35 @@ const BT=(x,field)=>window.SKXLocale?.businessField(x.id,field,x[field])||x[fiel
 const BASE='../sk-group-demo/assets/';
 const BRAND_LOGOS={royal:'../temark-assets/royal-enfield.png',tvs:'../temark-assets/tvs.png',yamaha:'../temark-assets/yamaha.png',montra:'../temark-assets/montra.png',ashok:'../temark-assets/ashok-leyland.png'};
 function businessLogo(x,cls){const src=BRAND_LOGOS[x.id];return src?'<span class="'+cls+'"><img src="'+src+'" alt="'+escapeHTML(x.name)+' logo" loading="lazy" decoding="async"></span>':'';}
+/* Manufacturer social accounts are not local dealership accounts. The group has not yet supplied
+   official Instagram handles for its independent properties, jewellery store, or future ventures. */
+const BRAND_SOCIALS={
+ royal:{instagram:'https://www.instagram.com/royalenfield/',website:'https://www.royalenfield.com/'},
+ tvs:{instagram:'https://www.instagram.com/tvsmotorcompany/',facebook:'https://www.facebook.com/tvsmotorcompany/',website:'https://www.tvsmotor.com/'},
+ yamaha:{instagram:'https://www.instagram.com/yamahamotorindia/',website:'https://www.yamaha-motor-india.com/'},
+ montra:{instagram:'https://www.instagram.com/montra.electric/',facebook:'https://www.facebook.com/MontraElectric',linkedin:'https://www.linkedin.com/company/montraelectric/',website:'https://www.montraelectric.com/'},
+ ashok:{instagram:'https://www.instagram.com/ashokleyland_official/',website:'https://www.ashokleyland.com/'},
+ indane:{instagram:'https://www.instagram.com/indianoilcorp/',website:'https://iocl.com/'},
+ dominos:{instagram:'https://www.instagram.com/dominos_india/',website:'https://www.dominos.co.in/'}
+};
+const INSTAGRAM_ICON='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>';
+function brandSocials(x,full){
+ const social=BRAND_SOCIALS[x.id]||{};
+ const account=(url,label,cls)=>{
+  const kind=cls==='website'?'official manufacturer or brand website':'official manufacturer or parent-brand account, not the local dealership account';
+  return '<a class="skx-social-link '+cls+'" href="'+escapeHTML(url)+'" target="_blank" rel="noopener noreferrer" aria-label="'+escapeHTML(label+' for '+x.name+' ('+kind+')')+'" title="'+escapeHTML(kind)+'">'+(cls==='instagram'?INSTAGRAM_ICON:'')+'<span>'+label+'</span><b aria-hidden="true">↗</b></a>';
+ };
+ let html='<div class="skx-social-links" aria-label="'+escapeHTML(x.name)+' social media and business resources">';
+ if(social.instagram)html+=account(social.instagram,'Instagram · Brand','instagram');
+ else html+='<a class="skx-social-link skx-social-pending" href="'+mailto('Instagram profile for '+x.name,'Hello SK Group X,\n\nPlease share the verified Instagram page for '+x.name+'.\n\nThank you.')+'" title="The business-specific Instagram account has not yet been provided"><span>Instagram · Ask for handle</span><b aria-hidden="true">↗</b></a>';
+ if(social.website)html+=account(social.website,'Official website','website');
+ else if(!x.upcoming)html+='<a class="skx-social-link website" href="'+mailto('Contact for '+x.name,'Hello SK Group X,\n\nPlease send the official contact and website for '+x.name+'.\n\nThank you.')+'"><span>Business contacts</span><b aria-hidden="true">↗</b></a>';
+ if(full){
+  if(social.facebook)html+=account(social.facebook,'Facebook · Brand','facebook');
+  if(social.linkedin)html+=account(social.linkedin,'LinkedIn · Brand','linkedin');
+ }
+ return html+'</div>';
+}
 const UNSPLASH='https://images.unsplash.com/';
 function callCardAction(x){
   const simple=(phone,display,label)=>'<a class="card-call-cta" href="tel:+91'+phone+'" aria-label="Call '+escapeHTML(x.name)+' on '+display+'"><span>☎ &nbsp;'+label+'</span><b aria-hidden="true">↗</b></a>';
@@ -49,7 +78,7 @@ grid.innerHTML=visible.map(x=>{
 const visual=x.id==='mahamandi'
 ?'<div class="future-visual" role="img" aria-label="Mahamandi upcoming venture identity"><strong>Mahamandi</strong><span>THE NEXT CHAPTER</span></div>'
 :'<img src="'+escapeHTML(x.image)+'" data-fallback="'+escapeHTML(x.fallback)+'" alt="'+escapeHTML(x.name+(x.image.startsWith('media/ai-')?' illustrative sector concept image (AI-generated)':' sector or business imagery'))+'" loading="lazy" decoding="async">';
-return '<article class="business-card"><div class="card-image">'+visual+'<span class="card-sector">'+escapeHTML(LT(x.sector))+'</span>'+businessLogo(x,'card-brand-logo')+(x.upcoming?'<span class="card-status">UPCOMING</span>':'')+'</div><div class="card-body"><small>'+escapeHTML(LT(x.city))+'</small><h3>'+escapeHTML(x.name)+'</h3><p>'+escapeHTML(BT(x,'desc'))+'</p><button type="button" class="card-button" data-business="'+escapeHTML(x.id)+'" aria-label="Explore '+escapeHTML(x.name)+'"><span class="card-action">Discover business <span aria-hidden="true">↗</span></span></button>'+callCardAction(x)+'</div></article>';
+return '<article class="business-card"><div class="card-image">'+visual+'<span class="card-sector">'+escapeHTML(LT(x.sector))+'</span>'+businessLogo(x,'card-brand-logo')+(x.upcoming?'<span class="card-status">UPCOMING</span>':'')+'</div><div class="card-body"><small>'+escapeHTML(LT(x.city))+'</small><h3>'+escapeHTML(x.name)+'</h3><p>'+escapeHTML(BT(x,'desc'))+'</p><button type="button" class="card-button" data-business="'+escapeHTML(x.id)+'" aria-label="Explore '+escapeHTML(x.name)+'"><span class="card-action">Discover business <span aria-hidden="true">↗</span></span></button>'+callCardAction(x)+brandSocials(x,false)+'</div></article>';
 }).join('');
 window.SKXLocale?.translate(grid);
 }
@@ -63,7 +92,7 @@ function openBusiness(id){
 const x=business.find(z=>z.id===id);if(!x||!dialog)return;
 const link=x.link?'<a href="'+escapeHTML(x.link)+'" class="line-link" target="_blank" rel="noopener noreferrer">Visit brand website <span>↗</span></a>':'';
 const phone=x.phone?'<a href="tel:+91'+x.phone+'" class="line-link">☎ Call this branch <span>↗</span></a>':(x.id==='royal'||x.id==='yamaha'||x.id==='ashok'?'<a href="#call-directory" class="line-link" data-exit-business-for-calls>Dealer phone directory <span>↗</span></a>':(x.id==='tvs'?'<a href="tel:+919870259695" class="line-link">☎ Call Osom Motors <span>↗</span></a>':''));
-$('#dialog-content').innerHTML=(x.id==='mahamandi'?'<div class="dialog-visual future-dialog"><strong>Mahamandi</strong><span>UPCOMING VENTURE</span></div>':'<div class="dialog-visual"><img src="'+escapeHTML(x.image)+'" data-fallback="'+escapeHTML(x.fallback)+'" alt="'+escapeHTML(x.name)+' image"></div>')+'<div class="dialog-inner">'+businessLogo(x,'dialog-brand-logo')+'<p class="section-index"><span class="bar"></span>'+escapeHTML(LT(x.sector))+'</p><h2 id="dialog-title">'+escapeHTML(x.name)+'</h2><p>'+escapeHTML(BT(x,'detail'))+'</p><div class="dialog-meta"><div><span>LOCATION / PRESENCE</span><strong>'+escapeHTML(LT(x.city))+'</strong></div><div><span>BUSINESS FOCUS</span><strong>'+escapeHTML(LT(x.note))+'</strong></div></div><div class="dialog-actions"><a class="btn btn-dark" href="'+mailto('Enquiry: '+x.name+' | SK Group X','Hello SK Group X,\n\nI am interested in '+x.name+'. Please contact me with the relevant details.\n\nMy name:\nMy contact number:\nMy enquiry:')+'">Enquire by email <span>↗</span></a>'+phone+link+'</div></div>';
+$('#dialog-content').innerHTML=(x.id==='mahamandi'?'<div class="dialog-visual future-dialog"><strong>Mahamandi</strong><span>UPCOMING VENTURE</span></div>':'<div class="dialog-visual"><img src="'+escapeHTML(x.image)+'" data-fallback="'+escapeHTML(x.fallback)+'" alt="'+escapeHTML(x.name)+' image"></div>')+'<div class="dialog-inner">'+businessLogo(x,'dialog-brand-logo')+'<p class="section-index"><span class="bar"></span>'+escapeHTML(LT(x.sector))+'</p><h2 id="dialog-title">'+escapeHTML(x.name)+'</h2><p>'+escapeHTML(BT(x,'detail'))+'</p><div class="dialog-meta"><div><span>LOCATION / PRESENCE</span><strong>'+escapeHTML(LT(x.city))+'</strong></div><div><span>BUSINESS FOCUS</span><strong>'+escapeHTML(LT(x.note))+'</strong></div></div><div class="dialog-actions"><a class="btn btn-dark" href="'+mailto('Enquiry: '+x.name+' | SK Group X','Hello SK Group X,\n\nI am interested in '+x.name+'. Please contact me with the relevant details.\n\nMy name:\nMy contact number:\nMy enquiry:')+'">Enquire by email <span>↗</span></a>'+phone+link+'</div><div class="skx-dialog-social"><span>OFFICIAL BRAND CHANNELS / BUSINESS ENQUIRIES</span>'+brandSocials(x,true)+'</div></div>';
 window.SKXLocale?.translate($('#dialog-content'));
 if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
 document.body.style.overflow='hidden';
