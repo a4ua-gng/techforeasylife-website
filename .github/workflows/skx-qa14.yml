@@ -1,0 +1,51 @@
+name: SK Group X - 14 responsive alignment checks
+on:
+  push:
+    paths:
+      - 'sk-group-final/**'
+      - '.github/workflows/skx-qa14.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  responsive-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/skx-playwright-browser
+      NODE_PATH: /tmp/skx-playwright/node_modules
+    steps:
+      - name: Check out the actual production website
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser testing tools
+        run: |
+          mkdir -p /tmp/skx-playwright
+          npm install --prefix /tmp/skx-playwright --no-save playwright@1.56.1
+          /tmp/skx-playwright/node_modules/.bin/playwright install --with-deps chromium
+      - name: Start local website
+        run: |
+          nohup python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/skx-serve.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:4173/sk-group-final/ >/dev/null; then
+              echo "Website is ready for 14 real-browser alignment checks"
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/skx-serve.log
+          exit 1
+      - name: Test 14 desktop, tablet and mobile layouts in English, Assamese and Hindi
+        run: node sk-group-final/qa14.cjs
+      - name: Keep screenshots and the alignment report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sk-group-14-viewport-qa
+          path: sk-group-final/qa-results/
+          if-no-files-found: ignore
