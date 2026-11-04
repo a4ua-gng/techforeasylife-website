@@ -66,7 +66,7 @@ if(!reduced.matches){
 document.body.classList.add('motion-enabled');
 const photoObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');photoObserver.unobserve(entry.target);}}),{threshold:.05,rootMargin:'0px 0px 80px 0px'});
 const scan=()=>{
-$('.business-card,.gallery-tile,.journal-grid figure,.picture-tile').forEach((el,i)=>{if(el.dataset.scrollBound)return;el.dataset.scrollBound='yes';el.style.transitionDelay=(i%3)*85+'ms';photoObserver.observe(el);});
+$$('.business-card,.gallery-tile,.journal-grid figure,.picture-tile').forEach((el,i)=>{if(el.dataset.scrollBound)return;el.dataset.scrollBound='yes';el.style.transitionDelay=(i%3)*85+'ms';photoObserver.observe(el);});
 };
 scan();
 const grid=$('#business-grid');if(grid){new MutationObserver(scan).observe(grid,{childList:true});}
