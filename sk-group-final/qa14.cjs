@@ -182,6 +182,29 @@ const run=async()=>{
      assert.equal(await page.locator('#skx3d-dock').isVisible(),false,'Interactive 3D panel failed to close');
      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),true,'3D model introduced viewport overflow');
    }
+   // Manufacturer logos must fit inside their gold-edged badges, without cropping any letters.
+   const logos=await page.evaluate(()=>{
+     const r=e=>e.getBoundingClientRect();
+     return [...document.querySelectorAll('.business-card .card-brand-logo')].map(frame=>{
+       const img=frame.querySelector('img'),photo=frame.closest('.card-image'),
+             badge=r(frame),container=r(photo),sector=r(photo.querySelector('.card-sector'));
+       return{
+         name:img?.alt,
+         fit:getComputedStyle(img).objectFit,
+         transform:getComputedStyle(img).transform,
+         badge:[badge.left,badge.top,badge.right,badge.bottom],
+         image:[container.left,container.top,container.right,container.bottom],
+         sector:[sector.left,sector.top,sector.right,sector.bottom],
+         overlap:!(badge.right<=sector.left+1||badge.left>=sector.right-1||badge.bottom<=sector.top+1||badge.top>=sector.bottom-1)
+       };
+     });
+   });
+   assert.equal(logos.length,5,'All five manufacturer logos must remain on the portfolio cards');
+   assert(logos.every(x=>x.fit==='contain'),'One or more brand logos are cropped: '+JSON.stringify(logos));
+   assert(logos.every(x=>x.transform==='none'),'Brand badge image was incorrectly scaled');
+   assert(logos.every(x=>!x.overlap),'Logo badge collides with category label: '+JSON.stringify(logos));
+   assert(logos.every(x=>x.badge[0]>=x.image[0]-1&&x.badge[2]<=x.image[2]+1&&x.badge[1]>=x.image[1]-1&&x.badge[3]<=x.image[3]+1),
+     'Logo badge escapes its photograph frame');
    assert.equal(errors.length,0,'JavaScript runtime errors: '+errors.join(' | '));
    if([0,4,8,10,12,13].includes(i)){
     await page.screenshot({path:path.join(reportDir,id+'.png'),fullPage:false});
