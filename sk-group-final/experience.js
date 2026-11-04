@@ -14,13 +14,14 @@ const w=key=>words[locale()]?.[key]||words.en[key];
 let previousFocus=null;
 const chips=$$('.enquiry-chip');
 function markChoice(value){chips.forEach(button=>{const active=button.dataset.quick===value;button.classList.toggle('selected',active);button.setAttribute('aria-pressed',String(active));});}
-function setChoice(value){if(!$$('option',purpose).some(o=>o.value===value))value='montra-auto';purpose.value=value;markChoice(value);const isOther=!value.startsWith('montra-');const wa=$('#welcome-whatsapp');wa.disabled=isOther;wa.title=isOther?w('waOther'):'';wa.setAttribute('aria-disabled',String(isOther));}
-function openEnquiry(value='montra-auto'){
+function setChoice(value){if(!$('option',purpose).some(o=>o.value===value))value='other';purpose.value=value;markChoice(value);const isOther=!value.startsWith('montra-');const wa=$('#welcome-whatsapp');wa.disabled=isOther;wa.title=isOther?w('waOther'):'';wa.setAttribute('aria-disabled',String(isOther));}
+function openEnquiry(value='other'){
 previousFocus=document.activeElement;
 if($('#business-dialog')?.open)$('#business-dialog').close();
 setChoice(value);
 if(!dialog.open){try{dialog.showModal();}catch(_){dialog.setAttribute('open','');}}
 document.body.classList.add('modal-lock');
+try{sessionStorage.setItem('skx-welcome-seen','yes');}catch(_){}
 $('#welcome-name')?.focus({preventScroll:true});
 }
 function closeEnquiry(){if(dialog.open&&typeof dialog.close==='function')dialog.close();else dialog.removeAttribute('open');document.body.classList.remove('modal-lock');if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});}
@@ -44,7 +45,18 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dialog.open)closeEn
 const params=new URLSearchParams(location.search);
 const force=params.get('enquire');
 let shown=false;try{shown=sessionStorage.getItem('skx-welcome-seen')==='yes';}catch(_){}
-function showWelcome(){if(force){openEnquiry(force);try{sessionStorage.setItem('skx-welcome-seen','yes');}catch(_){}}}
+function showWelcome(){
+  if(force){openEnquiry(force);return;}
+  // A one-time, group-wide contact invitation. The site remains usable and scrollable
+  // before the dialog appears; it never appears again within the same tab session.
+  if(shown||new URLSearchParams(location.search).has('qa'))return;
+  window.setTimeout(()=>{
+    if(document.hidden||dialog.open||$('#business-dialog')?.open)return;
+    let previouslyOpened=false;
+    try{previouslyOpened=sessionStorage.getItem('skx-welcome-seen')==='yes';}catch(_){}
+    if(!previouslyOpened)openEnquiry('other');
+  },4400);
+}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',showWelcome,{once:true});else requestAnimationFrame(showWelcome);
 /* Scroll feedback, accessible section discovery and staggered editorial transitions. */
 const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
