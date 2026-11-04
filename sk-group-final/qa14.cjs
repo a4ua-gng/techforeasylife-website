@@ -33,6 +33,43 @@ const run=async()=>{
   try{
    await page.goto(base+'?lang='+t.lang+'&qa='+i,{waitUntil:'domcontentloaded',timeout:25000});
    await page.locator('.business-card .skx-social-links').first().waitFor({timeout:18000});
+   // Global header: both modes must be real, stable and non-overflowing.
+   const theme=page.locator('#skx-theme-toggle');
+   const language=page.locator('#skx-language-toggle');
+   const dropdown=page.locator('#skx-language-menu');
+   await theme.waitFor({timeout:10000});
+   await language.waitFor({timeout:10000});
+   assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','Default colour theme must be dark');
+   const darkColours=await page.evaluate(()=>({header:getComputedStyle(document.querySelector('.site-header')).backgroundColor,hero:getComputedStyle(document.querySelector('.fx-hero-intro h1')).color,body:getComputedStyle(document.body).backgroundColor}));
+   assert.equal(await language.getAttribute('aria-expanded'),'false','Language dropdown should be closed by default');
+   await language.click();
+   assert.equal(await language.getAttribute('aria-expanded'),'true','Custom language dropdown did not open');
+   assert.equal(await dropdown.isVisible(),true,'Custom language dropdown is not visible');
+   const menuBounds=await dropdown.boundingBox();
+   assert(menuBounds&&menuBounds.x>=-1&&menuBounds.x+menuBounds.width<=t.width+1,'Language menu clips out of viewport');
+   assert.equal(await dropdown.locator('.skx-language-option').count(),3,'Missing native language options');
+   await page.keyboard.press('Escape');
+   assert.equal(await dropdown.isVisible(),false,'Language menu does not close with Escape');
+   await theme.click();
+   assert.equal(await page.locator('html').getAttribute('data-theme'),'light','Switch did not enable light mode');
+   assert.equal(await theme.getAttribute('aria-checked'),'true','Accessible switch state is not light');
+   const lightColours=await page.evaluate(()=>({header:getComputedStyle(document.querySelector('.site-header')).backgroundColor,hero:getComputedStyle(document.querySelector('.fx-hero-intro h1')).color,body:getComputedStyle(document.body).backgroundColor}));
+   assert.notDeepEqual(lightColours,darkColours,'Theme toggle changed no actual colours');
+   assert.equal(await page.locator('html').evaluate(e=>e.scrollWidth<=e.clientWidth+1),true,'Light theme overflows page');
+   await language.click();
+   const lightMenuBounds=await dropdown.boundingBox();
+   assert(lightMenuBounds&&lightMenuBounds.x>=-1&&lightMenuBounds.x+lightMenuBounds.width<=t.width+1,'Light language menu clips out of viewport');
+   await page.keyboard.press('Escape');
+   if([0,4,8,12].includes(i)){
+     await page.screenshot({path:path.join(reportDir,id+'-light-mode.png'),fullPage:false});
+   }
+   // Reload to prove light mode persistence across subsequent page loads.
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('.business-card .skx-social-links').first().waitFor({timeout:18000});
+   assert.equal(await page.locator('html').getAttribute('data-theme'),'light','Light mode not saved across reload');
+   await theme.click();
+   assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','Switch did not return to dark mode');
+   
    const state=await page.evaluate(()=>{
     const q=s=>document.querySelector(s),qa=s=>[...document.querySelectorAll(s)],root=document.documentElement;
     const rect=e=>{if(!e)return null;const r=e.getBoundingClientRect();return{l:r.left,r:r.right,t:r.top,b:r.bottom,w:r.width,h:r.height};};
@@ -118,7 +155,7 @@ const run=async()=>{
  }
  await browser.close();
  fs.writeFileSync(path.join(reportDir,'alignment-14.json'),JSON.stringify({checks:14,passed:results.filter(x=>x.status==='PASS').length,failed:results.filter(x=>x.status==='FAIL').length,results},null,2));
- console.log('14-viewport check:',results.filter(x=>x.status==='PASS').length,'passed,',results.filter(x=>x.status==='FAIL').length,'failed');
+ console.log('14-viewport dark/light plus custom language menu:',results.filter(x=>x.status==='PASS').length,'passed,',results.filter(x=>x.status==='FAIL').length,'failed');
  if(results.some(x=>x.status==='FAIL'))process.exitCode=1;
 };
 run().catch(err=>{console.error(err);process.exitCode=1;});
