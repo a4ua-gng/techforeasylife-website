@@ -14,7 +14,7 @@ const w=key=>words[locale()]?.[key]||words.en[key];
 let previousFocus=null;
 const chips=$$('.enquiry-chip');
 function markChoice(value){chips.forEach(button=>{const active=button.dataset.quick===value;button.classList.toggle('selected',active);button.setAttribute('aria-pressed',String(active));});}
-function setChoice(value){if(!$('option',purpose).some(o=>o.value===value))value='other';purpose.value=value;markChoice(value);const isOther=!value.startsWith('montra-');const wa=$('#welcome-whatsapp');wa.disabled=isOther;wa.title=isOther?w('waOther'):'';wa.setAttribute('aria-disabled',String(isOther));}
+function setChoice(value){if(!$$('option',purpose).some(o=>o.value===value))value='other';purpose.value=value;markChoice(value);const isOther=!value.startsWith('montra-');const wa=$('#welcome-whatsapp');wa.disabled=isOther;wa.title=isOther?w('waOther'):'';wa.setAttribute('aria-disabled',String(isOther));}
 function openEnquiry(value='other'){
 previousFocus=document.activeElement;
 if($('#business-dialog')?.open)$('#business-dialog').close();
