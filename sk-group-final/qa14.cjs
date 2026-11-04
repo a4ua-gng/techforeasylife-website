@@ -155,6 +155,32 @@ const run=async()=>{
      assert.equal((await page.locator('#skx-language-label').textContent()).trim(),expected,'Wrong language label after translation');
      assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','Changing language lost the saved theme');
    }
+   // Reported bug: the wide-banner caption must remain inside its image and not cover "Our Direction".
+   const editorial=await page.evaluate(()=>{
+     const r=s=>document.querySelector(s)?.getBoundingClientRect();
+     const banner=r('.wide-image'),caption=r('.wide-caption'),vision=r('.vision'),title=r('.vision-copy h2');
+     return{bannerEnd:banner?.bottom,captionEnd:caption?.bottom,visionTop:vision?.top,titleTop:title?.top,
+       menuText:getComputedStyle(document.querySelector('.skx-language-option span')).display};
+   });
+   assert(editorial.bannerEnd!=null&&editorial.captionEnd<=editorial.bannerEnd+2,
+     'Commercial banner caption leaks into next section: '+JSON.stringify(editorial));
+   assert(editorial.titleTop>=editorial.visionTop-2,'Vision headline leaks outside vision section');
+   assert.notEqual(editorial.menuText,'none','Language menu text is invisible');
+   // Optional CGI is a separate closable layer. It never blocks the company site.
+   if(i===12){
+     const opener=page.locator('.skx3d-open');
+     await opener.waitFor({state:'visible',timeout:18000});
+     await opener.click();
+     await page.locator('.skx3d-canvas').waitFor({state:'visible',timeout:18000});
+     await page.waitForFunction(()=>!!document.querySelector('.skx3d-loading')?.hidden,{timeout:18000});
+     assert.equal(await page.locator('#skx3d-dock').isVisible(),true,'Interactive model dock did not open');
+     assert.equal((await page.locator('.skx3d-model-name').textContent()).trim(),'The SK Group orbit');
+     await page.locator('.skx3d-next').click();
+     await page.waitForFunction(()=>document.querySelector('.skx3d-model-name')?.textContent==='Two-wheeler concept',{timeout:12000});
+     await page.locator('.skx3d-close').click();
+     assert.equal(await page.locator('#skx3d-dock').isVisible(),false,'Interactive 3D panel failed to close');
+     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),true,'3D model introduced viewport overflow');
+   }
    assert.equal(errors.length,0,'JavaScript runtime errors: '+errors.join(' | '));
    if([0,4,8,10,12,13].includes(i)){
     await page.screenshot({path:path.join(reportDir,id+'.png'),fullPage:false});
