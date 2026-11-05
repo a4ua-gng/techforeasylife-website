@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0b10">
+  <meta name="description" content="Explore how Tech for Easy Life separates ownership, execution, team leadership and cover in an interactive organizational chart.">
+  <link rel="canonical" href="https://techforeasylife.in/hierarchy/">
+  <link rel="icon" href="../favicon.png">
+  <link rel="stylesheet" href="../tel-operations/operations.css">
+  <script src="../tel-operations/hierarchy.js" type="module"></script>
+  <title>TEL Hierarchy | Tech for Easy Life</title>
+</head>
+<body>
+  <a class="ops-skip" href="#main">Skip to content</a>
+  <header class="ops-header">
+    <div class="ops-shell ops-header-inner">
+      <a href="../" class="ops-brand" aria-label="TEL home"><img src="../tel-logo.webp" alt="TEL" width="56" height="29"><span>OPERATIONS</span></a>
+      <nav aria-label="Operations" class="ops-nav">
+        <a href="./" aria-current="page">Hierarchy</a>
+        <a href="../hr/">Leave SOP</a>
+        <a class="ops-nav-back" href="../about.html#team">About TEL <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="ops-shell">
+    <div class="ops-hero">
+      <div>
+        <p class="ops-kicker"><span></span> TECH FOR EASY LIFE / ORGANISATION</p>
+        <h1>The TEL <em>hierarchy.</em></h1>
+        <p class="ops-intro">Explore who sets direction, who assigns work, and who steps in when someone is away.</p>
+      </div>
+      <a class="ops-text-link hero-link" href="../hr/">Leave &amp; working hours <span aria-hidden="true">↗</span></a>
+    </div>
+
+    <section class="chart-app" aria-label="Interactive organisation chart">
+      <div class="chart-bar">
+        <div class="chart-label"><span class="chart-mark" aria-hidden="true">✳</span><span>Authority map</span></div>
+        <div class="ops-segment" role="group" aria-label="Relationship displayed">
+          <button type="button" data-mode="reporting" aria-pressed="true">Reporting</button>
+          <button type="button" data-mode="approvals" aria-pressed="false">Approvals</button>
+          <button type="button" data-mode="cover" aria-pressed="false">Cover</button>
+        </div>
+        <label class="chart-cover" hidden><span class="ops-sr">Absence scenario</span>
+          <select id="cover-scenario">
+            <option value="founder">Founder away</option>
+            <option value="cofounder">Co-founder away</option>
+            <option value="both">Both founders away</option>
+          </select>
+        </label>
+        <div class="ops-segment chart-view" role="group" aria-label="Chart view">
+          <button type="button" data-view="depth" aria-pressed="true">3D</button>
+          <button type="button" data-view="flat" aria-pressed="false">Flat</button>
+        </div>
+      </div>
+
+      <div class="chart-layout">
+        <div id="chart-stage" class="chart-stage" aria-label="Organisation diagram">
+          <p class="chart-hint" id="chart-hint">Drag to orbit · select a role</p>
+          <svg id="chart-scene" class="chart-scene" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="deck-fill" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+                <stop stop-color="#7782ba" stop-opacity=".025"></stop>
+                <stop offset="1" stop-color="#8d9ac6" stop-opacity=".11"></stop>
+              </linearGradient>
+            </defs>
+            <g id="chart-decks"></g>
+            <g id="chart-edges"></g>
+          </svg>
+          <div id="chart-nodes" class="chart-nodes"></div>
+          <div class="chart-camera" role="group" aria-label="Rotate diagram">
+            <button type="button" data-camera="left" aria-label="Rotate left" title="Rotate left">⟲</button>
+            <button type="button" data-camera="right" aria-label="Rotate right" title="Rotate right">⟳</button>
+            <button type="button" data-camera="reset" aria-label="Reset angle" title="Reset angle">◎</button>
+          </div>
+          <noscript><p class="chart-nojs">Enable JavaScript to explore the interactive chart. The operating rules below are also available as text.</p></noscript>
+        </div>
+
+        <aside id="chart-inspector" class="chart-inspector" aria-label="Selected role">
+          <p class="ops-mono chart-index" id="role-index">01 / OWNERSHIP</p>
+          <div class="role-person">
+            <div class="role-avatar" id="role-avatar" aria-hidden="true">HD</div>
+            <div>
+              <h2 id="role-title">Founder</h2>
+              <p id="role-person">Harsh Das</p>
+            </div>
+          </div>
+          <p class="role-summary" id="role-summary">Sets company direction and holds the primary ownership authority.</p>
+          <dl id="role-facts" class="role-facts"></dl>
+          <div class="chart-context" id="chart-context">
+            <p class="ops-mono" id="context-title">REPORTING</p>
+            <p id="context-copy">Follow the lines from the ownership roles to executives, leads and members.</p>
+          </div>
+        </aside>
+      </div>
+
+      <div class="chart-footer">
+        <p id="chart-legend"><span class="legend-line"></span> Reporting and delegated authority</p>
+        <p><span class="legend-dot"></span> <span id="chart-levels">4 levels · 4 departments</span></p>
+      </div>
+      <span id="chart-status" class="ops-sr" aria-live="polite"></span>
+    </section>
+
+    <section class="ops-section" id="decision-rules" aria-labelledby="rules-title">
+      <div class="ops-section-heading">
+        <div><p class="ops-kicker"><span></span> 01 / DECISION RIGHTS</p><h2 id="rules-title">How authority works.</h2></div>
+        <p>Use the portfolio owner for assignments. Use HR to record changes and share the handover.</p>
+      </div>
+      <div class="ops-table-wrap">
+        <table class="ops-table">
+          <thead><tr><th scope="col">Decision</th><th scope="col">Who acts</th><th scope="col">Approval or notice</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Company direction &amp; equity</th><td>Founder sets company-wide priorities and leads ownership decisions.</td><td>Formal equity decisions follow the governing documents and required approvals. The CEO and COO carry out the operating decisions.</td></tr>
+            <tr><th scope="row">TeMark priorities &amp; assignments</th><td>Founder sets priorities and can assign or redirect work directly. Tanishka Dhatrak runs daily delivery and assigns tasks.</td><td>Founder decisions in TeMark take effect directly. Notify Tanishka of changes that affect her team’s owners, deadlines or client commitments.</td></tr>
+            <tr><th scope="row">TEL Education, Product Development &amp; HR</th><td>Co-founder owns the portfolio. The COO runs delivery. HR coordinates staff communication across TEL.</td><td>Founder seeks Co-founder consent before assigning or redirecting work here, except during a documented acting handover.</td></tr>
+            <tr><th scope="row">Finance</th><td>Maverick Alam runs daily finance work. Finance serves both portfolios.</td><td>Use the relevant portfolio owner for priorities and escalate cross-portfolio conflicts to both founders. Finance verifies records and routes payments to the authorised approver.</td></tr>
+            <tr><th scope="row">Co-founder assigning outside their portfolio</th><td>Co-founder or COO proposes the scope, owner and deadline.</td><td>Get Founder consent before directing work in TeMark or taking on Founder-side assignments in Finance.</td></tr>
+            <tr><th scope="row">Daily work within a team</th><td>Team leads assign, review and connect the team. Members share the same authority level and deliver their role-specific work.</td><td>Ask the lead to resolve conflicting deadlines. When the work crosses teams, leads coordinate before handing out tasks.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="ops-section" id="operating-rules" aria-labelledby="operating-title">
+      <div class="ops-section-heading">
+        <div><p class="ops-kicker"><span></span> 02 / CONTINUITY &amp; PEOPLE</p><h2 id="operating-title">When things change.</h2></div>
+        <p>Keep the decision owner, handover and review date visible to the people doing the work.</p>
+      </div>
+      <div class="ops-accordion">
+        <details><summary>Founder coverage and temporary delegation <span aria-hidden="true">+</span></summary><p>When one founder is away, the available founder takes over operating decisions for the agreed period. HR records the acting scope and end date. When both are away, Tanishka covers TeMark, Maverick covers Finance and Humaira covers HR. The founders name an acting owner for TEL Education before planned overlap. If unexpected overlap leaves Education uncovered, HR coordinates urgent handoffs and defers decisions that need a portfolio owner.</p><p>Acting leads keep approved work moving. Ownership changes, permanent appointments, pay decisions and commitments outside approved limits go to the designated approver. When leadership returns, HR closes the handover and records decisions made during cover.</p></details>
+        <details><summary>Pausing or replacing a team lead <span aria-hidden="true">+</span></summary><p>The Founder can take over TeMark’s lead duties and pause or withdraw delegated lead authority when delivery needs it. Apply the same continuity process in Finance through its portfolio sponsor, and in HR through the Co-founder. When a decision affects the Co-founder’s portfolio, get their consent or use a documented acting handover.</p><p>Record the reason, scope, acting lead and review date privately with HR. Give the affected person a chance to respond. During a pause they may carry agreed member-level duties. Restore lead authority or communicate a reviewed change in writing.</p></details>
+        <details><summary>HR communications and escalation <span aria-hidden="true">+</span></summary><p>HR issues company announcements, runs HR discussions, maintains the leave and decision records, and follows up on handovers. Leads pass on team updates and flag risks. Members can contact HR directly about a sensitive issue. If the concern involves HR, route it privately to a founder without a conflict.</p></details>
+        <details><summary>December 2026 compensation review <span aria-hidden="true">+</span></summary><p>From December 2026, responsibilities and acting duties can inform prospective compensation reviews. Finance verifies the calculation, HR documents the review and shares any proposed change privately, and the authorised approver signs off in writing under the engagement terms. The chart and leave log record roles and availability. They do not trigger automatic deductions or changes to earned pay.</p></details>
+      </div>
+    </section>
+  </main>
+  <footer class="ops-footer ops-shell">
+    <a href="../about.html#team">TEL team directory <span aria-hidden="true">↗</span></a>
+    <span>Tech for Easy Life · Guwahati</span>
+    <a href="../hr/">Leave SOP <span aria-hidden="true">↗</span></a>
+  </footer>
+</body>
+</html>
