@@ -1,0 +1,147 @@
+{
+  "email": "skgroupx@gmail.com",
+  "photos": {
+    "montra-ceremony": {
+      "file": "montra-betkuchi-ceremony.webp", "small": "montra-betkuchi-ceremony-800.webp",
+      "width": 1600, "height": 900, "position": "66% 48%",
+      "alt": "Guests lighting a ceremonial lamp at the Montra Electric Betkuchi opening",
+      "title": "Opening day in Betkuchi", "caption": "Montra Electric · Betkuchi, Guwahati · 28 October 2026",
+      "credit": "Photographed by TeMark", "owner": "montra-electric-betkuchi"
+    },
+    "howly-front": {
+      "file": "gs-auto-howly.webp", "width": 289, "height": 312, "position": "center 44%",
+      "alt": "The GS Auto Royal Enfield showroom below Axom Inn Guest House in Howly",
+      "title": "The GS Auto showroom", "caption": "Royal Enfield · Howly, Barpeta",
+      "credit": "Photo supplied by SK Group’s website team", "owner": "royal-enfield-gs-auto-howly"
+    },
+    "montra-gathering": {
+      "file": "montra-betkuchi-gathering.webp", "width": 1050, "height": 1400, "position": "center 51%",
+      "alt": "Guests on stage inside the Montra Electric Betkuchi showroom during the inauguration",
+      "title": "Inside the Betkuchi showroom", "caption": "Montra Electric · Betkuchi, Guwahati",
+      "credit": "Photographed by TeMark", "owner": "montra-electric-betkuchi"
+    },
+    "montra-conversations": {
+      "file": "montra-betkuchi-conversations.webp", "width": 1050, "height": 1400, "position": "center 47%",
+      "alt": "Guests talking inside the Montra Electric Betkuchi showroom on opening day",
+      "title": "Conversations at the launch", "caption": "Montra Electric · Betkuchi, Guwahati",
+      "credit": "Photographed by TeMark", "owner": "montra-electric-betkuchi"
+    }
+  },
+  "marks": {
+    "montra": {"file":"montra.png", "width":3000, "height":800, "alt":"Montra Electric"},
+    "royal": {"file":"royal-enfield.png", "width":1288, "height":182, "alt":"Royal Enfield"},
+    "tvs": {"file":"tvs.png", "width":740, "height":135, "alt":"TVS Motor"},
+    "riders": {"file":"gs-riders-mark.webp", "width":447, "height":447, "alt":"G.S. Riders Kokrajhar emblem"}
+  },
+  "dealers": [
+    {
+      "id": "montra-electric-betkuchi", "brand": "Montra Electric", "operator": "SK Group X (OPC) Pvt. Ltd.",
+      "place": "Betkuchi, Guwahati", "district": "Guwahati", "kind": "Electric three-wheelers", "category": "electric",
+      "address": "Royal Square Building, Betkuchi, Lokhra, Guwahati, Assam 781034", "phone": "8071441068",
+      "map": "Montra Electric SK Group X Royal Square Building Betkuchi Guwahati 781034",
+      "source": "https://trucks.cardekho.com/en/news/detail/montra-electric-opens-new-e-3w-dealership-in-guwahati-to-expand-northeast-presence-3970.html", "source_label": "Dealership launch coverage",
+      "mark": "montra", "photo": "montra-ceremony", "gallery": ["montra-gathering","montra-conversations"],
+      "intro": "Electric three-wheelers for passenger trips and cargo runs. Visit the Betkuchi team to explore the Montra range and get help with sales, service and spare parts.",
+      "short": "Passenger and cargo electric three-wheelers, with sales, service and parts in Betkuchi.",
+      "offerings": [
+        ["Super Auto", "Ask the team about the passenger three-wheeler and arrange a showroom visit."],
+        ["Super Cargo", "Talk through cargo and last-mile delivery requirements with the Betkuchi team."],
+        ["Service & parts", "Contact the branch about service appointments and genuine spare parts."]
+      ]
+    },
+    {
+      "id": "royal-enfield-gs-auto-howly", "brand": "Royal Enfield", "operator": "GS Auto",
+      "place": "Howly, Barpeta", "district": "Barpeta", "kind": "Motorcycles", "category": "motorcycles",
+      "address": "Ward No. 1, NH 31, Howly, Barpeta, Assam 781316", "phone": "8291203209", "hours": "9 AM–8 PM IST",
+      "map": "Royal Enfield GS Auto Ward No 1 NH 31 Howly Barpeta Assam 781316",
+      "source": "https://dealers.royalenfield.com/assam/barpeta", "source_label": "Royal Enfield dealer listing",
+      "mark": "royal", "photo": "howly-front",
+      "intro": "Explore Royal Enfield motorcycles at GS Auto in Howly. Get in touch with this branch to discuss models, test rides and your next showroom visit.",
+      "short": "Royal Enfield motorcycles at GS Auto on NH 31 in Howly.",
+      "offerings": [
+        ["Motorcycles", "Ask the Howly team about the range, on-road pricing and current availability."],
+        ["Test rides", "Call the showroom to check which models are available to ride."],
+        ["Ownership support", "Ask about accessories, service enquiries and next steps for your motorcycle."]
+      ]
+    },
+    {
+      "id": "royal-enfield-gs-auto-sonkuchi", "brand": "Royal Enfield", "operator": "GS Auto",
+      "place": "Sonkuchi, Barpeta", "district": "Barpeta", "kind": "Motorcycles", "category": "motorcycles",
+      "address": "Dewrikuchi, Sonkuchi, Barpeta, Assam 781314", "phone": "9167288263",
+      "map": "Royal Enfield GS Auto Dewrikuchi Sonkuchi Barpeta Assam 781314",
+      "source": "https://dealers.royalenfield.com/assam/barpeta", "source_label": "Royal Enfield dealer listing",
+      "mark": "royal",
+      "intro": "Talk to the GS Auto team at the Sonkuchi showroom for Royal Enfield model enquiries, test rides and visits in the Barpeta area.",
+      "short": "The GS Auto Royal Enfield showroom in Dewrikuchi, Sonkuchi.",
+      "offerings": [
+        ["Model enquiries", "Ask the Sonkuchi branch about models, pricing and availability."],
+        ["Showroom visits", "Call before travelling to arrange a visit or enquire about a test ride."],
+        ["Ownership support", "Speak to the branch about accessories and after-sales assistance."]
+      ]
+    },
+    {
+      "id": "royal-enfield-gs-riders-kokrajhar", "brand": "Royal Enfield", "operator": "GS Riders",
+      "place": "Kokrajhar", "district": "Kokrajhar", "kind": "Motorcycles", "category": "motorcycles",
+      "address": "JD Road, opposite IndianOil Petrol Pump, Kokrajhar, Assam 783370", "phone": "9167782629", "hours": "9 AM–8 PM IST",
+      "map": "Royal Enfield GS Riders JD Road opposite Indian Oil Petrol Pump Kokrajhar Assam 783370",
+      "source": "https://dealers.royalenfield.com/assam/kokrajhar/jd-road-gs-riders-9110080160", "source_label": "Royal Enfield dealer listing",
+      "mark": "riders",
+      "intro": "Visit GS Riders on JD Road for Royal Enfield motorcycles, accessories and riding gear in Kokrajhar. Contact the branch to plan your visit.",
+      "short": "Royal Enfield motorcycles, riding gear and accessories on JD Road.",
+      "offerings": [
+        ["Motorcycles", "Ask GS Riders about the Royal Enfield range, prices and current availability."],
+        ["Riding gear & accessories", "Check with the showroom for genuine accessories and riding apparel."],
+        ["Visits & test rides", "Arrange a visit or enquire about a test ride with the Kokrajhar team."]
+      ]
+    },
+    {
+      "id": "tvs-osom-motors-agia", "brand": "TVS Motor", "operator": "Osom Motors LLP",
+      "place": "Agia, Goalpara", "district": "Goalpara", "kind": "Motorcycles & scooters", "category": "motorcycles",
+      "address": "Ground floor, opposite Anirban Bajaj, Agia, Goalpara, Assam 783120", "phone": "9870259695",
+      "map": "TVS Osom Motors LLP Agia opposite Anirban Bajaj Goalpara Assam 783120",
+      "source": "https://www.tvsmotor.com/en/tvs-dealer-locator", "source_label": "TVS dealer locator",
+      "mark": "tvs",
+      "intro": "Explore TVS motorcycles and scooters with the Osom Motors team in Agia. Call the branch for model enquiries, availability and showroom visits.",
+      "short": "TVS motorcycle and scooter enquiries at Osom Motors in Agia.",
+      "offerings": [
+        ["Motorcycles", "Discuss the TVS motorcycle range and current availability with the Agia team."],
+        ["Scooters", "Ask which TVS scooters are available to see or try at the showroom."],
+        ["Service enquiries", "Call the branch to ask about servicing, spare parts or ownership support."]
+      ]
+    }
+  ],
+  "other_mobility": [
+    {"name":"Yamaha Motor", "place":"Goalpara, Assam", "text":"Ask SK Group about its Yamaha showroom plans and enquiries in Goalpara."},
+    {"name":"Ashok Leyland", "place":"Light commercial vehicles", "text":"Contact SK Group about light commercial vehicle enquiries and the relevant branch."}
+  ],
+  "businesses": [
+    {
+      "id":"energy", "name":"Energy & LPG", "intro":"LPG connections, refills and distributor enquiries.",
+      "entries":[{"name":"IndianOil · Indane LPG", "place":"Guwahati", "text":"Domestic connection, refill and distributor assistance enquiries."}]
+    },
+    {
+      "id":"hospitality", "name":"Food & hospitality", "intro":"Dining and guest accommodation in Assam.",
+      "entries":[
+        {"name":"Domino’s", "place":"Assam", "text":"Contact SK Group for details of the relevant outlet."},
+        {"name":"Guest house", "place":"Guwahati", "text":"Short stay and accommodation enquiries."},
+        {"name":"Axom Inn Guest House", "place":"Howly, Barpeta", "text":"Ask about room availability and stays at the guest house above GS Auto on NH 31."}
+      ]
+    },
+    {
+      "id":"tourism", "name":"Tourism & resorts", "intro":"An upcoming hospitality venture near Manas.",
+      "entries":[{"name":"Manas resort venture", "place":"Manas National Park area", "text":"Contact the group for project updates and future stay enquiries."}]
+    },
+    {
+      "id":"jewellery", "name":"Gold & jewellery", "intro":"Gold and jewellery retail enquiries in Guwahati.",
+      "entries":[{"name":"Gold & jewellery store", "place":"Guwahati", "text":"Ask the group about collections, store details and visits."}]
+    },
+    {
+      "id":"fmcg", "name":"Assamese foods", "intro":"Upcoming Assamese snacks and packaged foods.",
+      "entries":[{"name":"Ophomor Swaad / Jalpan Ghar", "place":"Upcoming", "text":"Ask about launch plans, packaged snacks and distribution opportunities."}]
+    },
+    {
+      "id":"corporate", "name":"Corporate operations", "intro":"Group operations, partnerships and development.",
+      "entries":[{"name":"SK Group X (OPC) Pvt. Ltd.", "place":"Guwahati, Assam", "text":"Contact the group for corporate enquiries and information about its businesses."}]
+    }
+  ]
+}
