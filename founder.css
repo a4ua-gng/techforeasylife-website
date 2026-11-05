@@ -20,7 +20,7 @@
 .hd-button.primary:hover{background:#c9b9ff}
 .hd-portrait-shell{position:relative;max-width:430px;margin-left:auto;width:100%}
 .hd-portrait-glow{position:absolute;inset:12% -11%;filter:blur(65px);background:radial-gradient(ellipse at 50% 40%,rgba(173,147,255,.38),transparent 68%);z-index:-1}
-.hd-portrait-frame{width:100%;aspect-ratio:4/5;position:relative;overflow:hidden;border-radius:220px 220px 18px 18px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(145deg,#242137,#0e101b);box-shadow:0 42px 100px rgba(0,0,0,.35)}
+.hd-portrait-frame{margin:0;width:100%;aspect-ratio:4/5;position:relative;overflow:hidden;border-radius:220px 220px 18px 18px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(145deg,#242137,#0e101b);box-shadow:0 42px 100px rgba(0,0,0,.35)}
 .hd-portrait-frame img{width:100%;height:100%;object-fit:cover;display:block;object-position:center 25%;filter:contrast(1.03) saturate(.86)}
 .hd-portrait-frame:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(12,10,25,.5),transparent 42%)}
 .hd-portrait-caption{position:absolute;bottom:25px;left:23px;right:23px;z-index:1;display:flex;justify-content:space-between;gap:20px;font-size:.75rem;letter-spacing:.13em;text-transform:uppercase;color:#fff}
