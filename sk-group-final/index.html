@@ -1,15 +1,120 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#15140f"><meta name="description" content="Explore the SK Group X business portfolio in Assam: mobility, energy, hospitality, tourism, jewellery and Assamese foods."><title>SK Group X — Rooted in Assam</title><link rel="stylesheet" href="style.css"><link rel="icon" href="assets/icon.svg" type="image/svg+xml"><script src="data.js" defer></script><script src="app.js" defer></script><script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script></head>
-<body><a class="skip" href="#main">Skip to content</a><header><a class="brand" href="#top" aria-label="SK Group X home"><b>SK<span>✦</span></b><span>SK GROUP X<small>ASSAM, INDIA</small></span></a><button class="menu" aria-expanded="false" aria-controls="nav">Menu <span>☰</span></button><nav id="nav"><a href="#about">The group</a><a href="#portfolio">Businesses</a><a href="#locations">Locations</a><a href="#gallery">Gallery</a></nav><button class="contact-button" data-enquire>Get in touch <span>↗</span></button></header>
-<main id="main"><section class="hero" id="top" aria-label="SK Group X portfolio highlights">
-<div class="hero-copy"><p class="eyebrow"><span></span> BUILT IN ASSAM · ACROSS INDUSTRIES</p><h1>Rooted here.<br><em>Growing together.</em></h1><p>From the vehicles people drive to the places they stay and the food they bring home, discover the businesses that make up SK Group X.</p><a class="primary" href="#portfolio">Explore our businesses <span>↘</span></a></div>
-<div class="hero-media"><img id="hero-image" src="assets/axom-wide.webp" alt="Axom Inn Guest House exterior in Howly" fetchpriority="high" width="547" height="365"><div class="photo-meta"><div><small id="slide-kicker">01 / HOSPITALITY</small><strong id="slide-name">Axom Inn, Howly</strong></div><div class="arrows"><button id="prev" aria-label="Previous photo">←</button><button id="next" aria-label="Next photo">→</button></div></div></div>
-<div class="hero-note"><span>01 — THE GROUP</span><a href="#about">SCROLL TO EXPLORE ↓</a><span>GUWAHATI · ASSAM</span></div></section>
-<section id="about" class="intro shell"><div><p class="eyebrow"><span></span> THE GROUP</p><h2>Across industries.<br><em>Connected by Assam.</em></h2></div><p>SK Group X brings together businesses in mobility, energy, hospitality and retail, alongside ventures in tourism and Assamese packaged foods. Explore each sector, find branch information and get in touch with the group.</p></section>
-<section id="portfolio" class="portfolio"><div class="shell"><div class="section-head"><div><p class="eyebrow"><span></span> 02 — OUR BUSINESSES</p><h2>Explore the portfolio.</h2></div><p>Eight sectors, from the businesses serving Assam today to those still taking shape.</p></div><div class="studio-tools"><button id="studio" type="button" aria-pressed="false">Enable 3D artwork <span>◇</span></button><span id="studio-status" role="status"></span></div><div id="sector-grid" class="sector-grid"></div></div></section>
-<section id="locations" class="directory shell"><div class="section-head"><div><p class="eyebrow"><span></span> 03 — VISIT OR ENQUIRE</p><h2>Find a business.</h2></div><p>Group enquiry hours: <strong>9 AM–8 PM IST</strong>.<br>Confirm individual branch hours before visiting.</p></div><div class="filters"><label>Search businesses<input id="search" type="search" placeholder="Try Montra, Barpeta or jewellery"></label><label>Business sector<select id="sector-filter"><option value="">All sectors</option></select></label></div><p id="result-count" role="status"></p><div id="directory-list"></div></section>
-<section id="gallery" class="gallery"><div class="shell"><div class="section-head"><div><p class="eyebrow"><span></span> 04 — THROUGH THE LENS</p><h2>Places and people.</h2></div><p>Showroom and hospitality imagery from the SK Group handover.</p></div><div id="gallery-grid" class="gallery-grid"></div></div></section>
-<section id="contact" class="closing shell"><p class="eyebrow"><span></span> 05 — CONTACT</p><h2>Let’s talk.</h2><p>For showroom visits, stays, products and partnerships, write to the group and tell us which business you’re interested in.</p><div><button class="primary" data-enquire>Make an enquiry <span>↗</span></button><a class="email" href="mailto:skgroupx@gmail.com">skgroupx@gmail.com</a></div></section></main>
-<footer><div class="shell foot"><div><strong>SK GROUP X</strong><p>SK Group X (OPC) Pvt. Ltd. · Assam, India</p></div><a href="#portfolio">Businesses</a><a href="#locations">Locations</a><a href="#top">Back to top ↑</a></div></footer>
-<dialog id="enquiry"><button class="close" data-close aria-label="Close enquiry">×</button><p class="eyebrow"><span></span> CONTACT SK GROUP X</p><h2>Make an enquiry.</h2><p>We’ll open your email app with your enquiry filled in. Review it and press Send there.</p><form id="enquiry-form"><label>Business<select name="business" required><option value="">Choose a business</option></select></label><label>Your name<input name="name" required maxlength="80" autocomplete="name"></label><label>Phone or email<input name="contact" required maxlength="120"></label><label>Your message<textarea name="message" rows="4" maxlength="900" required></textarea></label><button class="primary" type="submit">Open email draft ↗</button><p id="email-status" role="status"></p><a href="mailto:skgroupx@gmail.com">Email directly instead</a></form></dialog>
-<dialog id="lightbox"><button class="close" data-close aria-label="Close photograph">×</button><img alt=""><p></p></dialog>
-</body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#161613">
+  <meta name="description" content="Explore SK Group X’s business portfolio across Assam, from mobility and energy to hospitality, tourism, jewellery and Assamese foods.">
+  <title>SK Group X — Rooted in Assam</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+  <link rel="stylesheet" href="style.css?v=photo-20261105">
+  <script src="data.js?v=photo-20261105" defer></script>
+  <script src="app.js?v=photo-20261105" defer></script>
+</head>
+<body id="top">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="SK Group X home"><b aria-hidden="true">SK</b><span>SK GROUP X<small>ASSAM, INDIA</small></span></a>
+      <button class="menu" type="button" aria-expanded="false" aria-controls="nav">Menu <span aria-hidden="true">☰</span></button>
+      <nav id="nav" aria-label="Main navigation">
+        <a href="#portfolio">Businesses</a><a href="#gallery">Photography</a><a href="#locations">Locations</a>
+      </nav>
+      <button class="contact-button" type="button" data-enquire>Get in touch <span aria-hidden="true">↗</span></button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-media portrait">
+        <img id="hero-image" src="assets/royal-enfield-front.webp" alt="Royal Enfield showroom exterior" width="168" height="300" fetchpriority="high">
+      </div>
+      <div class="shell hero-content">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> SK GROUP X · ASSAM</p>
+          <h1 id="hero-title">Rooted here.<br><em>Growing together.</em></h1>
+          <a class="primary" href="#portfolio">Explore our businesses <span aria-hidden="true">↘</span></a>
+        </div>
+      </div>
+      <div class="hero-bar shell">
+        <div class="hero-caption" aria-live="polite" aria-atomic="true">
+          <small id="slide-kicker">01 / TWO-WHEELERS</small>
+          <strong id="slide-name">Royal Enfield showroom</strong>
+        </div>
+        <div class="hero-controls" aria-label="Featured photographs">
+          <span id="slide-count" aria-hidden="true">01 / 07</span>
+          <button id="prev" type="button" aria-label="Previous photo">←</button>
+          <button id="next" type="button" aria-label="Next photo">→</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="portfolio" class="portfolio">
+      <div class="shell">
+        <div class="section-head">
+          <div><p class="eyebrow"><span></span> THE GROUP</p><h2>Our businesses.</h2></div>
+          <span class="section-index">01 — 08 / SECTORS</span>
+        </div>
+        <div id="sector-grid" class="sector-grid"></div>
+      </div>
+    </section>
+
+    <section id="gallery" class="gallery">
+      <div class="shell">
+        <div class="section-head">
+          <div><p class="eyebrow"><span></span> A CLOSER LOOK</p><h2>Through the lens.</h2></div>
+          <a class="text-link" href="photo-credits.html">Photo credits <span aria-hidden="true">↗</span></a>
+        </div>
+        <div id="gallery-grid" class="gallery-grid"></div>
+      </div>
+    </section>
+
+    <section id="locations" class="directory shell">
+      <div class="section-head">
+        <div><p class="eyebrow"><span></span> DIRECTORY</p><h2>Find a business.</h2></div>
+        <p>Group enquiries: <strong>9 AM–8 PM IST</strong>.<br>Confirm branch hours before visiting.</p>
+      </div>
+      <div class="filters">
+        <label>Search businesses<input id="search" type="search" placeholder="Try Montra, Barpeta or jewellery"></label>
+        <label>Business sector<select id="sector-filter"><option value="">All sectors</option></select></label>
+      </div>
+      <p id="result-count" role="status"></p>
+      <div id="directory-list"></div>
+    </section>
+
+    <section id="contact" class="closing">
+      <div class="shell contact-inner">
+        <div><p class="eyebrow"><span></span> CONTACT SK GROUP X</p><h2>Let’s talk.</h2></div>
+        <div><button class="primary" type="button" data-enquire>Make an enquiry <span aria-hidden="true">↗</span></button><a class="email" href="mailto:skgroupx@gmail.com">skgroupx@gmail.com</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="shell foot"><div><strong>SK GROUP X</strong><p>SK Group X (OPC) Pvt. Ltd. · Assam, India</p></div><a href="photo-credits.html">Photo credits</a><a href="#top">Back to top ↑</a></div></footer>
+  <noscript><p class="shell no-js">Enable JavaScript to browse the portfolio and gallery. You can still <a href="mailto:skgroupx@gmail.com">email the group</a>.</p></noscript>
+
+  <dialog id="enquiry" aria-labelledby="enquiry-title">
+    <button class="close" type="button" data-close aria-label="Close enquiry">×</button>
+    <p class="eyebrow"><span></span> CONTACT SK GROUP X</p><h2 id="enquiry-title">Make an enquiry.</h2>
+    <p>Your enquiry opens in your email app. Review it and press Send there.</p>
+    <form id="enquiry-form">
+      <label>Business<select name="business" required><option value="">Choose a business</option></select></label>
+      <label>Your name<input name="name" required maxlength="80" autocomplete="name"></label>
+      <label>Phone or email<input name="contact" required maxlength="120"></label>
+      <label>Your message<textarea name="message" rows="4" maxlength="900" required></textarea></label>
+      <button class="primary" type="submit">Open email draft <span aria-hidden="true">↗</span></button>
+      <p id="email-status" role="status"></p>
+      <a href="mailto:skgroupx@gmail.com">Email directly instead</a>
+    </form>
+  </dialog>
+
+  <dialog id="lightbox" aria-labelledby="lightbox-caption">
+    <button class="close" type="button" data-close aria-label="Close photograph">×</button>
+    <img id="lightbox-image" alt="">
+    <div class="lightbox-footer">
+      <div><p id="lightbox-caption" aria-live="polite"></p><a id="lightbox-source" href="photo-credits.html" hidden>Photo credit ↗</a></div>
+      <div class="hero-controls"><button id="gallery-prev" type="button" aria-label="Previous gallery photo">←</button><button id="gallery-next" type="button" aria-label="Next gallery photo">→</button></div>
+    </div>
+  </dialog>
+</body>
+</html>

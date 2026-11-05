@@ -1,67 +1,189 @@
 (() => {
- const $=s=>document.querySelector(s), data=window.SK;
- const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const pictures=[
- ['axom-wide','Axom Inn, Howly','Hospitality'],
- ['montra-front','Montra Electric, Betkuchi','Commercial mobility'],
- ['montra-floor','Inside the Montra showroom','Electric three-wheelers'],
- ['guest-interior','Guest-house interior','Hospitality'],
- ['axom-front','Axom Inn and Royal Enfield frontage','Barpeta'],
- ['riders','G.S. Riders crest','Royal Enfield · Kokrajhar'],
- ['opening','Montra inauguration artwork','Showroom opening']
- ];
- const maps=address=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address);
- const media=(key,art=false)=>'assets/'+key+(art?'.svg':'.webp');
- let slide=0;
- function showSlide(delta){
-  slide=(slide+delta+5)%5;const [key,name,kind]=pictures[slide];const img=$('#hero-image');
-  img.src=media(key);img.alt=name;img.style.objectPosition=key==='axom-wide'?'34% center':'center';$('#slide-name').textContent=name;$('#slide-kicker').textContent=String(slide+1).padStart(2,'0')+' / '+kind.toUpperCase();
- }
- $('#prev').onclick=()=>showSlide(-1);$('#next').onclick=()=>showSlide(1);
- $('#sector-grid').innerHTML=data.sectors.map(s=>`<a class="sector ${s.image==='riders'?'crest':s.image==='monogram'?'logo':''}" href="#business-${s.id}" data-sector="${s.id}"><img loading="lazy" decoding="async" src="${media(s.image,s.art)}" alt="${escape(s.alt)}"><span class="tag">${s.n} / SECTOR</span><div><h3>${escape(s.name)}</h3><p>${escape(s.line)}</p></div><span class="go" aria-hidden="true">↗</span></a>`).join('');
- $('#sector-filter').insertAdjacentHTML('beforeend',data.sectors.map(s=>`<option value="${s.id}">${escape(s.name)}</option>`).join(''));
- const opt=$('[name="business"]');opt.insertAdjacentHTML('beforeend','<option>General group enquiry</option>'+data.sectors.map(s=>`<optgroup label="${escape(s.name)}">${s.entries.map(([name,place])=>`<option>${escape(name+' — '+place)}</option>`).join('')}</optgroup>`).join(''));
- function render(openId=''){
-  const term=$('#search').value.trim().toLowerCase(), sector=$('#sector-filter').value;let count=0;
-  const open=new Set([...document.querySelectorAll('.dir-group[open]')].map(x=>x.id));
-  $('#directory-list').innerHTML=data.sectors.filter(s=>!sector||s.id===sector).map(s=>{
-   const list=s.entries.filter(e=>!term||[s.name,...e.slice(0,4)].join(' ').toLowerCase().includes(term));if(!list.length)return '';
-   count+=list.length;
-   return `<details class="dir-group" id="business-${s.id}" ${term||sector||openId===s.id||open.has('business-'+s.id)?'open':''}><summary>${escape(s.name)} <small>${list.length} listings</small></summary><div class="entries">${list.map(([name,place,desc,address,link,phone,sourceType])=>`<article class="entry"><span class="place">${escape(place)}</span><h3>${escape(name)}</h3><p>${escape(desc)}</p><address>${escape(address||'Contact the group for the exact location.')}</address><p class="visit-hours">${escape(name.includes('GS Riders')?'Showroom: 9 AM–8 PM':name.includes('Axom Inn')?'Check-in details: see the property listing.':'Group enquiries: 9 AM–8 PM IST')}</p><div class="links"><button type="button" data-enquire data-business="${escape(name+' — '+place)}">Enquire</button>${phone?`<a href="tel:+91${phone}">Call branch</a>`:''}${address?`<a href="${maps(address)}" target="_blank" rel="noopener">Map ↗</a>`:''}${link?`<a href="${escape(link)}" target="_blank" rel="noopener">${sourceType||(/dealers\.royalenfield/.test(link)?'Official dealer ↗':'Brand website ↗')}</a>`:''}</div></article>`).join('')}</div></details>`;
+  'use strict';
+  const $ = selector => document.querySelector(selector);
+  const {sectors, email, photos, featured} = window.SK;
+  const escape = value => String(value).replace(/[&<>"']/g, character =>
+    ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[character]));
+  const media = key => 'assets/' + key + '.webp';
+  const maps = address => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(address);
+  const formatNumber = value => String(value).padStart(2, '0');
+
+  let slide = 0;
+  const heroImage = $('#hero-image');
+  const heroMedia = heroImage.parentElement;
+  function showSlide(delta) {
+    slide = (slide + delta + featured.length) % featured.length;
+    const photo = photos[featured[slide]];
+    const source = media(photo.key);
+    heroImage.src = source;
+    heroImage.alt = photo.alt;
+    heroImage.width = photo.width;
+    heroImage.height = photo.height;
+    heroMedia.classList.toggle('portrait', Boolean(photo.portrait));
+    heroMedia.style.setProperty('--hero-photo', `url("${source}")`);
+    heroMedia.style.setProperty('--photo-position', photo.position || 'center 47%');
+    $('#slide-name').textContent = photo.caption;
+    $('#slide-kicker').textContent = formatNumber(slide + 1) + ' / ' + photo.category.toUpperCase();
+    $('#slide-count').textContent = formatNumber(slide + 1) + ' / ' + formatNumber(featured.length);
+  }
+  $('#prev').addEventListener('click', () => showSlide(-1));
+  $('#next').addEventListener('click', () => showSlide(1));
+  $('.hero-controls').addEventListener('keydown', event => {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+    event.preventDefault();
+    showSlide(event.key === 'ArrowRight' ? 1 : -1);
+  });
+
+  $('#sector-grid').innerHTML = sectors.map(sector => {
+    const photo = photos[sector.image];
+    return `<a class="sector" href="#business-${sector.id}" data-sector="${sector.id}">
+      <img src="${media(photo.key)}" alt="${escape(photo.alt)}" width="${photo.width}" height="${photo.height}" loading="lazy" decoding="async">
+      <span class="tag" aria-hidden="true">${sector.n} / SECTOR</span>
+      <div class="sector-copy"><h3>${escape(sector.name)}</h3>${photo.context ? `<p class="photo-label">${escape(photo.context)}</p>` : ''}</div>
+      <span class="go" aria-hidden="true">↗</span>
+    </a>`;
   }).join('');
-  $('#result-count').textContent=count?count+' business '+(count===1?'listing':'listings'):'No matches. Try a different name or location.';
- }
- $('#search').oninput=()=>render();$('#sector-filter').onchange=()=>render();
- render(location.hash.replace('#business-',''));
- $('#gallery-grid').innerHTML=pictures.map(([key,name],i)=>`<button class="photo ${key==='riders'?'crest':''}" data-photo="${i}" aria-label="View ${escape(name)}"><img src="${media(key)}" alt="${escape(name)}" loading="lazy" decoding="async"><span>${escape(name)} ↗</span></button>`).join('');
- const menu=$('.menu');menu.onclick=()=>{const b=$('#nav').classList.toggle('open');menu.setAttribute('aria-expanded',String(b));};
- let previous;
- document.addEventListener('click',e=>{
-  const sector=e.target.closest('[data-sector]');if(sector){$('#search').value='';$('#sector-filter').value='';render(sector.dataset.sector);}
-  if(e.target.closest('#nav a')){$('#nav').classList.remove('open');menu.setAttribute('aria-expanded','false');}
-  const request=e.target.closest('[data-enquire]');if(request){previous=request;opt.value=request.dataset.business||'';$('#email-status').textContent='';$('#enquiry').showModal();}
-  const photo=e.target.closest('[data-photo]');if(photo){previous=photo;const [key,name]=pictures[Number(photo.dataset.photo)];const box=$('#lightbox');box.querySelector('img').src=media(key);box.querySelector('img').alt=name;box.querySelector('p').textContent=name;box.showModal();}
-  const close=e.target.closest('[data-close]');if(close)close.closest('dialog').close();
-  if(e.target instanceof HTMLDialogElement)e.target.close();
- });
- for(const d of document.querySelectorAll('dialog'))d.addEventListener('close',()=>previous?.focus());
- $('#enquiry-form').onsubmit=e=>{
-  e.preventDefault();const f=new FormData(e.target);const body='Business: '+f.get('business')+'\nName: '+f.get('name')+'\nContact: '+f.get('contact')+'\n\n'+f.get('message');
-  $('#email-status').textContent='If your email app did not open, use the email link below.';
-  location.href='mailto:'+data.email+'?subject='+encodeURIComponent('SK Group enquiry: '+f.get('business'))+'&body='+encodeURIComponent(body);
- };
+
+  const search = $('#search');
+  const filter = $('#sector-filter');
+  filter.insertAdjacentHTML('beforeend', sectors.map(sector =>
+    `<option value="${sector.id}">${escape(sector.name)}</option>`).join(''));
+  const business = $('#enquiry [name="business"]');
+  business.insertAdjacentHTML('beforeend', '<option>General group enquiry</option>' + sectors.map(sector =>
+    `<optgroup label="${escape(sector.name)}">${sector.entries.map(([name, place]) =>
+      `<option>${escape(name + ' — ' + place)}</option>`).join('')}</optgroup>`).join(''));
+
+  function businessCard([name, place, description, address, link, phone, sourceLabel]) {
+    const hours = name.includes('GS Riders') ? 'Showroom: 9 AM–8 PM'
+      : name.includes('Axom Inn') ? 'Check-in details: see the property listing.'
+        : 'Group enquiries: 9 AM–8 PM IST';
+    return `<article class="entry">
+      <span class="place">${escape(place)}</span><h3>${escape(name)}</h3><p>${escape(description)}</p>
+      <address>${escape(address || 'Contact the group for the exact location.')}</address><p>${escape(hours)}</p>
+      <div class="links">
+        <button type="button" data-enquire data-business="${escape(name + ' — ' + place)}">Enquire</button>
+        ${phone ? `<a href="tel:+91${escape(phone)}">Call branch</a>` : ''}
+        ${address ? `<a href="${maps(address)}" target="_blank" rel="noopener">Map ↗</a>` : ''}
+        ${link ? `<a href="${escape(link)}" target="_blank" rel="noopener">${escape(sourceLabel || (/dealers\.royalenfield/.test(link) ? 'Official dealer ↗' : 'Brand website ↗'))}</a>` : ''}
+      </div>
+    </article>`;
+  }
+  function renderDirectory(openId = '') {
+    const term = search.value.trim().toLowerCase();
+    const sectorFilter = filter.value;
+    const opened = new Set([...document.querySelectorAll('.dir-group[open]')].map(group => group.id));
+    let count = 0;
+    $('#directory-list').innerHTML = sectors.filter(sector => !sectorFilter || sector.id === sectorFilter).map(sector => {
+      const entries = sector.entries.filter(entry =>
+        !term || [sector.name, ...entry.slice(0,4)].join(' ').toLowerCase().includes(term));
+      if (!entries.length) return '';
+      count += entries.length;
+      const id = 'business-' + sector.id;
+      return `<details class="dir-group" id="${id}" ${term || sectorFilter || openId === sector.id || opened.has(id) ? 'open' : ''}>
+        <summary>${escape(sector.name)} <small>${entries.length} ${entries.length === 1 ? 'listing' : 'listings'}</small></summary>
+        <div class="entries">${entries.map(businessCard).join('')}</div>
+      </details>`;
+    }).join('');
+    $('#result-count').textContent = count ? count + ' business ' + (count === 1 ? 'listing' : 'listings') : 'No matches. Try a different name or location.';
+  }
+  function openSector(id) {
+    search.value = '';
+    filter.value = '';
+    renderDirectory(id);
+  }
+  search.addEventListener('input', () => renderDirectory());
+  filter.addEventListener('change', () => renderDirectory());
+  renderDirectory(location.hash.startsWith('#business-') ? location.hash.slice(10) : '');
+  addEventListener('hashchange', () => {
+    if (!location.hash.startsWith('#business-')) return;
+    const id = location.hash.slice(1);
+    const target = document.getElementById(id);
+    if (target) target.open = true;
+    else if (sectors.some(sector => 'business-' + sector.id === id)) {
+      openSector(id.slice(9));
+      document.getElementById(id)?.scrollIntoView();
+    }
+  });
+
+  const album = Object.values(photos);
+  const lightbox = $('#lightbox');
+  let photoIndex = 0;
+  const lightboxSource = $('#lightbox-source');
+  function showPhoto(index) {
+    photoIndex = (index + album.length) % album.length;
+    const photo = album[photoIndex];
+    $('#lightbox-image').src = media(photo.key);
+    $('#lightbox-image').alt = photo.alt;
+    $('#lightbox-caption').textContent = photo.caption + (photo.context ? ' · ' + photo.context : '');
+    lightboxSource.hidden = !photo.source;
+    lightboxSource.href = photo.source ? 'photo-credits.html#' + photo.key : 'photo-credits.html';
+  }
+  $('#gallery-grid').innerHTML = album.map((photo, i) => `<button class="photo" type="button" data-photo="${i}" aria-label="View ${escape(photo.caption)}">
+    <img src="${media(photo.key)}" alt="${escape(photo.alt)}" width="${photo.width}" height="${photo.height}" loading="lazy" decoding="async">
+    <span>${escape(photo.caption)} ${photo.context ? `<small>· ${escape(photo.context)}</small>` : ''} ↗</span>
+  </button>`).join('');
+  $('#gallery-prev').addEventListener('click', () => showPhoto(photoIndex - 1));
+  $('#gallery-next').addEventListener('click', () => showPhoto(photoIndex + 1));
+  lightbox.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      showPhoto(photoIndex + (event.key === 'ArrowRight' ? 1 : -1));
+    }
+  });
+
+  const menu = $('.menu');
+  const nav = $('#nav');
+  const enquiry = $('#enquiry');
+  function closeMenu() {
+    nav.classList.remove('open');
+    menu.setAttribute('aria-expanded', 'false');
+  }
+  menu.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    menu.setAttribute('aria-expanded', String(open));
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && nav.classList.contains('open') && !enquiry.open && !lightbox.open) {
+      closeMenu();
+      menu.focus();
+    }
+  });
+  const openers = new WeakMap();
+  document.addEventListener('click', event => {
+    const sector = event.target.closest('[data-sector]');
+    if (sector && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) openSector(sector.dataset.sector);
+    if (event.target.closest('#nav a')) closeMenu();
+    const request = event.target.closest('[data-enquire]');
+    if (request) {
+      closeMenu();
+      openers.set(enquiry, request);
+      business.value = request.dataset.business || '';
+      $('#email-status').textContent = '';
+      enquiry.showModal();
+    }
+    const gallery = event.target.closest('[data-photo]');
+    if (gallery) {
+      openers.set(lightbox, gallery);
+      showPhoto(Number(gallery.dataset.photo));
+      lightbox.showModal();
+    }
+    const close = event.target.closest('[data-close]');
+    if (close) close.closest('dialog').close();
+  });
+  for (const dialog of [enquiry, lightbox]) {
+    dialog.addEventListener('click', event => {
+      if (event.target !== dialog) return;
+      const box = dialog.getBoundingClientRect();
+      if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close();
+    });
+    dialog.addEventListener('close', () => openers.get(dialog)?.focus());
+  }
+  $('#enquiry-form').addEventListener('submit', event => {
+    event.preventDefault();
+    const fields = new FormData(event.currentTarget);
+    const subject = 'SK Group enquiry: ' + fields.get('business');
+    const body = 'Business: ' + fields.get('business') + '\nName: ' + fields.get('name') + '\nContact: ' + fields.get('contact') + '\n\n' + fields.get('message');
+    $('#email-status').textContent = 'If your email app did not open, use the email link below.';
+    location.href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  });
 })();
-{
- const toggle=document.querySelector('#studio'), status=document.querySelector('#studio-status');
- let release;
- toggle.addEventListener('click',async()=>{
-  if(release){release();release=null;toggle.setAttribute('aria-pressed','false');toggle.firstChild.nodeValue='Enable 3D artwork ';status.textContent='';return;}
-  toggle.disabled=true;status.textContent='Loading the 3D artwork…';
-  try{
-   if(!window.WebGL2RenderingContext)throw Error('WebGL2 unavailable');
-   release=await (await import('./scene.mjs')).default();
-   toggle.setAttribute('aria-pressed','true');toggle.firstChild.nodeValue='Disable 3D artwork ';status.textContent='Scroll through the portfolio to see the models turn.';
-  }catch{status.textContent='3D is unavailable in this browser. You can still explore every photo and business.';}
-  finally{toggle.disabled=false;}
- });
-}
