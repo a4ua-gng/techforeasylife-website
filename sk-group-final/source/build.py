@@ -7,7 +7,7 @@ from urllib.parse import quote
 BASE = Path(__file__).resolve().parents[1]
 DATA = json.loads(Path(__file__).with_name("content.json").read_text(encoding="utf-8"))
 ORIGIN = "https://techforeasylife.in/sk-group-final/"
-VERSION = "20261105-dealers"
+VERSION = "20261105-dealers-v2"
 EMAIL = DATA["email"]
 DEALERS = DATA["dealers"]
 PHOTOS = DATA["photos"]

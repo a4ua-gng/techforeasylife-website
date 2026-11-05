@@ -154,7 +154,7 @@ h1 em,h2 em { color:var(--bronze); font-weight:400 }
 .branch-intro h1 { font-size:clamp(43px,6.25vw,88px); margin:15px 0 8px; text-wrap:wrap }
 .branch-operator { color:var(--bronze); font-size:clamp(15px,2vw,21px); font-weight:700 }
 .branch-summary { max-width:500px; color:var(--muted); margin:15px 0 22px }
-.branch-hero .dealer-image,.branch-hero .brand-panel { aspect-ratio:1.22; min-height:280px; border:1px solid var(--line) }
+.branch-hero .dealer-image,.branch-hero .brand-panel { width:100%; min-width:0; aspect-ratio:1.22; min-height:280px; border:1px solid var(--line) }
 .branch-hero .dealer-image img { position:absolute; inset:0; width:100%; height:100% }
 .branch-hero .brand-panel { padding:25px; min-width:0 }
 .branch-hero .brand-panel .mark { width:min(72%,400px); max-height:205px }
