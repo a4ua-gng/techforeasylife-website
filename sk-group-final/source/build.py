@@ -7,8 +7,9 @@ from urllib.parse import quote
 BASE = Path(__file__).resolve().parents[1]
 DATA = json.loads(Path(__file__).with_name("content.json").read_text(encoding="utf-8"))
 ORIGIN = "https://techforeasylife.in/sk-group-final/"
-VERSION = "20261105-dealers-v2"
+VERSION = "20261108-whatsapp"
 EMAIL = DATA["email"]
+WHATSAPP = DATA["whatsapp"]
 DEALERS = DATA["dealers"]
 PHOTOS = DATA["photos"]
 MARKS = DATA["marks"]
@@ -90,7 +91,21 @@ def footer(prefix):
     </div></footer>'''
 
 
+def whatsapp(context="SK Group X", *, floating=False):
+    message = "Hello SK Group X, I would like to enquire about " + context + "."
+    url = "https://wa.me/" + WHATSAPP + "?text=" + quote(message)
+    cls = "whatsapp-float" if floating else "dialog-whatsapp line-link"
+    return (f'<a class="{cls}" href="{h(url)}" target="_blank" rel="noopener noreferrer" '
+            f'aria-label="WhatsApp SK Group X on +91 84719 23584 about {h(context)}">'
+            '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" '
+            'stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'
+            '<path d="M20.4 11.7a8.6 8.6 0 0 1-12.7 7.5L3 20.7l1.5-4.5a8.6 8.6 0 1 1 15.9-4.5Z"/>'
+            '<path d="m8.1 7.7 1.4-.4 1.1 2.5-1.1.9a8.7 8.7 0 0 0 3.8 3.8l.9-1.1 2.5 1.1-.4 1.4c-.4 1.1-2.1 1.1-3.5.5a11.7 11.7 0 0 1-5.2-5.2c-.6-1.4-.6-3.1.5-3.5Z"/>'
+            '</svg><span>WhatsApp<small>+91 84719 23584</small></span></a>')
+
+
 def document(title, description, prefix, path, content, *, page="home", social=None, schema=None):
+    context = next((d["brand"] + " · " + d["place"] for d in DEALERS if path == route(d)), "SK Group X")
     absolute = ORIGIN + path
     meta_image = (f'<meta property="og:image" content="{h(ORIGIN + "assets/" + social)}">' if social else "")
     structured = ""
@@ -118,6 +133,7 @@ def document(title, description, prefix, path, content, *, page="home", social=N
 </head>
 <body class="{h(page)}">
 {content}
+{whatsapp(context, floating=True)}
 </body>
 </html>
 '''
@@ -218,6 +234,7 @@ def enquiry_dialog():
         <p class="form-hint">Review and send your enquiry in your email app.</p>
         <p class="form-status" aria-live="polite"></p>
       </form>
+      {whatsapp()}
     </dialog>'''
 
 
@@ -317,6 +334,7 @@ def branch_dialog(d):
         {textlink("Get directions", location(d), "button outline", True)}
       </div>
       {textlink("Email SK Group", mail("Enquiry: " + d["brand"] + " · " + d["place"]))}
+      {whatsapp(d["brand"] + " · " + d["place"])}
     </dialog>'''
 
 

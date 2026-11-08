@@ -182,6 +182,13 @@ h1 em,h2 em { color:var(--bronze); font-weight:400 }
 .more-dealers ul { margin:0; padding:0; list-style:none; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px 22px }
 .more-dealers li { border-bottom:1px solid var(--line) }
 .mobile-branch-actions { display:none }
+.whatsapp-float { position:fixed; right:max(16px,env(safe-area-inset-right)); bottom:calc(18px + env(safe-area-inset-bottom)); z-index:5; display:flex; align-items:center; gap:9px; min-height:52px; padding:9px 15px; border:1px solid #ffffff70; border-radius:28px; background:#126b46; color:#fff; box-shadow:0 4px 18px #10151630; font-size:13px; font-weight:750; line-height:1.2 }
+.whatsapp-float small { display:block; margin-top:3px; font-size:10px; font-weight:550; letter-spacing:.02em }
+.whatsapp-float:hover { background:#0b5334 }
+.whatsapp-float svg,.dialog-whatsapp svg { flex:none }
+.dialog-whatsapp { display:flex; width:max-content; max-width:100%; gap:8px; color:#126b46; padding-top:6px }
+.dialog-whatsapp small { display:block; font-size:11px; font-weight:550 }
+body:has(dialog[open]) .whatsapp-float { visibility:hidden }
 .credits-page { max-width:760px; margin-inline:auto }
 .credits-page h1 { font-size:clamp(42px,6vw,83px); margin:13px 0 17px }
 .credits-page ul { list-style:none; margin:24px 0; padding:0 }
@@ -254,6 +261,8 @@ html:has(dialog[open]) { overflow:hidden }
   .footer-grid>div { grid-column:2; grid-row:1/-1 }
   .mobile-branch-actions { position:sticky; z-index:3; bottom:0; display:grid; grid-template-columns:1fr 1fr; gap:8px; background:var(--paper); border-top:1px solid var(--line); padding:8px var(--edge) calc(8px + env(safe-area-inset-bottom)) }
   .mobile-branch-actions .button { min-height:42px; padding-inline:6px }
+  .branch-page .whatsapp-float { bottom:calc(76px + env(safe-area-inset-bottom)) }
+  .whatsapp-float { padding:9px 12px; font-size:12px }
   .branch-gallery .gallery-grid { grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:clamp(155px,33vw,260px) }
   .branch-gallery .gallery-tile:first-child { grid-column:span 2 }
 }
