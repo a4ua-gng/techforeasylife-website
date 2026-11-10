@@ -300,3 +300,122 @@ html:has(dialog[open]) { overflow:hidden }
   html { scroll-behavior:auto }
   *,*::before,*::after { transition-duration:.001ms!important; animation-duration:.001ms!important }
 }
+
+/* PREMIUM SK GROUP X / 10 NOV 2026. Isolated refresh, non-destructive. */
+:root{
+  color-scheme:dark;
+  --paper:#08090c;--white:#17191e;--ink:#f4ead4;--muted:#b9b1a2;
+  --dark:#090c11;--deep:#06070a;--gold:#e6c27e;--bronze:#d6ad6c;
+  --line:#413729;--display:Georgia,"Times New Roman",serif;
+}
+body{background:var(--paper);background-image:radial-gradient(ellipse at 88% 2%,#5c3a152a,transparent 38%);color:var(--ink)}
+.header{background:#08090ceB;backdrop-filter:blur(19px);-webkit-backdrop-filter:blur(19px);border-bottom:1px solid #d2a85a38}
+.brand-symbol{position:relative;color:#fbe7b0;background:linear-gradient(135deg,#ffeca6 4%,#8f551b 28%,#efcf78 44%,#fff3bb 55%,#ae762c 72%,#ffdc80 95%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(1px 2px 0 #522907) drop-shadow(0 1px 8px #a871237a);font-family:system-ui,sans-serif;font-style:normal;font-weight:900;letter-spacing:-.12em;transform:perspective(200px) rotateY(-10deg)}
+.brand-name{font-size:12px;letter-spacing:.18em;color:#f3dfb9}
+.brand-name small{color:#ab9068}
+.header-button{color:#150e07;background:linear-gradient(110deg,#b77a2c,#ffdf94 33%,#d4a65f 75%,#b17727);box-shadow:0 0 25px #ba832626;transition:transform .2s ease,box-shadow .2s ease}
+.header-button:hover{transform:translateY(-2px);box-shadow:0 4px 24px #c28d3b5c}
+.nav{gap:clamp(12px,2vw,29px)}
+.nav a,.nav-signin{color:#d8c8a9}
+.nav a:hover,.nav-signin:hover{color:#ffe2a1}
+.nav-signin{border:0;background:transparent;font-size:13px;font-weight:690;white-space:nowrap;padding:12px 0}
+.lang-control select{width:auto;min-width:0;height:36px;min-height:36px;padding:3px 8px;border-color:#947341;background:#171717;color:#f1d7a8;font-size:12px}
+.home-hero{background:#05080c}
+.home-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 80% 54%,#fbc36325,transparent 40%),radial-gradient(ellipse at 24% 79%,#a67a3416,transparent 39%);pointer-events:none}
+.hero-media::after{background:linear-gradient(90deg,#06090ef7 0%,#06090ef2 22%,#06090eaf 45%,#06090e43 71%,#06090e24 100%),linear-gradient(0deg,#050508c2,transparent 43%)}
+.hero-image{filter:saturate(.84) contrast(1.1);transform:scale(1.03);animation:heroReveal 11s ease-in-out both}
+@keyframes heroReveal{0%{transform:scale(1.105)}100%{transform:scale(1.03)}}
+.hero-copy{max-width:990px;position:relative}
+.hero-copy::after{content:"";position:absolute;right:0;top:17%;width:clamp(90px,15vw,230px);aspect-ratio:1;border-radius:50%;border:1px solid #eecb6f4a;box-shadow:inset 0 0 33px #deb35314,0 0 70px #b8883416;transform:perspective(500px) rotateY(66deg) rotateX(25deg);pointer-events:none;animation:orbit 16s ease-in-out infinite alternate}
+@keyframes orbit{to{transform:perspective(500px) rotateY(-65deg) rotateX(-25deg)}}
+.hero-copy h1{font-size:clamp(54px,7.6vw,112px);line-height:.985;text-shadow:0 8px 38px #0007}
+.hero-copy h1 em,h2 em{color:#e2bb76}
+.hero-copy h1 em{background:linear-gradient(108deg,#e5b769 10%,#fff5c3 43%,#b78337 74%,#f5d68f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 5px 10px #05050555)}
+.eyebrow{color:#d5ac67}
+.hero-foot{border-top-color:#d8b16e55}
+.band{border-top:1px solid #6e57261b}
+.network{background:radial-gradient(ellipse at top left,#674a202a,transparent 46%)}
+.businesses{background:#0b0d11}
+.section-head>p{color:#bcb4a4}
+.section-head h2{max-width:900px}
+.button.primary{background:linear-gradient(125deg,#af792e,#f9da91 40%,#d1a252 90%);color:#160f09;border-color:#ffc97677;box-shadow:inset 0 1px #fff4b0aa}
+.button.light{background:#0c0e11a8;border-color:#dbbb766e}
+.button:hover{transform:translateY(-2px)}
+.dealer-card,.business-card,.offering-grid article{background:linear-gradient(157deg,#191a1e,#111316 75%);border:1px solid #6d542d65;box-shadow:inset 0 1px #ffffff0a,0 13px 27px #0003;transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease}
+.dealer-card:hover{transform:perspective(1000px) rotateX(1.4deg) rotateY(-1deg) translateY(-5px);border-color:#dab674a8;box-shadow:0 16px 40px #0008,0 0 27px #8e60201c}
+.dealer-card .card-kicker,.business-index{color:#dbb977}
+.dealer-card h3{color:#f7ecd7}
+.dealer-card .card-body p:not(.card-kicker){color:#bfb6a5}
+.card-media{background:#181a1e}
+.card-media::after{content:"";pointer-events:none;position:absolute;inset:0;background:linear-gradient(118deg,transparent 21%,#ffe9ae0e 49%,transparent 58%);z-index:1;transform:translateX(-110%);transition:transform .8s ease}
+.card-media:hover::after{transform:translateX(110%)}
+.card-number{background:#08090cd6;color:#f4d99b;border:1px solid #e0b86261}
+.business-card summary{color:#ebdfcb}
+.business-card .business-entry{border-color:#6d542d42}
+.business-card h4{color:#f2dbac}
+.business-card small,.business-card p{color:#bbb1a0}
+.gallery{background:radial-gradient(ellipse at 65% 10%,#aa6d1a20,transparent 44%),#0a0b0d}
+.gallery-tile{border:1px solid #9977464a}
+.gallery-tile img{filter:saturate(.88)}
+.group-contact{background:radial-gradient(ellipse at 80% 45%,#89621d34,transparent 52%),#0c0c0d}
+.footer{border-top:1px solid #b28b4a55;background:#060708}
+.footer .brand-name{color:#f3d7a0}
+.brand-ribbon{padding:25px 0 21px;border-block:1px solid #aa83433d;background:#090a0c;overflow:hidden}
+.ribbon-head{display:flex;justify-content:space-between;gap:14px;color:#bca16d;font-size:10px;letter-spacing:.18em;font-weight:760;margin-bottom:14px}
+.brand-track-window{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.brand-track{width:max-content;display:flex;align-items:center;gap:12px;animation:brandScroll 42s linear infinite}
+.brand-track-window:hover .brand-track{animation-play-state:paused}
+.brand-chip{width:clamp(135px,15vw,230px);height:84px;border:1px solid #81663850;background:linear-gradient(120deg,#141315,#232019,#121315);display:flex;align-items:center;justify-content:center;padding:20px;border-radius:2px}
+.brand-chip img{max-width:100%;max-height:60px;width:auto;height:auto;object-fit:contain;filter:grayscale(.25);opacity:.93}
+.brand-chip.text-logo{font-size:clamp(12px,1.3vw,17px);font-weight:800;letter-spacing:.04em;color:#e6c78d;text-align:center}
+@keyframes brandScroll{to{transform:translateX(-50%)}}
+.vision-band{background:radial-gradient(ellipse at 20% 35%,#8f5a1d1c,transparent 48%),#0c0b0d}
+.vision-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(25px,7vw,115px);align-items:center}
+.vision-copy h2{font-size:clamp(46px,6vw,91px);margin:17px 0 24px}
+.vision-copy>p:not(.eyebrow){font-size:clamp(15px,1.4vw,18px);line-height:1.85;color:#c7bfb1;max-width:660px}
+.vision-copy .line-link{margin-top:22px;color:#f2d18e}
+.vision-stat{border-top:1px solid #bb8c4866;border-bottom:1px solid #bb8c4866;margin-top:30px;padding:19px 0;display:flex;justify-content:space-between;align-items:baseline;gap:17px;color:#ddbf86}
+.vision-stat span:first-child{font-family:var(--display);font-size:32px}
+.vision-stat span:last-child{font-size:10px;letter-spacing:.17em}
+.vision-photo{height:clamp(400px,52vw,610px);position:relative;overflow:hidden;border:1px solid #c69b5c72;transform:perspective(1400px) rotateY(-3deg);box-shadow:22px 25px 65px #0009,0 0 35px #af853322}
+.vision-photo img{height:100%;width:100%;object-fit:cover}
+.vision-photo-caption{position:absolute;bottom:0;left:0;right:0;padding:28px 18px 15px;color:#f2d89a;background:linear-gradient(transparent,#050506e9);font-size:10px;letter-spacing:.13em;font-weight:800}
+.contact-dialog{border:1px solid #c59a5d8e;background:linear-gradient(160deg,#151414,#08090b);color:#f8e9c8;border-radius:13px;box-shadow:0 30px 100px #000c,0 0 35px #a779293d}
+.contact-dialog h2{color:#f0dca8}
+.contact-dialog input,.contact-dialog textarea,.contact-dialog select{background:#151a1e;border:1px solid #79623c;color:#f5ebd9;min-height:46px;border-radius:6px}
+.contact-dialog input:focus,.contact-dialog textarea:focus,.contact-dialog select:focus{outline:2px solid #d5b16c;outline-offset:1px}
+.contact-dialog label,.form-hint,.form-status,.login-copy,.login-note{color:#c9bfae}
+.dialog-close{background:#2b251d;border-color:#a78651;color:#f5deb2}
+.dialog-close:hover{background:#493823}
+.membership-dialog{width:min(480px,calc(100vw - 24px))}
+.login-copy{line-height:1.6;margin:8px 0 20px}
+.login-provider{display:flex;align-items:center;justify-content:space-between;gap:11px;width:100%;min-height:53px;background:#f2eadb;color:#201a14;border-radius:7px;border:0;margin:9px 0;padding:10px 17px;font-weight:750}
+.login-provider strong{font-size:20px}
+.login-provider span{font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.login-provider:disabled{opacity:.55;cursor:not-allowed}
+.login-note{font-size:12px;margin:19px 0 12px;line-height:1.6}
+.whatsapp-float{background:#165a3b;border-color:#9ddbb46e;box-shadow:0 5px 24px #0008}
+@media(max-width:1000px){.nav{gap:11px;font-size:11px}.nav-signin{font-size:11px}.header-wrap{gap:10px}}
+@media(max-width:720px){
+ .brand-name{font-size:9px}
+ .header-wrap{gap:6px}
+ .nav{gap:2px}
+ .js .nav{background:#101115;border:1px solid #8c6e3d}
+ .js .nav button,.js .nav select{align-self:start}
+ .nav-signin{min-height:43px}
+ .hero-copy::after{width:80px;right:3%;top:5%;opacity:.55}
+ .hero-wrap{min-height:clamp(600px,85svh,780px)}
+ .hero-media::after{background:linear-gradient(0deg,#05080dfa 0%,#05080deb 36%,#05080d68 72%,#05080d60 100%)}
+ .hero-copy h1{font-size:clamp(46px,10vw,71px)}
+ .ribbon-head{font-size:8px}
+ .brand-chip{height:66px;width:148px;padding:13px}
+ .vision-layout{grid-template-columns:1fr}
+ .vision-photo{height:340px;transform:none}
+ .vision-stat span:first-child{font-size:26px}
+ .vision-stat span:last-child{font-size:8px}
+ .header-button{font-size:10px}
+ .lang-control{padding-bottom:13px}
+ .contact-dialog{max-height:calc(100dvh - 28px)}
+}
+@media(max-width:370px){.header-button{padding:6px 7px;font-size:9px}.brand-name{letter-spacing:.05em}.brand-symbol{width:30px;height:30px}.header-wrap{column-gap:3px}}
+@media(prefers-reduced-motion:reduce){.hero-image,.brand-track,.hero-copy::after{animation:none!important}.dealer-card:hover{transform:none}}
