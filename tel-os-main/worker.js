@@ -99,9 +99,27 @@ async function handle(request,env){
    result(db.prepare('SELECT * FROM shift_plans WHERE day>=? AND day<=? ORDER BY day').bind(day(now()-7*86400000),day(now()+42*86400000))),
    result(db.prepare('SELECT * FROM notifications WHERE recipient_id=? ORDER BY created_at DESC LIMIT 100').bind(u.id))
   ]);
+  const absenceAlerts=[];
+  if(isAdmin(u)){
+   const [planned,clocked,approved]=await Promise.all([
+    result(db.prepare('SELECT user_id,day FROM shift_plans WHERE day<? AND day>=? ORDER BY day DESC').bind(day(),day(now()-86400000*60))),
+    result(db.prepare('SELECT DISTINCT user_id,work_date FROM work_sessions WHERE work_date>=?').bind(day(now()-86400000*60))),
+    result(db.prepare("SELECT user_id,start_date,end_date FROM leave_requests WHERE status='approved' AND end_date>=?").bind(day(now()-86400000*60)))
+   ]);
+   const worked=new Set(clocked.map(x=>x.user_id+'|'+x.work_date));
+   for(const emp of users.filter(x=>x.active)){
+    let missed=0;
+    for(const shift of planned.filter(x=>x.user_id===emp.id)){
+     const excused=approved.some(x=>x.user_id===emp.id&&x.start_date<=shift.day&&x.end_date>=shift.day)||availability.some(x=>x.user_id===emp.id&&x.day===shift.day&&['school','exam'].includes(x.state));
+     if(worked.has(emp.id+'|'+shift.day)||excused)break;
+     missed++;
+    }
+    if(missed>=3)absenceAlerts.push({user_id:emp.id,consecutive_missed_shifts:missed,action:'HR welfare and attendance review; no automatic account lockout'});
+   }
+  }
   const active=await db.prepare(`SELECT * FROM work_sessions WHERE user_id=? AND state!='finished' ORDER BY start_at DESC LIMIT 1`).bind(u.id).first();
   const today=await result(db.prepare('SELECT * FROM work_sessions WHERE user_id=? AND work_date=?').bind(u.id,day()));const adjustments=await db.prepare("SELECT coalesce(sum(requested_minutes),0) mins FROM attendance_corrections WHERE user_id=? AND work_date=? AND status='approved'").bind(u.id,day()).first();
-  return json({user:publicUser(u),users,clients,tasks,leaves,meetings,calls,sessions,availability,handovers,corrections,grievances,exits,documents,announcements,oncall,shifts,notifications,activeSession:active,todayMs:today.reduce((a,s)=>a+elapsed(s),0)+(adjustments?.mins||0)*60000,now:now(),today:day()});
+  return json({user:publicUser(u),users,clients,tasks,leaves,meetings,calls,sessions,availability,handovers,corrections,grievances,exits,documents,announcements,oncall,shifts,notifications,absenceAlerts,activeSession:active,todayMs:today.reduce((a,s)=>a+elapsed(s),0)+(adjustments?.mins||0)*60000,now:now(),today:day()});
  }
  if(path==='/api/heartbeat'&&request.method==='POST'){await db.prepare('UPDATE users SET last_seen=? WHERE id=?').bind(now(),u.id).run();return json({ok:true})}
  if(path==='/api/clock'&&request.method==='POST'){
