@@ -1,0 +1,11 @@
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+import {dirname,join} from 'node:path';
+const base=dirname(fileURLToPath(import.meta.url));
+const worker=readFileSync(join(base,'worker.js'),'utf8');
+const html=readFileSync(join(base,'app.html'),'utf8');
+const placeholder='const HTML = "__INJECT_HTML__";';
+if(!worker.includes(placeholder))throw new Error('HTML injection placeholder missing');
+mkdirSync(join(base,'dist'),{recursive:true});
+writeFileSync(join(base,'dist','index.mjs'),worker.replace(placeholder,`const HTML = ${JSON.stringify(html)};`),'utf8');
+console.log('Built dist/index.mjs (includes TEL OS UI). Never commit secrets or employee data.');
