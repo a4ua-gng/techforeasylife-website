@@ -1,0 +1,44 @@
+import { DatabaseSync } from 'node:sqlite';
+import {readFileSync,writeFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+const schema=readFileSync(new URL('./schema.sql',import.meta.url),'utf8');
+const workerSource=readFileSync(new URL('./worker.js',import.meta.url),'utf8');
+writeFileSync('/tmp/tel-os-main-test-worker.mjs',workerSource);
+const worker=(await import('file:///tmp/tel-os-main-test-worker.mjs?version='+Date.now())).default;
+const sqlite=new DatabaseSync(':memory:'); sqlite.exec(schema);
+const DB={prepare(sql){const stmt=sqlite.prepare(sql);let params=[];return{bind(...v){params=v;return this},first(){return stmt.get(...params)??null},all(){return Promise.resolve({results:stmt.all(...params)})},run(){return stmt.run(...params)}}}};
+const env={DB,SETUP_CODE:'test'.repeat(10)};
+let founderCookie='',employeeCookie='',employeeId='',employeeTemp='';
+async function request(path,method='GET',body,session=''){
+ const headers={};if(method!=='GET'){headers.origin='https://tel-os.local';headers['content-type']='application/json'}
+ if(session)headers.cookie=session;
+ const req=new Request('https://tel-os.local'+path,{method,headers,...(method!=='GET'?{body:JSON.stringify(body||{})}:{})});
+ const res=await worker.fetch(req,env,{});const data=await res.json();
+ return {status:res.status,data,cookie:res.headers.get('set-cookie')};
+}
+let r=await request('/api/setup/status');assert.equal(r.status,200);assert.equal(r.data.needs_setup,true);
+r=await request('/api/setup','POST',{setup_code:env.SETUP_CODE,name:'Founder Test',username:'foundertest',password:'a-very-long-test-password',is_minor:true});assert.equal(r.status,200,JSON.stringify(r));
+r=await request('/api/setup/status');assert.equal(r.data.needs_setup,false);
+r=await request('/api/login','POST',{username:'foundertest',password:'a-very-long-test-password'});assert.equal(r.status,200,JSON.stringify(r));founderCookie=r.cookie.split(';')[0];
+r=await request('/api/bootstrap','GET',undefined,founderCookie);assert.equal(r.status,200,JSON.stringify(r));assert.equal(r.data.users.length,1);assert.equal(r.data.clients.length,4);
+r=await request('/api/employees','POST',{name:'Sample Student',username:'sample.student',role:'employee',is_minor:true,department:'Creative',designation:'Editor'},founderCookie);assert.equal(r.status,200,JSON.stringify(r));employeeTemp=r.data.temporary_password;
+employeeId=sqlite.prepare("SELECT id FROM users WHERE username='sample.student'").get().id;
+r=await request('/api/login','POST',{username:'sample.student',password:employeeTemp});assert.equal(r.status,200,JSON.stringify(r));employeeCookie=r.cookie.split(';')[0];
+r=await request('/api/bootstrap','GET',undefined,employeeCookie);assert.equal(r.status,428,JSON.stringify(r));
+r=await request('/api/change-password','POST',{old_password:employeeTemp,new_password:'another-strong-test-password'},employeeCookie);assert.equal(r.status,200,JSON.stringify(r));
+r=await request('/api/bootstrap','GET',undefined,employeeCookie);assert.equal(r.status,200,JSON.stringify(r));assert.equal(r.data.user.role,'employee');
+r=await request('/api/tasks','POST',{title:'Draft reel storyboard',details:'Format 1080x1920',assignee_id:employeeId,client_id:'montra',priority:'high',due_date:'2026-11-15'},founderCookie);assert.equal(r.status,200,JSON.stringify(r));
+const taskId=sqlite.prepare('SELECT id FROM tasks LIMIT 1').get().id;
+r=await request('/api/tasks/'+taskId,'PATCH',{status:'done'},employeeCookie);assert.equal(r.status,400,JSON.stringify(r));
+r=await request('/api/task-submit','POST',{task_id:taskId,deliverable_url:'https://drive.google.com/file/d/example',notes:'Storyboard ready for approval'},employeeCookie);assert.equal(r.status,200,JSON.stringify(r));
+r=await request('/api/task-review','POST',{task_id:taskId,action:'approve',notes:'Approved'},founderCookie);assert.equal(r.status,200,JSON.stringify(r));assert.equal(sqlite.prepare('SELECT status FROM tasks WHERE id=?').get(taskId).status,'done');
+r=await request('/api/availability','POST',{day:'2026-11-12',state:'exam',note:'School examination'},employeeCookie);assert.equal(r.status,200,JSON.stringify(r));
+r=await request('/api/leave','POST',{start_date:'2026-11-16',end_date:'2026-11-17',reason:'Exam preparation'},employeeCookie);assert.equal(r.status,200,JSON.stringify(r));
+const leave=sqlite.prepare('SELECT id FROM leave_requests LIMIT 1').get().id;
+r=await request('/api/leave/'+leave,'PATCH',{status:'approved'},founderCookie);assert.equal(r.status,200,JSON.stringify(r));assert.equal(sqlite.prepare("SELECT state FROM availability WHERE day='2026-11-16'").get().state,'leave');
+r=await request('/api/shifts','POST',{user_id:employeeId,day:'2026-11-18',start_time:'16:00',end_time:'19:00',note:'Work block with required break'},founderCookie);assert.equal(r.status,200,JSON.stringify(r));
+r=await request('/api/oncall','POST',{user_id:employeeId,starts_at:'2026-11-19T17:00:00+05:30',ends_at:'2026-11-19T19:00:00+05:30',allowance_rupees:500},founderCookie);assert.equal(r.status,403,JSON.stringify(r));
+r=await request('/api/grievances','POST',{category:'HR concern',detail:'Test confidential concern',founder_only:true},employeeCookie);assert.equal(r.status,200,JSON.stringify(r));
+r=await request('/api/audit','GET',undefined,employeeCookie);assert.equal(r.status,403,JSON.stringify(r));
+r=await request('/api/bootstrap','GET',undefined,founderCookie);assert.equal(r.status,200,JSON.stringify(r));assert.equal(r.data.grievances.length,1);assert.equal(r.data.availability.length>=2,true);
+console.log('PASSED: setup, secure login, forced reset, HR onboarding, access permissions, submissions, manager review, leave, calendar, scheduling, student emergency restriction, grievance privacy, audit gating.');
