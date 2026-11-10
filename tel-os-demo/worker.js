@@ -13,7 +13,7 @@ const managers=u=>u&&['founder','hr','lead'].includes(u.role);
 function bytesHex(bytes){return Array.from(bytes,x=>x.toString(16).padStart(2,'0')).join('')}
 function hexBytes(s){return new Uint8Array(s.match(/.{1,2}/g).map(x=>parseInt(x,16)))}
 async function sha(v){return bytesHex(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v))))}
-async function hashPw(password,salt){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);return bytesHex(new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt:hexBytes(salt),iterations:160000,hash:'SHA-256'},k,256)))}
+async function hashPw(password,salt){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);return bytesHex(new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt:hexBytes(salt),iterations:100000,hash:'SHA-256'},k,256)))}
 function safeCompareHex(a,b){if(!a||!b||a.length!==b.length)return false;let v=0;for(let i=0;i<a.length;i++)v|=a.charCodeAt(i)^b.charCodeAt(i);return v===0}
 function strongPassword(p){return typeof p==='string' && p.length>=12 && p.length<=120}
 const cookie=(token,max=43200)=>`tel_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${max}`;
