@@ -22,7 +22,7 @@ Isolated Cloudflare Worker + D1 employee portal prototype for **TEL / TeMark**. 
 ## Deployment setup
 
 1. Create a new D1 database called `tel-os-demo` and run `schema.sql`.
-2. Seed only a controlled founder account using a unique temporary password, a random 16-byte hex salt, and PBKDF2-SHA256 with 160,000 iterations. Never commit passwords, API keys or password hashes.
+2. Seed only a controlled founder account using a unique temporary password, a random 16-byte hex salt, and PBKDF2-SHA256 with 100,000 iterations. Never commit passwords, API keys or password hashes.
 3. Deploy an ES module Worker called `tel-os-demo` with a `DB` D1 binding to the new database.
 4. Bind the Worker to a dedicated `*.workers.dev` subdomain. Do not point TEL's live domain at this prototype.
 5. On first login, change the temporary password. HR can then create additional accounts.
