@@ -1,15 +1,29 @@
-# TEL OS · Space-themed mission control preview
+# TEL OS · Monochrome Mission Control (v0.2)
 
-Interactive fictional demonstration for TEL / TeMark, kept separate from the live public website.
+A black-and-white, space-inspired interactive preview of TEL's student workforce OS.
 
-## Preview
-https://tel-os-space-preview.xtremedivyangshu.workers.dev/
-https://tel-os-space-preview.xtremedivyangshu.workers.dev/?dashboard
+**Live preview:** https://tel-os-space-preview.xtremedivyangshu.workers.dev/
 
-## What to try
-Choose Founder, HR or Employee on the demo sign-in screen. Explore tasks, attendance, team status, goal-based meetings, calls, student leave, and HR onboarding. Try assigning a fictional task, marking it for review, clocking in, taking a break and clocking out.
+## Implemented in the interactive demo
 
-## Important
-This is a client-side preview with fictional sample data. It has **no actual authentication, real employee accounts, background surveillance, AI monitoring, payroll, live WhatsApp integration or production database connectivity**. Demo changes stay in your browser's local storage. Do not input real employee data, contracts, client secrets, passwords or payroll information.
+- Role switching between Founder, HR, Team Leader and Employee
+- Attendance: clock in, pause, resume, clock out, and correction requests
+- Task creation, assignments, deliverable review and client work tracking
+- Crew presence and work-call register
+- Student leave and HR approval
+- Shared 14-day availability calendar, examination commitments, published shifts
+- Assignment handovers and manager review
+- Rule-based notification centre
+- Draft document and SOP catalogue
+- Workload planning and departmental reports
+- Example grievance and employee exit workflows
 
-The Cloudflare Worker serves the isolated static preview. The separately developed backend prototype under tel-os-demo must be reviewed, tested and connected before real employee use. Student working hours and duty rules require legal compliance review.
+## Real use restrictions
+
+This is a **fictional local-storage preview**, not a secure employee-management deployment. There are no real logins, remote data synchronization, confidential grievance storage, WhatsApp integrations, payroll calculations or AI monitoring. Do not enter real student profiles, private employee records, passwords, client assets or secrets.
+
+For production, implement server-side authentication and role permissions, proper access audits and logging, secure D1 storage, protected employee information, explicit monitoring disclosures, manager approvals, scheduled rest periods and student-employment legal review. School and examination commitments must be respected. No background surveillance.
+
+## Architecture
+
+This branch contains the standalone design preview. It is hosted as a Cloudflare Worker separate from TEL's public website. The original production homepage is unchanged.
