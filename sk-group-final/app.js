@@ -135,7 +135,12 @@
       if (!plainClick(event)) return;
       if (openDialog(enquiry, trigger)) {
         event.preventDefault();
-        form.elements.business.value = trigger.dataset.business || 'General group enquiry';
+        const selected = trigger.dataset.business || 'General group enquiry';
+        const list = form.elements.business;
+        if (![...list.options].some(option => option.value === selected)) {
+          list.add(new Option(selected, selected));
+        }
+        list.value = selected;
         $('.form-status', form).textContent = '';
       }
     });
@@ -202,7 +207,10 @@
   }
 
   const memberDialog = $('#member-dialog');
-  for (const signIn of $$('[data-member-login]')) {
+  if (memberDialog && new URLSearchParams(location.search).has('login')) {
+    addEventListener('load', () => openDialog(memberDialog, $('.nav-signin')), {once:true});
+  }
+  for (const signIn of $('[data-member-login]')) {
     signIn.addEventListener('click', () => {
       if (memberDialog) openDialog(memberDialog, signIn);
     });
