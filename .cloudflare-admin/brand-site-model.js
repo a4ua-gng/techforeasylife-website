@@ -21,7 +21,7 @@ globalThis.TELBrandModel = (() => {
       schoolYear: '2027'
     },
     temark: {
-      name: 'TeMark by TEL', instagram: 'temarkk__',
+      name: 'TeMark by TEL', instagram: 'temarkk_',
       email: 'business.telmark@gmail.com', emailVerified: false,
       ctaTitle: 'Become our client today.',
       ctaIntro: 'Tell us about your business, your audience and what you want to achieve. Let’s discuss where TeMark can help.',
