@@ -7,9 +7,9 @@ const built=spawnSync(process.execPath,['build.mjs'],{stdio:'inherit'});if(built
 async function api(path,method,body){const response=await fetch('https://api.cloudflare.com/client/v4'+path,{method,headers:{Authorization:'Bearer '+token,...(body instanceof FormData?{}:{'Content-Type':'application/json'})},body:body instanceof FormData?body:JSON.stringify(body)});const data=await response.json();if(!response.ok||data.success===false)throw Error('Cloudflare API failed: '+response.status+' '+JSON.stringify(data.errors));return data;}
 await api(`/accounts/${account}/d1/database/${database}/query`,'POST',{sql:await readFile('dist/schema.sql','utf8')});
 // Credentials are provisioned separately; deployment never resets staff passwords or replaces team data.
-const metadata={main_module:'worker.js',compatibility_date:'2026-11-14',bindings:[{type:'d1',name:'DB',database_id:database}],observability:{enabled:true,redact_query_string:true,logs:{enabled:true,invocation_logs:true,persist:true},traces:{enabled:true,persist:true,head_sampling_rate:1}}};
+const metadata={main_module:'worker.js',compatibility_date:'2026-11-14',keep_bindings:['secret_text'],bindings:[{type:'d1',name:'DB',database_id:database},{type:'service',name:'WEBSITE_ADMIN',service:process.env.TEL_WEBSITE_ADMIN_SERVICE||'tel-website-admin-api'}],observability:{enabled:true,redact_query_string:true,logs:{enabled:true,invocation_logs:true,persist:true},traces:{enabled:true,persist:true,head_sampling_rate:1}}};
 const form=new FormData();form.append('metadata',new Blob([JSON.stringify(metadata)],{type:'application/json'}));form.append('worker.js',new Blob([await readFile('dist/worker.js','utf8')],{type:'application/javascript+module'}),'worker.js');
 await api(`/accounts/${account}/workers/scripts/${name}`,'PUT',form);
 await api(`/accounts/${account}/workers/scripts/${name}/subdomain`,'POST',{enabled:true,previews_enabled:false});
-await api(`/accounts/${account}/workers/scripts/${name}/schedules`,'PUT',[{cron:'*/15 * * * *'}]);
-console.log('TEL OS Worker and 15-minute automation schedule deployed.');
+await api(`/accounts/${account}/workers/scripts/${name}/schedules`,'PUT',[{cron:'*/5 * * * *'}]);
+console.log('TEL OS Worker and 5-minute automation schedule deployed.');

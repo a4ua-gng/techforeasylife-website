@@ -14,3 +14,4 @@ CREATE TABLE IF NOT EXISTS audit_events (id TEXT PRIMARY KEY,actor_id TEXT REFER
 CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_events(created_at);
 CREATE TABLE IF NOT EXISTS status_requests (id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),requested_by TEXT NOT NULL REFERENCES users(id),status TEXT NOT NULL CHECK(status IN ('active','on_leave','suspended','exited')),reason TEXT NOT NULL,state TEXT NOT NULL DEFAULT 'pending' CHECK(state IN ('pending','approved','rejected')),reviewed_by TEXT REFERENCES users(id),review_note TEXT NOT NULL DEFAULT '',created_at TEXT NOT NULL,reviewed_at TEXT);
 CREATE TABLE IF NOT EXISTS onboarding (user_id TEXT PRIMARY KEY REFERENCES users(id),stage TEXT NOT NULL DEFAULT 'policy_orientation',policy_acknowledged_at TEXT,completed_at TEXT);
+CREATE TABLE IF NOT EXISTS guide_progress (user_id TEXT PRIMARY KEY REFERENCES users(id),completed_at TEXT NOT NULL);

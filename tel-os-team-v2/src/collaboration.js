@@ -1,3 +1,4 @@
+import {queueMeetingDeliveries} from './deliveries.js';
 const sameDept = (a, b) => String(a || '').toLowerCase() === String(b || '').toLowerCase();
 const isFounder = user => user.role === 'founder';
 const isHRLead = user => user.role === 'hr_lead';
@@ -106,7 +107,8 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
       const members = await rows(env, "SELECT id,role,department FROM users WHERE status IN ('active','on_leave')");
       for (const person of members) if (person.id !== user.id && canSeeDepartment(person, channel.department)) recipients.add(person.id);
     }
-    for (const recipient of recipients) await notify(env, recipient, parent ? `Reply in #${channel.name}` : `Update in #${channel.name}`, `${user.name} posted a message.`, 'channels');
+    if(channel.id==='marketing-reports'){const owner=await one(env,"SELECT id FROM users WHERE username='harsh' AND role='founder' AND status='active'");if(owner&&owner.id!==user.id)recipients.add(owner.id);}
+    for (const recipient of recipients) await notify(env, recipient, parent ? `Reply in #${channel.name}` : `Update in #${channel.name}`, `${user.name} posted a message.`, 'channel/'+channel.id);
     await audit(env, user, 'message_posted', 'channel', channel.id);
     return json({ message: await one(env, 'SELECT m.*,u.name FROM messages m JOIN users u ON u.id=m.user_id WHERE m.id=?', messageId) }, 201);
   }
@@ -129,6 +131,7 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
     const meetingId = id();
     await run(env, 'INSERT INTO meetings(id,title,purpose,starts_at,call_url,participants_json,attended_json,decisions,follow_ups,department,kind,created_by,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)', meetingId, title, purpose, new Date(timestamp).toISOString(), urlValue(b.call_url), JSON.stringify(participants), JSON.stringify(attended), text(b.decisions, 5000, 'Decisions'), text(b.follow_ups, 5000, 'Follow-up responsibilities'), department, b.kind === 'client_call' ? 'client_call' : 'meeting', user.id, now(), now());
     for (const participant of participants) if (participant !== user.id) await notify(env, participant, 'Meeting scheduled', `${title} · ${new Date(timestamp).toISOString()}`, 'meetings');
+    await queueMeetingDeliveries(env,await one(env,'SELECT * FROM meetings WHERE id=?',meetingId));
     await audit(env, user, 'meeting_created', 'meeting', meetingId);
     return json({ meeting: meetingData(await one(env, 'SELECT * FROM meetings WHERE id=?', meetingId)) }, 201);
   }
@@ -158,14 +161,14 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
   }
 
   if (path === '/api/grievances' && method === 'GET') {
-    const query = isFounder(user) ? 'SELECT * FROM grievances ORDER BY created_at DESC LIMIT 200' : isHRLead(user) ? 'SELECT * FROM grievances WHERE founder_only=0 OR user_id=? ORDER BY created_at DESC LIMIT 200' : 'SELECT * FROM grievances WHERE user_id=? ORDER BY created_at DESC LIMIT 200';
+    const query = isFounder(user) ? 'SELECT * FROM grievances ORDER BY created_at DESC LIMIT 200' : ['hr_lead','hr_member'].includes(user.role) ? 'SELECT * FROM grievances WHERE founder_only=0 OR user_id=? ORDER BY created_at DESC LIMIT 200' : 'SELECT * FROM grievances WHERE user_id=? ORDER BY created_at DESC LIMIT 200';
     return json({ grievances: await rows(env, query, ...(isFounder(user) ? [] : [user.id])) });
   }
   if (path === '/api/grievances' && method === 'POST') {
     if (b.founder_only !== undefined && typeof b.founder_only !== 'boolean') fail(400, 'Choose whether this is founder-only.');
     const grievanceId = id();
     await run(env, 'INSERT INTO grievances(id,user_id,title,body,founder_only,created_at,updated_at) VALUES(?,?,?,?,?,?,?)', grievanceId, user.id, text(b.title, 160, 'Concern title', true), text(b.body, 12000, 'Concern details', true), b.founder_only ? 1 : 0, now(), now());
-    const reviewers = await rows(env, b.founder_only ? "SELECT id FROM users WHERE role='founder' AND status='active'" : "SELECT id FROM users WHERE role IN ('founder','hr_lead') AND status='active'");
+    const reviewers = await rows(env, b.founder_only ? "SELECT id FROM users WHERE role='founder' AND status='active'" : "SELECT id FROM users WHERE role IN ('founder','hr_lead','hr_member') AND status='active'");
     for (const reviewer of reviewers) if (reviewer.id !== user.id) await notify(env, reviewer.id, 'Confidential concern received', 'A private concern is awaiting authorised review.', 'grievances');
     // Audit excludes the title and body; the restricted founder audit retains the actor for accountability.
     await audit(env, user, 'confidential_concern_received', 'grievance', grievanceId);
@@ -175,7 +178,7 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
   if (grievanceMatch && method === 'PATCH') {
     const grievance = await one(env, 'SELECT * FROM grievances WHERE id=?', grievanceMatch[1]);
     if (!grievance) fail(404, 'Concern not found.');
-    if ((!isFounder(user) && !(isHRLead(user) && !grievance.founder_only)) || grievance.user_id === user.id) fail(403, 'An independent authorised reviewer must handle this concern.');
+    if ((!isFounder(user) && !(['hr_lead','hr_member'].includes(user.role) && !grievance.founder_only)) || grievance.user_id === user.id) fail(403, 'An independent authorised reviewer must handle this concern.');
     if (!['in_review', 'resolved'].includes(b.status)) fail(400, 'Choose in_review or resolved.');
     if (grievance.status === 'resolved') fail(409, 'This concern is already resolved.');
     const response = text(b.response, 6000, 'Review response', b.status === 'resolved');

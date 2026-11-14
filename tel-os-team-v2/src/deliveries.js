@@ -1,0 +1,17 @@
+import {rows,run,id,now} from './core.js';
+export async function queueMeetingDeliveries(env,meeting,event='scheduled'){
+ const participants=JSON.parse(meeting.participants_json||'[]');if(!participants.length)return;
+ const people=await rows(env,`SELECT id,email,phone FROM users WHERE id IN (${participants.map(()=>'?').join(',')})`,...participants);
+ const pending=[];for(const user of people){const digits=user.phone.replace(/\D/g,'');const phone=digits.length===10?'+91'+digits:digits.length>=11&&digits.length<=15?'+'+digits:'';
+  for(const channel of ['email','whatsapp']){const recipient=channel==='email'?user.email.trim():phone;const error=!recipient?'Contact details are missing.':channel==='whatsapp'?'WhatsApp provider connection is required.':'';pending.push([id(),meeting.id,user.id,channel,event,error?'blocked':'queued',recipient,error,now()]);}
+ }
+ for(let offset=0;offset<pending.length;offset+=10){const group=pending.slice(offset,offset+10);await run(env,'INSERT OR IGNORE INTO meeting_deliveries(id,meeting_id,user_id,channel,event,status,recipient,error,created_at) VALUES '+group.map(()=>'(?,?,?,?,?,?,?,?,?)').join(','),...group.flat());}
+}
+export async function deliverMeetingWhatsApp(env){
+ if(!env.WHATSAPP_TOKEN||!env.WHATSAPP_PHONE_NUMBER_ID||!env.WHATSAPP_MEETING_TEMPLATE_NAME)return {configured:false,sent:0};
+ const jobs=await rows(env,"SELECT d.*,m.title,m.starts_at,m.call_url,u.phone FROM meeting_deliveries d JOIN meetings m ON m.id=d.meeting_id JOIN users u ON u.id=d.user_id WHERE d.channel='whatsapp' AND d.status IN ('queued','blocked') AND m.starts_at>? AND u.status IN ('active','on_leave') ORDER BY d.created_at LIMIT 10",now());let sent=0;
+ for(const job of jobs){const digits=job.phone.replace(/\D/g,'');const recipient=digits.length===10?'91'+digits:digits.length>=11&&digits.length<=15?digits:'';if(!recipient)continue;const disconnected=await rows(env,"SELECT status FROM member_connections WHERE user_id=? AND provider='whatsapp' AND status='disconnected'",job.user_id);if(disconnected.length)continue;const claim=await run(env,"UPDATE meeting_deliveries SET status='sending',recipient=?,error='' WHERE id=? AND status IN ('queued','blocked')",'+'+recipient,job.id);if(!claim.meta.changes)continue;
+  try{const response=await fetch(`https://graph.facebook.com/${env.WHATSAPP_API_VERSION||'v23.0'}/${env.WHATSAPP_PHONE_NUMBER_ID}/messages`,{method:'POST',headers:{Authorization:'Bearer '+env.WHATSAPP_TOKEN,'Content-Type':'application/json'},body:JSON.stringify({messaging_product:'whatsapp',to:recipient,type:'template',template:{name:env.WHATSAPP_MEETING_TEMPLATE_NAME,language:{code:'en_US'},components:[{type:'body',parameters:[{type:'text',text:job.title.slice(0,160)},{type:'text',text:new Intl.DateTimeFormat('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'}).format(new Date(job.starts_at))+' IST'},{type:'text',text:job.call_url||'Open TEL OS for meeting details'}]}]}})});if(!response.ok)throw Error('The WhatsApp provider rejected this delivery.');const data=await response.json(),mid=data.messages?.[0]?.id;if(!mid)throw Error('The WhatsApp provider did not confirm a message ID.');await run(env,"UPDATE meeting_deliveries SET status='accepted',provider_id=?,sent_at=? WHERE id=?",mid,now(),job.id);sent++;}catch(e){await run(env,"UPDATE meeting_deliveries SET status='needs_review',error=? WHERE id=?",String(e.message).slice(0,300),job.id);}
+ }
+ return {configured:true,sent};
+}

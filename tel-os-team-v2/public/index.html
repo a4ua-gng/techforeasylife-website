@@ -3,15 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#122b32">
+  <meta name="theme-color" content="#08080b">
   <meta name="description" content="TEL OS is your team's workspace for assignments, attendance, availability and accountable collaboration.">
   <title>TEL OS · Team workspace</title>
+  <link rel="icon" type="image/webp" href="/tel-logo.webp">
+  <link rel="preload" href="/fonts/dm-sans.woff" as="font" type="font/woff" crossorigin>
   <link rel="stylesheet" href="/styles.css">
   <script src="/app.js" defer></script>
+  <script src="/enhancements.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <div id="app"><main id="main" class="startup"><div class="brand-mark">T</div><h1>TEL OS</h1><p>Opening your workspace…</p></main></div>
+  <div id="app"><main id="main" class="startup"><img class="tel-logo" src="/tel-logo.webp" alt="TEL" width="183" height="96"><h1>TEL OS</h1><p>Opening your workspace…</p></main></div>
   <div id="toasts" role="status" aria-live="polite" aria-atomic="true"></div>
   <dialog id="dialog" aria-labelledby="dialog-title"></dialog>
 </body>

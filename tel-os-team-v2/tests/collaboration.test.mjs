@@ -32,7 +32,7 @@ const feedback={user_id:'member',period:day().slice(0,7),quality:'Good',timeline
 
 test('TEL collaboration integration in the Workers runtime',async t=>{
  try{
-  for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql']){
+  for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql']){
    const sql=await readFile(new URL('../'+file,import.meta.url),'utf8');
    for(const part of sql.split(';').map(x=>x.trim()).filter(Boolean))await db.prepare(part).run();
   }
@@ -40,7 +40,7 @@ test('TEL collaboration integration in the Workers runtime',async t=>{
 
   await t.test('channels enforce department boundaries and official posting authority',async()=>{
    const channels=(await ok('member','GET','/api/channels')).channels;
-   assert.deepEqual(channels.map(c=>c.id).sort(),['announcements','general','marketing']);
+   assert.deepEqual(channels.map(c=>c.id).sort(),['announcements','general','marketing','marketing-reports']);
    await denied('member','GET','/api/channels/finance/messages',{},403);
    await denied('member','POST','/api/channels/announcements/messages',{body:'Impersonated announcement'},403);
    await denied('lead','POST','/api/channels',{name:'finance-leak',department:'Finance'},403);

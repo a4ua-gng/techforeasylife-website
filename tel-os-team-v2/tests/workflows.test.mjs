@@ -8,12 +8,19 @@ const wrapper=`import {handleWorkflows,runAutomations} from './src/workflows.js'
 export default {async fetch(request,env) {
 const url=new URL(request.url);const user=await env.DB.prepare('SELECT * FROM users WHERE id=?').bind(request.headers.get('x-test-user')||'employee').first();
 const helpers={json:(x,status=200)=>Response.json(x,{status}),fail:(status,message)=>{throw Object.assign(new Error(message),{status});},audit:async()=>{},notify:async()=>{}};
-try {if(url.pathname==='/test-automation')return Response.json(await runAutomations(env));const response=await handleWorkflows({request,url,env,user,body:request.method==='GET'?{}:await request.json(),helpers});return response||new Response('missing',{status:404});} catch(error){return Response.json({error:error.message},{status:error.status||500});}
+try {
+if(url.pathname==='/test-automation-budget'){
+ const queries=[];
+ const wrap=(sql,statement,bindings=0)=>({sql,statement,bindings,bind(...p){return wrap(sql,statement.bind(...p),p.length);},all(...p){queries.push({sql,bindings});return statement.all(...p);},first(...p){queries.push({sql,bindings});return statement.first(...p);},run(...p){queries.push({sql,bindings});return statement.run(...p);}});
+ const measured={...env,DB:{prepare(sql){return wrap(sql,env.DB.prepare(sql));},batch(statements){for(const item of statements)queries.push({sql:item.sql,bindings:item.bindings});return env.DB.batch(statements.map(item=>item.statement));}}};
+ const result=await runAutomations(measured);return Response.json({result,queries});
+}
+if(url.pathname==='/test-automation')return Response.json(await runAutomations(env));const response=await handleWorkflows({request,url,env,user,body:request.method==='GET'?{}:await request.json(),helpers});return response||new Response('missing',{status:404});} catch(error){return Response.json({error:error.message},{status:error.status||500});}
 }};`;
 const compiled=await build({stdin:{contents:wrapper,resolveDir:process.cwd(),sourcefile:'workflow-test-entry.js'},bundle:true,format:'esm',write:false,platform:'browser'});
 const mf=new Miniflare({modules:true,script:compiled.outputFiles[0].text,compatibilityDate:'2026-07-30',d1Databases:{DB:'workflow-tests'}});
 const db=await mf.getD1Database('DB');
-for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql']){
+for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql']){
  const sql=await readFile(file,'utf8');
  for(const part of sql.split(';').map(x=>x.trim()).filter(Boolean))await db.prepare(part).run();
 }
@@ -115,6 +122,26 @@ test('TEL workflow integration in the Workers runtime',async t=>{
   await ok('founder','GET','/test-automation');await ok('founder','GET','/test-automation');
   const reminders=await db.prepare("SELECT user_id FROM notifications WHERE dedupe_key LIKE 'meeting:meeting:%'").all();assert.equal(reminders.results.length,3);
   const note=await ok('employee','GET','/api/notifications');assert.equal(note.unread,1);await ok('employee','POST','/api/notifications/read',{});assert.equal((await ok('employee','GET','/api/notifications')).unread,0);
+ });
+ await t.test('legacy reminder batches stay below D1 parameter and query budgets without duplicates',async()=>{
+  const yesterday=new Date(Date.parse(`${localDay}T00:00:00Z`)-86400000).toISOString().slice(0,10);
+  const stale=new Date(Date.now()-96*3600000).toISOString();
+  for(let index=0;index<24;index++)await db.prepare("INSERT INTO tasks(id,title,assignee_id,leader_id,department,priority,deadline,expected_deliverable,status,created_by,created_at,updated_at) VALUES(?,?,'employee','lead','Marketing','normal',?,'Delivery','working','lead',?,?)").bind(`bulk-${index}`,`Overdue item ${index}`,yesterday,stale,stale).run();
+  for(const person of ['employee','founder','hr'])await db.prepare("INSERT INTO attendance_sessions(id,user_id,work_date,clock_in,state,active_started_at,updated_at) VALUES(?,?,?,?,'working',?,?)").bind(`bulk-open-${person}`,person,localDay,now,now,now).run();
+  const first=await ok('founder','GET','/test-automation-budget');
+  assert.equal(first.result.overdue,24);
+  const writes=first.queries.filter(query=>/^INSERT OR IGNORE INTO notifications/i.test(query.sql));
+  assert.ok(writes.some(query=>query.bindings===70),'notices use full ten-row inserts');
+  assert.ok(writes.every(query=>query.bindings<=70&&query.bindings%7===0),'each notice insert stays within 70 bound values');
+  assert.ok(first.queries.length<50,`the complete scheduled run uses ${first.queries.length} queries`);
+  assert.ok(!first.queries.some(query=>query.sql==='SELECT * FROM attendance_sessions WHERE user_id=? AND clock_out IS NULL'),'current-day sessions do not incur rollover reads');
+  const overdue=await db.prepare('SELECT COUNT(*) count FROM notifications WHERE dedupe_key LIKE ?').bind(`overdue:${localDay}:bulk-%`).first();assert.equal(overdue.count,48);
+  const inactive=await db.prepare('SELECT COUNT(*) count FROM notifications WHERE dedupe_key LIKE ?').bind(`inactive:${localDay}:bulk-%`).first();assert.equal(inactive.count,24);
+  const support=await db.prepare('SELECT body FROM notifications WHERE dedupe_key=?').bind(`repeated-overdue:${localDay}:employee:lead`).first();assert.ok(support.body.includes('24 overdue assignments'));
+  const countBefore=(await db.prepare('SELECT COUNT(*) count FROM notifications').first()).count;
+  await ok('founder','GET','/test-automation-budget');
+  assert.equal((await db.prepare('SELECT COUNT(*) count FROM notifications').first()).count,countBefore);
+  assert.ok((await db.prepare("SELECT created_at FROM automation_runs WHERE key='last_success'").first()).created_at);
  });
  }finally{await mf.dispose();}
 });

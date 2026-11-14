@@ -21,7 +21,7 @@ before(async()=>{
  await build({entryPoints:['src/worker.js'],bundle:true,format:'esm',platform:'browser',target:'es2022',outfile:'tests/artifacts/auth-worker.mjs',define:{__HTML__:JSON.stringify('<html>test</html>'),__CSS__:JSON.stringify(''),__APP__:JSON.stringify('')}});
  mf=new Miniflare({modules:true,scriptPath:'tests/artifacts/auth-worker.mjs',compatibilityDate:'2026-07-30',d1Databases:{DB:'auth-admin-test'}});
  db=await mf.getD1Database('DB');
- for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql']) await db.exec((await readFile(file,'utf8')).replace(/\n/g,' '));
+ for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql']) await db.exec((await readFile(file,'utf8')).replace(/\n/g,' '));
  const salt='0123456789abcdef0123456789abcdef',hash=await hashPassword(fixturePassword,salt);
  for(const [id,role,department,manager,force,status] of fixtures){
   await db.prepare('INSERT INTO users(id,employee_id,username,name,designation,role,department,manager_id,email,phone,joined_on,status,password_hash,password_salt,must_change_password,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind(id,'TEST-'+id,id,'Fixture '+id,role,role,department,manager,id+'@example.test','private-phone','2026-01-01',status,hash,salt,force,stamp).run();

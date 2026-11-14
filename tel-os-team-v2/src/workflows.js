@@ -1,3 +1,5 @@
+import {runAttendanceReminders} from './schedules.js';
+import {queueMeetingDeliveries,deliverMeetingWhatsApp} from './deliveries.js';
 const HR = ['founder', 'hr_lead', 'hr_member'];
 const LEADS = ['founder', 'hr_lead', 'team_lead', 'finance_head'];
 const TZ = 'Asia/Kolkata';
@@ -92,7 +94,7 @@ export async function handleWorkflows({request,url,env,user,body={},helpers}) {
  }
  if(path==='/api/attendance'&&method==='GET'){
   const visibility=scope(user);
-  const open=await dbRows(env,`SELECT a.user_id FROM attendance_sessions a JOIN users u ON u.id=a.user_id WHERE a.clock_out IS NULL AND ${visibility.clause}`,...visibility.params);
+  const open=await dbRows(env,`SELECT a.user_id FROM attendance_sessions a JOIN users u ON u.id=a.user_id WHERE a.clock_out IS NULL AND a.work_date<? AND ${visibility.clause}`,today(),...visibility.params);
   for(const session of open)await rolloverSession(env,session.user_id,date);
   const sessions=await dbRows(env,`SELECT a.*,u.name FROM attendance_sessions a JOIN users u ON u.id=a.user_id WHERE ${visibility.clause} ORDER BY a.clock_in DESC LIMIT 300`,...visibility.params);
   const current=await dbOne(env,'SELECT * FROM attendance_sessions WHERE user_id=? AND clock_out IS NULL',user.id);
@@ -106,7 +108,7 @@ export async function handleWorkflows({request,url,env,user,body={},helpers}) {
    const approved=await dbOne(env,"SELECT id FROM leave_requests WHERE user_id=? AND status='approved' AND start_date<=? AND end_date>=?",user.id,today(),today());
    if(user.status==='on_leave'||approved)fail(409,'You are on leave. HR can update your availability before you clock in.');
    const id=uid();
-   try{await dbRun(env,"INSERT INTO attendance_sessions (id,user_id,work_date,clock_in,state,active_started_at,updated_at) VALUES (?,?,?,?,'working',?,?)",id,user.id,today(),date,date,date);}catch(e){if(String(e).includes('UNIQUE'))fail(409,'You already have an open work session.');throw e;}
+   try{await env.DB.batch([env.DB.prepare("INSERT INTO attendance_sessions (id,user_id,work_date,clock_in,state,active_started_at,updated_at) VALUES (?,?,?,?,'working',?,?)").bind(id,user.id,today(),date,date,date),env.DB.prepare('INSERT INTO clock_in_events(session_id,user_id,occurred_at) VALUES(?,?,?)').bind(id,user.id,date)]);}catch(e){if(String(e).includes('UNIQUE'))fail(409,'You already have an open work session.');throw e;}
    await audit(env,user,'attendance.clock_in','attendance',id,'');
    return json({session:sessionView(await dbOne(env,'SELECT * FROM attendance_sessions WHERE id=?',id),date)},201);
   }
@@ -233,8 +235,17 @@ export async function handleWorkflows({request,url,env,user,body={},helpers}) {
 
 export async function runAutomations(env) {
  const date=stamp(),day=today();
- const insertNotice=async(userId,title,body,link,key)=>dbRun(env,'INSERT OR IGNORE INTO notifications (id,user_id,title,body,link,created_at,dedupe_key) VALUES (?,?,?,?,?,?,?)',uid(),userId,title,body,link,date,key);
- const open=await dbRows(env,'SELECT user_id FROM attendance_sessions WHERE clock_out IS NULL');
+ const attendance_reminders=await runAttendanceReminders(env,date);
+ const notices=[];
+ const insertNotice=async(userId,title,body,link,key)=>{notices.push([uid(),userId,title,body,link,date,key]);};
+ const flushNotices=async()=>{
+  // D1 allows 100 bound parameters per statement. Ten rows keep each insert at 70.
+  for(let offset=0;offset<notices.length;offset+=10){
+   const batch=notices.slice(offset,offset+10);
+   await dbRun(env,`INSERT OR IGNORE INTO notifications (id,user_id,title,body,link,created_at,dedupe_key) VALUES ${batch.map(()=>'(?,?,?,?,?,?,?)').join(',')}`,...batch.flat());
+  }
+ };
+ const open=await dbRows(env,'SELECT user_id FROM attendance_sessions WHERE clock_out IS NULL AND work_date<?',day);
  for(const row of open)await rolloverSession(env,row.user_id,date);
  const tasks=await dbRows(env,"SELECT id,title,assignee_id,leader_id,deadline,status,updated_at FROM tasks WHERE status!='done' AND deadline<?",day);
  for(const t of tasks){await insertNotice(t.assignee_id,'Assignment overdue',`${t.title} was due ${t.deadline}. Update the deliverable or discuss the deadline with your lead.`,'tasks',`overdue:${day}:${t.id}:${t.assignee_id}`);if(t.leader_id!==t.assignee_id)await insertNotice(t.leader_id,'Overdue assignment needs attention',`${t.title} was due ${t.deadline}.`,'tasks',`overdue:${day}:${t.id}:${t.leader_id}`);}
@@ -251,10 +262,14 @@ export async function runAutomations(env) {
  const repeated=await dbRows(env,"SELECT t.assignee_id,t.leader_id,u.name,COUNT(*) count FROM tasks t JOIN users u ON u.id=t.assignee_id WHERE t.status!='done' AND t.deadline<? GROUP BY t.assignee_id,t.leader_id HAVING COUNT(*)>=3",day);
  for(const row of repeated)await insertNotice(row.leader_id,'Delivery pattern needs a conversation',`${row.name} has ${row.count} overdue assignments. Review workload, academic commitments and handover needs together before deciding next steps.`,'tasks',`repeated-overdue:${day}:${row.assignee_id}:${row.leader_id}`);
  const meetings=await dbRows(env,'SELECT id,title,starts_at,participants_json,created_by FROM meetings WHERE starts_at>? AND starts_at<=?',date,new Date(Date.now()+24*3600000).toISOString());
- for(const meeting of meetings){let participants=[];try{participants=JSON.parse(meeting.participants_json)||[];}catch{};const ids=[...new Set([...participants,meeting.created_by])].filter(x=>typeof x==='string');for(const person of ids)await insertNotice(person,'Upcoming meeting',`${meeting.title} starts ${meeting.starts_at}.`,'meetings',`meeting:${meeting.id}:${person}`);}
+ for(const meeting of meetings){let participants=[];try{participants=JSON.parse(meeting.participants_json)||[];}catch{};const ids=[...new Set([...participants,meeting.created_by])].filter(x=>typeof x==='string');for(const person of ids)await insertNotice(person,'Upcoming meeting',`${meeting.title} starts ${meeting.starts_at}.`,'meetings',`meeting:${meeting.id}:${person}`);await queueMeetingDeliveries(env,meeting,'reminder');}
  const isMonday=new Intl.DateTimeFormat('en-US',{weekday:'short',timeZone:TZ}).format(new Date())==='Mon';
  if(isMonday){const leaders=await dbRows(env,"SELECT id,role,department FROM users WHERE role IN ('founder','hr_lead','team_lead','finance_head') AND status NOT IN ('suspended','exited','on_leave')");for(const leader of leaders){const filter=leader.role==='founder'?'1=1':'department=?',p=leader.role==='founder'?[]:[leader.department];const summary=await dbOne(env,`SELECT COUNT(*) total,SUM(CASE WHEN status='review' THEN 1 ELSE 0 END) reviews,SUM(CASE WHEN deadline<? AND status!='done' THEN 1 ELSE 0 END) overdue FROM tasks WHERE status!='done' AND ${filter}`,day,...p);await insertNotice(leader.id,'Weekly operations summary',`${summary.total} active assignments; ${summary.reviews||0} awaiting review; ${summary.overdue||0} overdue. Review workload and approved leave before assigning work.`,'reports',`weekly:${day}:${leader.id}`);}}
+ const whatsapp_delivery=await deliverMeetingWhatsApp(env);
  await dbRun(env,'DELETE FROM sessions WHERE expires_at<?',date);
+ await dbRun(env,'DELETE FROM activity_events WHERE created_at<?',new Date(Date.now()-30*86400000).toISOString());
+ await dbRun(env,'DELETE FROM activity_sessions WHERE last_seen<?',new Date(Date.now()-7*86400000).toISOString());
+ await flushNotices();
  await dbRun(env,'INSERT OR REPLACE INTO automation_runs (key,created_at) VALUES (?,?)','last_success',date);
- return {overdue:tasks.length,pending_reviews:reviews.length,open_sessions:sessions.length,at:date};
+ return {overdue:tasks.length,pending_reviews:reviews.length,open_sessions:sessions.length,attendance_reminders,whatsapp_delivery,at:date};
 }

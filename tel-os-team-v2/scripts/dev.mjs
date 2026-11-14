@@ -11,5 +11,8 @@ if(!count.n){
  try{await db.exec((await readFile('.private-seed.sql','utf8')).replaceAll('\n',' '));console.log('Loaded local copy of the provisioned team.');}
  catch(e){if(e.code!=='ENOENT')throw e;const s='0123456789abcdef0123456789abcdef',hash=await hashPassword('Local!Development2026',s);for(const [uid,name,role,department,manager] of [['dev-admin','Development Admin','founder','Leadership',null],['dev-member','Development Member','employee','Marketing','dev-admin']])await db.prepare('INSERT INTO users(id,employee_id,username,name,designation,role,department,manager_id,joined_on,password_hash,password_salt,must_change_password,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,0,?)').bind(uid,uid,uid,name,role,role,department,manager,day(),hash,s,now()).run();console.log('Local fixtures: dev-admin / dev-member, password Local!Development2026. These accounts exist only in local Miniflare.');}
 }
+if(process.env.TEL_LOCAL_IMPORT==='1'){
+ try{if(!(await db.prepare("SELECT id FROM users WHERE username='abhriaj'").first()))await db.exec((await readFile('.private-abhriaj.sql','utf8')).replaceAll('\n',' '));for(const sql of JSON.parse(await readFile('.private-profile-batches.json','utf8')))await db.prepare(sql).run();console.log('Local employee profile fixtures loaded.');}catch(e){if(e.code!=='ENOENT')throw e;}
+}
 console.log('TEL OS local preview: '+await mf.ready);
 for(const signal of ['SIGINT','SIGTERM'])process.once(signal,async()=>{await mf.dispose();process.exit();});

@@ -1,0 +1,30 @@
+import {one,rows,run,id,now,fail,json,audit} from './core.js';
+const HR=['founder','hr_lead','hr_member'];
+export async function mediaAccess(env,u,type,key,write=false){
+ if(type==='profile'){const p=await one(env,'SELECT id,role FROM users WHERE id=?',key);return !!p&&(!write||p.id===u.id||(HR.includes(u.role)&&(!['founder','hr_lead'].includes(p.role)||u.role==='founder')));}
+ if(type==='channel'){const c=await one(env,'SELECT * FROM channels WHERE id=?',key);return !!c&&(u.role==='founder'||c.department==='Company'||(c.department!=='Leadership'&&c.department===u.department))&&(!write||c.posting_policy!=='announcements'||['founder','hr_lead'].includes(u.role));}
+ const tables={task:'tasks',meeting:'meetings',grievance:'grievances',leave:'leave_requests',correction:'attendance_corrections',document:'documents',marketing_report:'marketing_reports'};
+ if(!tables[type])return false;const r=await one(env,`SELECT * FROM ${tables[type]} WHERE id=?`,key);if(!r)return false;
+ if(type==='grievance')return r.user_id===u.id||u.role==='founder'||(['hr_lead','hr_member'].includes(u.role)&&!r.founder_only);
+ if(type==='leave'||type==='correction')return r.user_id===u.id||HR.includes(u.role);
+ if(type==='task')return r.assignee_id===u.id||r.leader_id===u.id||u.role==='founder'||(!write&&HR.includes(u.role));
+ if(type==='marketing_report')return u.role==='founder'||(u.department==='Marketing'&&(!write||r.user_id===u.id));
+ if(type==='meeting')return u.role==='founder'||r.created_by===u.id||JSON.parse(r.participants_json||'[]').includes(u.id)||(!write&&(r.department==='Company'||(r.department!=='Leadership'&&r.department===u.department)));
+ return (r.department==='Company'||(r.department!=='Leadership'&&r.department===u.department)||u.role==='founder')&&(!write||r.created_by===u.id||['founder','hr_lead'].includes(u.role));
+}
+export async function readUpload(env,user,uploadId,head=false){const r=await one(env,'SELECT * FROM uploads WHERE id=?',uploadId);if(!r)fail(404,'Image not found.');if(!await mediaAccess(env,user,r.context_type,r.context_id))fail(403,'This image belongs to a restricted record.');if(head)return new Response(null,{headers:{'Content-Type':r.mime_type}});const parts=await rows(env,'SELECT data_base64 FROM upload_chunks WHERE upload_id=? ORDER BY part',r.id);const bytes=[];let n=0;for(const p of parts){const a=Uint8Array.from(atob(p.data_base64),c=>c.charCodeAt(0));bytes.push(a);n+=a.length;}const all=new Uint8Array(n);let off=0;for(const b of bytes){all.set(b,off);off+=b.length;}return new Response(all,{headers:{'Content-Type':r.mime_type,'Cache-Control':'no-store'}});}
+export async function handleMedia({request,url,env,user}){
+ const p=url.pathname,m=request.method;
+ if(p==='/api/uploads'&&m==='GET'){const type=url.searchParams.get('type'),key=url.searchParams.get('id');if(type&&key){if(!await mediaAccess(env,user,type,key))fail(403,'This record is restricted.');return json({uploads:await rows(env,'SELECT id,filename,mime_type,size,created_at FROM uploads WHERE context_type=? AND context_id=? ORDER BY created_at DESC LIMIT 50',type,key)});}return json({uploads:await rows(env,'SELECT id,filename,mime_type,size,context_type,context_id,created_at FROM uploads WHERE owner_id=? ORDER BY created_at DESC LIMIT 50',user.id)});}
+ const match=p.match(/^\/api\/uploads\/([^/]+)$/);if(match&&['GET','HEAD'].includes(m))return readUpload(env,user,match[1],m==='HEAD');
+ if(p==='/api/uploads'&&m==='POST'){
+  if(!request.headers.get('Content-Type')?.startsWith('multipart/form-data'))fail(415,'Choose an image file.');
+  const reader=request.body?.getReader();if(!reader)fail(400,'Image is missing.');const pieces=[];let len=0;for(;;){const v=await reader.read();if(v.done)break;len+=v.value.length;if(len>2200000){await reader.cancel();fail(413,'Use an image smaller than 2 MB.');}pieces.push(v.value);}const raw=new Uint8Array(len);let offset=0;for(const a of pieces){raw.set(a,offset);offset+=a.length;}
+  let form;try{form=await new Response(raw,{headers:{'Content-Type':request.headers.get('Content-Type')}}).formData();}catch{fail(400,'The image upload could not be read.');}const file=form.get('file'),type=form.get('context_type'),key=form.get('context_id');if(!file||typeof file.arrayBuffer!=='function'||file.size===0||file.size>2097152)fail(400,'Choose an image up to 2 MB.');if(typeof type!=='string'||typeof key!=='string'||!await mediaAccess(env,user,type,key,true))fail(403,'You cannot add an image to this record.');
+  const data=new Uint8Array(await file.arrayBuffer()),ascii=new TextDecoder().decode(data.subarray(0,12));let mime='';if(data[0]===255&&data[1]===216&&data[2]===255)mime='image/jpeg';else if(data[0]===137&&ascii.slice(1,4)==='PNG')mime='image/png';else if(ascii.startsWith('RIFF')&&ascii.slice(8,12)==='WEBP')mime='image/webp';else if(ascii.startsWith('GIF87a')||ascii.startsWith('GIF89a'))mime='image/gif';if(!mime)fail(400,'Upload a JPEG, PNG, WebP or GIF image.');
+  const uid=id(),filename=String(file.name||'image').replace(/[\x00-\x1f/\\]/g,'').slice(0,120),statements=[env.DB.prepare('INSERT INTO uploads(id,owner_id,context_type,context_id,filename,mime_type,size,created_at) VALUES(?,?,?,?,?,?,?,?)').bind(uid,user.id,type,key,filename,mime,file.size,now())];
+  for(let start=0,part=0;start<data.length;start+=65536,part++){let binary='';const chunk=data.subarray(start,start+65536);for(let i=0;i<chunk.length;i+=8192)binary+=String.fromCharCode(...chunk.subarray(i,i+8192));statements.push(env.DB.prepare('INSERT INTO upload_chunks(upload_id,part,data_base64) VALUES(?,?,?)').bind(uid,part,btoa(binary)));}
+  if(type==='profile')statements.push(env.DB.prepare("INSERT INTO employee_profiles(user_id,full_name,photo_key,updated_at) SELECT id,name,?,? FROM users WHERE id=? ON CONFLICT(user_id) DO UPDATE SET photo_key=excluded.photo_key,updated_at=excluded.updated_at").bind('upload:'+uid,now(),key));await env.DB.batch(statements);await audit(env,user,'image_uploaded',type,key);return json({upload:{id:uid,url:'/api/uploads/'+uid,filename}},201);
+ }
+ return null;
+}

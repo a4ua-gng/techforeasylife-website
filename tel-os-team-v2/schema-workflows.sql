@@ -29,3 +29,5 @@ CREATE TABLE IF NOT EXISTS notifications (
 );
 CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id,created_at);
 CREATE TABLE IF NOT EXISTS automation_runs (key TEXT PRIMARY KEY,created_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS clock_in_events (session_id TEXT PRIMARY KEY REFERENCES attendance_sessions(id),user_id TEXT NOT NULL REFERENCES users(id),occurred_at TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_clock_events_user_time ON clock_in_events(user_id,occurred_at);
