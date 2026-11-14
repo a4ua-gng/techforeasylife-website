@@ -1,0 +1,20 @@
+# Workflow API
+All requests authenticated same-origin JSON. Errors `{error}`. Lists are scoped by role. Dates `YYYY-MM-DD`; timestamps ISO UTC; application timezone Asia/Kolkata.
+
+- `GET /api/tasks` → `{tasks:[{id,title,description,assignee_id,assignee_name,leader_id,leader_name,department,priority,deadline,expected_deliverable,status,submission,feedback,created_at,updated_at,overdue}]}`. Status `todo|working|review|revision|approved|done`.
+- `POST /api/tasks` body `{title,description,assignee_id,leader_id? (default self),priority:'normal'|'high'|'urgent',deadline:'YYYY-MM-DD',expected_deliverable}`. Returns `{task}`. Founder/department leads assign. No assignment to On Leave users.
+- `PATCH /api/tasks/:id` body `{action:'start'|'submit'|'approve'|'revision'|'complete',submission?,feedback?}`. Submit requires submission, revision requires feedback. Assignee starts/submits/completes. Assigned lead/founder reviews; never self-review. Returns `{task}`.
+- `GET /api/attendance` → `{attendance:[{id,user_id,name,work_date,clock_in,clock_out,state,active_started_at,break_started_at,active_seconds,break_seconds}],current:session|null,target_seconds:14400}`. Staff own history; HR/founders all; departmental leads their team. `current` is viewer's own open session only.
+- `POST /api/attendance` body `{action:'clock_in'|'pause'|'resume'|'clock_out'}` → `{session}`. State `working|break|closed`.
+- `GET /api/corrections` → `{corrections:[{id,user_id,name,work_date,requested_seconds,reason,status,review_note,...}]}`. `POST /api/corrections` body `{work_date,requested_seconds:number,reason}`. `PATCH /api/corrections/:id` body `{action:'approve'|'reject',review_note}` by HR/founder, never own. Correction closes sessions for that date and replaces active seconds.
+- `GET /api/leaves` → `{leaves:[{id,user_id,name,department,type,start_date,end_date,reason,status,leader_note,hr_note,handover_to,handover_notes,...}]}`. `status:'pending_lead'|'pending_hr'|'approved'|'rejected'`.
+- `POST /api/leaves` body `{type:'examination'|'academic'|'medical'|'personal'|'emergency',start_date,end_date,reason,handover_to?:userId,handover_notes?:string}` → `{leave}`. Date ranges inclusive.
+- `PATCH /api/leaves/:id` body `{action:'recommend'|'approve'|'reject',note}`. Manager/founder recommends pending_lead→pending_hr; HR/founder approves pending_hr→approved. Never own approval. Returns `{leave}`.
+- `GET /api/calendar` → `{calendar:{leaves:[{id,user_id,name,department,type,start_date,end_date,handover_to,handover_name,handover_notes}],availability:[{id,user_id,name,kind,start_date,end_date,notes}],handovers:[{id,from_user,to_user,from_name,to_name,start_date,end_date,notes,leave_id}],on_leave:[{id,name,department,status}]}}`. Calendar excludes private leave reasons. `on_leave` contains indefinite status including Maverick.
+- `POST /api/availability` body `{kind:'exam'|'unavailable'|'available'|'weekly_schedule',start_date,end_date,notes}` → `{availability}`. `DELETE /api/availability/:id` removes own entry.
+- `GET /api/notifications` → `{notifications:[{id,title,body,link,read_at,created_at}],unread:number}` (own only).
+- `POST /api/notifications/read` body `{id?:notificationId}`; omitted ID marks all read.
+
+Attendance includes `source:'clock'|'correction'`. Correction rows represent approved daily totals: label them "HR correction" rather than presenting their derived start/end timestamps as original clock events. Open sessions split automatically at Asia/Kolkata midnight. Shared calendar viewers outside HR, the employee, and their reporting manager receive generic `type:'leave'`.
+
+`runAutomations(env)` supports an hourly Cron Trigger. In-app notifications are idempotent by date/entity/recipient: overdue and inactive assignments; reviews and leave decisions waiting 48 hours; open sessions; active approved leave; a supportive lead review prompt for three or more overdue assignments; next-24-hour meetings once per participant/creator; Monday departmental summaries. It also expires sessions and records `automation_runs.last_success`. No external Slack/email messages are sent.

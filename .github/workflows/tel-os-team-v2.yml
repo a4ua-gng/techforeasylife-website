@@ -1,0 +1,25 @@
+name: TEL OS checks
+on:
+  push:
+    branches: [tel-os-team-v2]
+    paths: ['tel-os-team-v2/**', '.github/workflows/tel-os-team-v2.yml']
+  pull_request:
+    paths: ['tel-os-team-v2/**', '.github/workflows/tel-os-team-v2.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tel-os-team-v2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: tel-os-team-v2/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm test

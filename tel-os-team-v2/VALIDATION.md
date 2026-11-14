@@ -1,0 +1,9 @@
+# Release verification · 14 November 2026
+
+- 36 automated tests passed using Miniflare/workerd with actual D1 bindings. Coverage includes authentication, password/session lifecycle, cross-origin writes, private contact access, role grants, independent status reviews, task submission/review, leave privacy, attendance concurrency/midnight calculations, correction totals, departmental channels, confidential concerns, qualitative feedback, exit review, and reminder deduplication.
+- 17 Chromium browser checks passed against an isolated local copy of the team: mandatory password change, form errors, 17 founder views, task assignment → employee submission → independent review → completion, clock controls, two-stage leave approval, calendar privacy, messages and threads, and mobile navigation. No JavaScript errors or server failures were observed. Desktop and 375px mobile layouts were visually inspected.
+- The production health endpoint and all 10 initial account logins were checked. All accounts still require their owner's first password change; test sessions were signed out. Database checks confirmed 10 distinct password hashes, 10 required password changes, and Maverick's On Leave status.
+- The dedicated Worker exposes fetch and scheduled handlers. Cloudflare's API confirmed a `*/15 * * * *` Cron Trigger and enabled Workers logs/traces. Scheduled rules were executed and checked for idempotence in the runtime test suite. Production Cron propagation and the first unattended invocation may take time after deployment.
+- Existing TEL OS resources and website main branch were preserved. No production tasks, leave requests, meetings, or attendance were fabricated for testing. Browser workflow records were created only in the local database.
+
+Passing these checks is release evidence, not a guarantee against every future defect. Continue reviewing operating policy, access, and recovery procedures as the team starts using the system.
