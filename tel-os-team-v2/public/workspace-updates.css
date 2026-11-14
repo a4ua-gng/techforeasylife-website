@@ -1,0 +1,10 @@
+.private-identity-panel { margin-top: 24px; }
+.private-identity-documents { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.identity-document { margin: 16px 0; }
+.identity-document img { display: block; max-width: 100%; width: auto; max-height: 680px; object-fit: contain; border-radius: 10px; background: #fff; }
+.identity-document figcaption { margin-top: 10px; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.founder-summary ul { padding-left: 22px; line-height: 1.8; }
+.founder-summary .panel-header { padding: 0 0 16px; gap: 12px; flex-wrap: wrap; }
+.founder-text-update .pre { margin: 14px 0; overflow-wrap: anywhere; }
+.founder-text-update .list-card-head { gap: 12px; flex-wrap: wrap; }
+@media(max-width: 600px) { .identity-document img { max-height: none; width: 100%; } .founder-summary .panel-header .btn { width: 100%; } }

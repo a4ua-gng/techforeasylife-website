@@ -1,3 +1,4 @@
+import {queueWorkDeliveries} from './work-deliveries.js';
 export const id = () => crypto.randomUUID();
 export const now = () => new Date().toISOString();
 export const day = () => new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -9,7 +10,7 @@ export async function run(env,sql,...params){return env.DB.prepare(sql).bind(...
 export function requireRole(user,...roles){if(!roles.includes(user.role))fail(403,'Your role cannot perform this action.');}
 export function text(value,max=5000,required=false){if(typeof value!=='string'){if(required)fail(400,'A required text field is missing.');return '';}const s=value.trim();if(s.length>max)fail(400,`Text must be ${max} characters or fewer.`);if(required&&!s)fail(400,'A required text field is empty.');return s;}
 export async function audit(env,user,action,entity,entityId='',details=''){await run(env,'INSERT INTO audit_events(id,actor_id,action,entity,entity_id,details,created_at) VALUES(?,?,?,?,?,?,?)',id(),user?.id||null,action,entity,String(entityId),String(details).slice(0,1000),now());}
-export async function notify(env,userId,title,body,link=''){await run(env,'INSERT INTO notifications(id,user_id,title,body,link,created_at) VALUES(?,?,?,?,?,?)',id(),userId,title,body,link,now());}
+export async function notify(env,userId,title,body,link=''){const notificationId=id();await run(env,'INSERT INTO notifications(id,user_id,title,body,link,created_at) VALUES(?,?,?,?,?,?)',notificationId,userId,title,body,link,now());try{await queueWorkDeliveries(env,{id:notificationId,user_id:userId});}catch{console.error(JSON.stringify({event:'work_delivery_queue_needs_retry',notification_id:notificationId}));}}
 export const helpers={id,now,day,fail,json,rows,one,run,audit,notify,requireRole};
 export const safeUser=u=>({id:u.id,employee_id:u.employee_id,username:u.username,name:u.name,designation:u.designation,role:u.role,department:u.department,manager_id:u.manager_id,joined_on:u.joined_on,status:u.status,must_change_password:!!u.must_change_password});
 export const hex = bytes => [...bytes].map(x=>x.toString(16).padStart(2,'0')).join('');

@@ -1,4 +1,5 @@
 import {queueMeetingDeliveries} from './deliveries.js';
+import {queuePendingWorkDeliveries} from './work-deliveries.js';
 const sameDept = (a, b) => String(a || '').toLowerCase() === String(b || '').toLowerCase();
 const isFounder = user => user.role === 'founder';
 const isHRLead = user => user.role === 'hr_lead';
@@ -97,18 +98,17 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
     }
     const messageId = id();
     await run(env, 'INSERT INTO messages(id,channel_id,user_id,body,parent_id,created_at) VALUES(?,?,?,?,?,?)', messageId, channel.id, user.id, content, parent_id, now());
-    const mentions = [...new Set([...content.matchAll(/@([a-z0-9._-]{2,60})/gi)].map(m => m[1].toLowerCase()))].slice(0, 30);
-    const recipients = new Set(parent && parent.user_id !== user.id ? [parent.user_id] : []);
-    if (mentions.length) {
-      const mentioned = await rows(env, `SELECT id,role,department FROM users WHERE lower(username) IN (${mentions.map(() => '?').join(',')}) AND status IN ('active','on_leave')`, ...mentions);
-      for (const person of mentioned) if (person.id !== user.id && canSeeDepartment(person, channel.department)) recipients.add(person.id);
+    // Every current channel member receives one alert. Mentions, thread ownership,
+    // announcements and Harsh's Marketing oversight share this single recipient set.
+    const members = await rows(env, "SELECT id,role,department FROM users WHERE status IN ('active','on_leave')");
+    const recipients = members.filter(person=>person.id!==user.id&&canSeeDepartment(person,channel.department));
+    const notificationTime=now();
+    for(let offset=0;offset<recipients.length;offset+=10){
+      const batch=recipients.slice(offset,offset+10);
+      await run(env,'INSERT OR IGNORE INTO notifications(id,user_id,title,body,link,created_at,dedupe_key) VALUES '+batch.map(()=>'(?,?,?,?,?,?,?)').join(','),
+        ...batch.flatMap(person=>[id(),person.id,parent?`Reply in #${channel.name}`:`Update in #${channel.name}`,`${user.name} posted a message.`,'channel/'+channel.id,notificationTime,'channel-message:'+messageId+':'+person.id]));
     }
-    if (channel.posting_policy === 'announcements') {
-      const members = await rows(env, "SELECT id,role,department FROM users WHERE status IN ('active','on_leave')");
-      for (const person of members) if (person.id !== user.id && canSeeDepartment(person, channel.department)) recipients.add(person.id);
-    }
-    if(channel.id==='marketing-reports'){const owner=await one(env,"SELECT id FROM users WHERE username='harsh' AND role='founder' AND status='active'");if(owner&&owner.id!==user.id)recipients.add(owner.id);}
-    for (const recipient of recipients) await notify(env, recipient, parent ? `Reply in #${channel.name}` : `Update in #${channel.name}`, `${user.name} posted a message.`, 'channel/'+channel.id);
+    try{await queuePendingWorkDeliveries(env);}catch{console.error(JSON.stringify({event:'channel_delivery_queue_needs_retry',message_id:messageId}));}
     await audit(env, user, 'message_posted', 'channel', channel.id);
     return json({ message: await one(env, 'SELECT m.*,u.name FROM messages m JOIN users u ON u.id=m.user_id WHERE m.id=?', messageId) }, 201);
   }

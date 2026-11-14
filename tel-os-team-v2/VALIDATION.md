@@ -1,3 +1,19 @@
+# TEL OS 2.3 verification · 15 November 2026 (IST)
+
+The final implementation passes110 runtime tests in real Miniflare/workerd with D1. New coverage includes private identity document ACLs and matching, channel-wide permission-scoped notification fanout, work outbox verification/disconnection/template handling, and founder text/fanout privacy, deduplication and bounded catch-up. The Cron reminder query-budget regression remains green.
+
+Six focused browser checks verify connection popup timing/focus/session behaviour, real custom profile-photo upload and avatar refresh, password precedence, required onboarding and375px layout. Four additional browser checks verify the actual supplied IC image renders for HR, unrelated employee access404, honest missing-card state, founder text copy/download/permissions, and375px IC/feed layouts.
+
+Seven identity-card images were imported privately after the owner's explicit request. Lossless WebP decode was checked pixel-for-pixel against the extracted originals. There are five matched cards and two pending HR account matching; zero document identifiers were transcribed into source or searchable public fields. Production storage metadata confirms seven documents and3,300,186 bytes.
+
+Operations Gmail profile exactly techforeasylife.operations@gmail.com was confirmed. A sender test returned a Gmail message ID. The scheduled job now explicitly selects that Operations account, is enabled hourly, and supports formatted meeting and relevant work notifications without reading the inbox. The earlier two meeting emails from the old sender were not resent.
+
+WhatsApp Business provider credentials and approved templates remain external setup requirements; Google OAuth client credentials are needed for each employee's connection flow. Setup is shown truthfully; unverified recipients stay blocked. Website publishing continues to require renewal of its existing rejected GitHub credential.
+
+The final production browser run passed14 checks, including actual authenticated IC pixels, popup/provider steps, custom-photo controls, founder text summaries and seven375px views, with no JavaScript/server errors. Deployed JavaScript and styles match the tested source hashes. The temporary owner QA session was revoked. The production Cron recorded a successful run after deployment.
+
+Earlier release evidence follows.
+
 # TEL OS 2.2 release verification · 15 November 2026 (IST)
 
 The implementation passed79 Workers/D1 runtime tests. The final raw-public-read patch then passed13/13 website tests, including an independently verified UTF-8 Git blob hash. GitHub CI runs the final80-test suite. This includes website bridge tests covering service-key scope, HR leadership protection, revision conflicts, public-field validation and legacy admin compatibility. WhatsApp challenge tests verify expiry, one-time use and an atomic five-attempt limit under concurrent guesses.

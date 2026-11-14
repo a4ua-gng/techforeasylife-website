@@ -1,5 +1,7 @@
 import {runAttendanceReminders} from './schedules.js';
 import {queueMeetingDeliveries,deliverMeetingWhatsApp} from './deliveries.js';
+import {queueFounderUpdates} from './founder-updates.js';
+import {queuePendingWorkDeliveries,deliverWorkWhatsApp} from './work-deliveries.js';
 const HR = ['founder', 'hr_lead', 'hr_member'];
 const LEADS = ['founder', 'hr_lead', 'team_lead', 'finance_head'];
 const TZ = 'Asia/Kolkata';
@@ -266,10 +268,13 @@ export async function runAutomations(env) {
  const isMonday=new Intl.DateTimeFormat('en-US',{weekday:'short',timeZone:TZ}).format(new Date())==='Mon';
  if(isMonday){const leaders=await dbRows(env,"SELECT id,role,department FROM users WHERE role IN ('founder','hr_lead','team_lead','finance_head') AND status NOT IN ('suspended','exited','on_leave')");for(const leader of leaders){const filter=leader.role==='founder'?'1=1':'department=?',p=leader.role==='founder'?[]:[leader.department];const summary=await dbOne(env,`SELECT COUNT(*) total,SUM(CASE WHEN status='review' THEN 1 ELSE 0 END) reviews,SUM(CASE WHEN deadline<? AND status!='done' THEN 1 ELSE 0 END) overdue FROM tasks WHERE status!='done' AND ${filter}`,day,...p);await insertNotice(leader.id,'Weekly operations summary',`${summary.total} active assignments; ${summary.reviews||0} awaiting review; ${summary.overdue||0} overdue. Review workload and approved leave before assigning work.`,'reports',`weekly:${day}:${leader.id}`);}}
  const whatsapp_delivery=await deliverMeetingWhatsApp(env);
+ await flushNotices();
+ const founder_updates=await queueFounderUpdates(env);
+ const work_notification_queue=await queuePendingWorkDeliveries(env);
+ const work_whatsapp_delivery=await deliverWorkWhatsApp(env);
  await dbRun(env,'DELETE FROM sessions WHERE expires_at<?',date);
  await dbRun(env,'DELETE FROM activity_events WHERE created_at<?',new Date(Date.now()-30*86400000).toISOString());
  await dbRun(env,'DELETE FROM activity_sessions WHERE last_seen<?',new Date(Date.now()-7*86400000).toISOString());
- await flushNotices();
  await dbRun(env,'INSERT OR REPLACE INTO automation_runs (key,created_at) VALUES (?,?)','last_success',date);
- return {overdue:tasks.length,pending_reviews:reviews.length,open_sessions:sessions.length,attendance_reminders,whatsapp_delivery,at:date};
+ return {overdue:tasks.length,pending_reviews:reviews.length,open_sessions:sessions.length,attendance_reminders,whatsapp_delivery,founder_updates,work_notification_queue,work_whatsapp_delivery,at:date};
 }

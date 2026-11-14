@@ -18,3 +18,10 @@ CREATE TABLE IF NOT EXISTS whatsapp_challenges(user_id TEXT PRIMARY KEY REFERENC
 CREATE TABLE IF NOT EXISTS app_settings(key TEXT PRIMARY KEY,value TEXT NOT NULL);
 INSERT OR IGNORE INTO app_settings(key,value) VALUES('require_connections','false');
 INSERT OR IGNORE INTO channels(id,name,description,department,posting_policy,created_at) VALUES('marketing-reports','marketing-reports','Marketing progress, blockers and reports to Harsh.','Marketing','members',strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+CREATE TABLE IF NOT EXISTS identity_documents(id TEXT PRIMARY KEY,import_id TEXT NOT NULL REFERENCES profile_imports(id),source_page INTEGER NOT NULL,mime_type TEXT NOT NULL,size INTEGER NOT NULL,created_at TEXT NOT NULL,UNIQUE(import_id,source_page));
+CREATE TABLE IF NOT EXISTS identity_document_chunks(document_id TEXT NOT NULL REFERENCES identity_documents(id),part INTEGER NOT NULL,data_base64 TEXT NOT NULL,PRIMARY KEY(document_id,part));
+CREATE TABLE IF NOT EXISTS work_notification_deliveries(id TEXT PRIMARY KEY,notification_id TEXT NOT NULL REFERENCES notifications(id),user_id TEXT NOT NULL REFERENCES users(id),channel TEXT NOT NULL,category TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'blocked',recipient TEXT NOT NULL DEFAULT '',provider_id TEXT,error TEXT NOT NULL DEFAULT '',created_at TEXT NOT NULL,sent_at TEXT,UNIQUE(notification_id,user_id,channel));
+CREATE INDEX IF NOT EXISTS idx_work_notification_queue ON work_notification_deliveries(channel,status,created_at);
+INSERT OR IGNORE INTO app_settings(key,value) VALUES('work_notifications_enabled_at',strftime('%Y-%m-%dT%H:%M:%fZ','now'));
+
+CREATE INDEX IF NOT EXISTS idx_notifications_created ON notifications(created_at,id);

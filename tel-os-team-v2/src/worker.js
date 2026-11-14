@@ -7,6 +7,8 @@ import {handleExtensions} from './extensions.js';
 import {handleMedia} from './media.js';
 import {handleConnections,googleCallback,connectionState} from './connections.js';
 import {handleWebsite} from './website.js';
+import {handleIdentity} from './identity.js';
+import {handleFounderUpdates} from './founder-updates.js';
 const binaries=typeof __BINARY_ASSETS__==='undefined'?{}:__BINARY_ASSETS__;
 const assets={'/':{type:'text/html; charset=utf-8',value:__HTML__},'/index.html':{type:'text/html; charset=utf-8',value:__HTML__},'/styles.css':{type:'text/css; charset=utf-8',value:__CSS__},'/app.js':{type:'application/javascript; charset=utf-8',value:__APP__}};
 function secure(response,requestId){const h=new Headers(response.headers);h.set('X-Content-Type-Options','nosniff');h.set('X-Frame-Options','DENY');h.set('Referrer-Policy','same-origin');h.set('Permissions-Policy','camera=(), microphone=(), geolocation=()');h.set('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; form-action 'self'; base-uri 'none'");h.set('Cache-Control','no-store');h.set('X-Request-ID',requestId);return new Response(response.body,{status:response.status,headers:h});}
@@ -14,7 +16,7 @@ export default {
  async fetch(request,env){const requestId=id();try{
   const url=new URL(request.url),mutating=!['GET','HEAD'].includes(request.method);
   if(mutating){const origin=request.headers.get('Origin');if(origin!==url.origin)fail(403,'Requests must originate from this TEL OS workspace.');}
-  if(url.pathname==='/api/health'&&request.method==='GET')return secure(json({service:'TEL OS',version:'2.2.0'}),requestId);
+  if(url.pathname==='/api/health'&&request.method==='GET')return secure(json({service:'TEL OS',version:'2.3.0'}),requestId);
   if(['GET','HEAD'].includes(request.method)&&assets[url.pathname]){const asset=assets[url.pathname];return secure(new Response(request.method==='HEAD'?null:asset.value,{headers:{'Content-Type':asset.type}}),requestId);}
   if(url.pathname==='/favicon.ico')return secure(new Response(null,{status:204}),requestId);
   if(['GET','HEAD'].includes(request.method)&&binaries[url.pathname]){const a=binaries[url.pathname];return secure(new Response(request.method==='HEAD'?null:Uint8Array.from(atob(a.base64),c=>c.charCodeAt(0)),{headers:{'Content-Type':a.type}}),requestId);}
@@ -30,6 +32,8 @@ export default {
   if(!response)response=await handleAdmin(context);
   if(!response)response=await handleWebsite(context);
   if(!response)response=await handleMedia(context);
+  if(!response)response=await handleIdentity(context);
+  if(!response)response=await handleFounderUpdates(context);
   if(!response)response=await handleExtensions(context);
   if(!response)response=await handleSchedules(context);
   if(!response)response=await handleWorkflows(context);

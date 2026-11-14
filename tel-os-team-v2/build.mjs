@@ -2,7 +2,7 @@ import {build} from 'esbuild';
 import {readFile,mkdir,writeFile,readdir} from 'node:fs/promises';
 const assets={__HTML__:await readFile('public/index.html','utf8'),__CSS__:await readFile('public/styles.css','utf8'),__APP__:await readFile('public/app.js','utf8')};
 const binaries={};
-async function collect(dir){for(const entry of await readdir('public/'+dir,{withFileTypes:true})){const path=dir?dir+'/'+entry.name:entry.name;if(entry.isDirectory())await collect(path);else if(!['index.html','styles.css','app.js'].includes(path)){const data=await readFile('public/'+path);const ext=path.split('.').pop();binaries['/'+path]={base64:data.toString('base64'),type:({webp:'image/webp',ttf:'font/ttf',woff:'font/woff',txt:'text/plain; charset=utf-8',svg:'image/svg+xml',js:'application/javascript; charset=utf-8'})[ext]||'application/octet-stream'};}}}
+async function collect(dir){for(const entry of await readdir('public/'+dir,{withFileTypes:true})){const path=dir?dir+'/'+entry.name:entry.name;if(entry.isDirectory())await collect(path);else if(!['index.html','styles.css','app.js'].includes(path)){const data=await readFile('public/'+path);const ext=path.split('.').pop();binaries['/'+path]={base64:data.toString('base64'),type:({webp:'image/webp',ttf:'font/ttf',woff:'font/woff',txt:'text/plain; charset=utf-8',svg:'image/svg+xml',js:'application/javascript; charset=utf-8',css:'text/css; charset=utf-8'})[ext]||'application/octet-stream'};}}}
 await collect('');
 assets.__BINARY_ASSETS__=binaries;
 await mkdir('dist',{recursive:true});
