@@ -4,7 +4,9 @@ Production: https://tel-os-team-v2.xtremedivyangshu.workers.dev
 
 Cloudflare Workers + a dedicated D1 database provide real employee accounts, department workspaces, attendance, tasks, leave, meetings, private HR tickets, image uploads and founder oversight. The public TEL website content is unchanged.
 
-## Current release: email only (2.4)
+## Current release: email and navigation helper (2.4.1)
+
+The floating Ask TEL helper opens existing authorised sections from short requests such as “open my tasks”, “email setup” and “last heartbeat”. Founder heartbeat requests open Activity & status, highlight the selected member and show the actual recorded time. Ambiguous requests offer choices. Requests are matched locally in the browser, require no AI service and do not send typed text to an external provider. Mobile directory search, header controls and card footers now align at narrow widths.
 
 Every employee can verify any normal email address using an eight-digit email code. Google sign-in and phone/WhatsApp onboarding are disabled. The existing instant verification sender and credentials are preserved. Codes expire in10minutes for instant delivery; the hourly Operations queue supports3hour codes when instant delivery is unavailable. Codes are never returned to the client. Verification is scoped to the logged-in requester, rate limited and capped at five attempts. Duplicate active verified addresses are rejected. Only successful verification updates the notification address.
 

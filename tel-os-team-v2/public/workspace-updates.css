@@ -8,3 +8,41 @@
 .founder-text-update .pre { margin: 14px 0; overflow-wrap: anywhere; }
 .founder-text-update .list-card-head { gap: 12px; flex-wrap: wrap; }
 @media(max-width: 600px) { .identity-document img { max-height: none; width: 100%; } .founder-summary .panel-header .btn { width: 100%; } }
+
+/* Keep search text clear of its icon after the shared field padding rule. */
+.search { min-width: min(180px, 100%); }
+.search input { min-height: 44px; padding-inline-start: 42px; }
+.search .svg { inset-inline-start: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+
+/* Let directory details reflow without pushing a card outside its column. */
+.person-card-head { align-items: center; flex-wrap: wrap; }
+.person-card h3, .person-card .designation { overflow-wrap: anywhere; }
+.person-card .presence-label { margin-bottom: 10px; }
+.person-card .person-footer { align-items: flex-start; flex-wrap: wrap; row-gap: 6px; }
+.person-card .person-footer > span { min-width: 0; overflow-wrap: anywhere; }
+.person-card .person-footer > span:last-child { margin-inline-start: auto; text-align: end; }
+
+.topbar > .btn-row { min-width: 0; flex-wrap: nowrap; }
+.breadcrumb { min-width: 0; }
+.breadcrumb strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.top-actions { flex-shrink: 0; }
+.topbar .icon-btn { background: var(--surface); }
+.topbar .icon-btn:hover { background: var(--nav); }
+.activity-notice { display: grid; grid-template-columns: 16px minmax(0, 1fr) auto; align-items: start; }
+.activity-notice > .svg { margin-top: 3px; }
+.activity-notice > span { min-width: 0; overflow-wrap: anywhere; }
+.activity-notice .btn { margin-inline-start: 0; align-self: center; }
+
+@media(max-width: 650px) {
+  .topbar { min-height: 65px; height: auto; padding-top: 8px; padding-bottom: 8px; }
+  .topbar > .btn-row { flex: 1; }
+  .topbar .icon-btn, .topbar .help-link { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+  .top-actions { gap: 8px; }
+  .top-actions > a[aria-label="My account"] { display: none; }
+  .activity-notice { padding: 12px 18px; font-size: 12px; line-height: 1.55; }
+  .activity-notice .btn { min-height: 44px; }
+  .filters .search { width: 100%; flex-basis: 100%; }
+  .search input { font-size: 16px; }
+  .filters > .small { line-height: 1.65; }
+  .person-card .person-footer > span:last-child { flex: 1; min-width: 130px; }
+}
