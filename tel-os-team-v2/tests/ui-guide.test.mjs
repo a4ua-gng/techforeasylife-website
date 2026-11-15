@@ -15,7 +15,7 @@ before(async()=>{
  const result=await build({entryPoints:['src/worker.js'],bundle:true,format:'esm',platform:'browser',write:false,define:{__HTML__:JSON.stringify('<html>guide test</html>'),__CSS__:JSON.stringify(''),__APP__:JSON.stringify(''),__BINARY_ASSETS__:JSON.stringify(binaries)}});
  mf=new Miniflare({modules:true,script:result.outputFiles[0].text,compatibilityDate:'2026-07-30',d1Databases:{DB:'guide-test'}});
  db=await mf.getD1Database('DB');
- for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql'])await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
+ for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql'])await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
  for(const uid of ['member','other']){await db.prepare('INSERT INTO users(id,employee_id,username,name,designation,role,department,joined_on,password_hash,password_salt,must_change_password,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,0,?)').bind(uid,uid,uid,uid,'Team Member','employee','Marketing','2026-01-01','fixture-hash','fixture-salt',new Date().toISOString()).run();await db.prepare('INSERT INTO onboarding(user_id) VALUES(?)').bind(uid).run();}
 });
 after(async()=>{if(mf)await mf.dispose();});
@@ -35,4 +35,13 @@ test('guide completion requires authentication and same-origin requests',async()
 test('official logo and local fonts are served intact with correct media types',async()=>{
  for(const [path,type] of [['/tel-logo.webp','image/webp'],['/fonts/dm-sans.woff','font/woff'],['/fonts/sora.woff','font/woff']]){const response=await mf.dispatchFetch(origin+path);assert.equal(response.status,200);assert.equal(response.headers.get('content-type'),type);assert.deepEqual(Buffer.from(await response.arrayBuffer()),await readFile('public'+path));}
  const response=await mf.dispatchFetch(origin+'/tel-logo.webp',{method:'HEAD'});assert.equal(response.status,200);assert.equal((await response.arrayBuffer()).byteLength,0);
+});
+
+
+test('historical chat notices stay out of the notification centre and bell count without deleting audit history',async()=>{
+ const stamp=new Date().toISOString();
+ for(const [id,link]of[['old-chat-notice','channel/general'],['old-thread-notice','#channel/general'],['real-task-notice','tasks']])await db.prepare('INSERT INTO notifications(id,user_id,title,body,link,created_at) VALUES(?,?,?,?,?,?)').bind(id,'member','Fixture notice','Fixture body',link,stamp).run();
+ const result=await call('/api/notifications',{user:'member'});assert.equal(result.status,200);
+ assert.ok(result.data.notifications.some(n=>n.id==='real-task-notice'));assert.ok(!result.data.notifications.some(n=>n.id==='old-chat-notice'||n.id==='old-thread-notice'));
+ assert.equal(result.data.unread,1);assert.equal((await db.prepare("SELECT COUNT(*) n FROM notifications WHERE id IN ('old-chat-notice','old-thread-notice')").first()).n,2);
 });

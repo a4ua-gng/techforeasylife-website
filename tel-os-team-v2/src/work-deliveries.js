@@ -60,11 +60,11 @@ async function enqueue(env,notification){
 }
 
 // Only IDs from a saved notification are used; caller-supplied title/body/link are ignored.
-export async function queueWorkDeliveries(env,notification){return enqueue(env,notification);}
-export async function queuePendingWorkDeliveries(env){return enqueue(env);}
+export async function queueWorkDeliveries(env,notification){if(env.TEL_OS_OPERATIONAL_EMAILS==='enabled')return {inserted:0};return enqueue(env,notification);}
+export async function queuePendingWorkDeliveries(env){if(env.TEL_OS_OPERATIONAL_EMAILS==='enabled')return {inserted:0};return enqueue(env);}
 
 export async function deliverWorkWhatsApp(env){
- if(env.NOTIFICATION_CHANNELS==='email'||!whatsappConfigured(env))return {configured:false,accepted:0,needs_review:0};
+ if(env.TEL_OS_OPERATIONAL_EMAILS==='enabled'||env.NOTIFICATION_CHANNELS==='email'||!whatsappConfigured(env))return {configured:false,accepted:0,needs_review:0};
  const result=await env.DB.prepare(`SELECT d.id,d.notification_id,d.user_id,d.category,n.link,c.account
   FROM work_notification_deliveries d JOIN notifications n ON n.id=d.notification_id AND n.user_id=d.user_id
   JOIN users u ON u.id=d.user_id JOIN member_connections c ON c.user_id=d.user_id AND c.provider='whatsapp'

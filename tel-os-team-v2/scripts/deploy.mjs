@@ -5,11 +5,21 @@ if(!account||!database||!token)throw Error('Set CLOUDFLARE_ACCOUNT_ID, D1_DATABA
 if(!/^[a-z0-9-]+$/.test(name))throw Error('Invalid Worker name.');
 const built=spawnSync(process.execPath,['build.mjs'],{stdio:'inherit'});if(built.status)process.exit(built.status);
 async function api(path,method,body){const response=await fetch('https://api.cloudflare.com/client/v4'+path,{method,headers:{Authorization:'Bearer '+token,...(body instanceof FormData?{}:{'Content-Type':'application/json'})},body:body instanceof FormData?body:JSON.stringify(body)});const data=await response.json();if(!response.ok||data.success===false)throw Error('Cloudflare API failed: '+response.status+' '+JSON.stringify(data.errors));return data;}
-await api(`/accounts/${account}/d1/database/${database}/query`,'POST',{sql:await readFile('dist/schema.sql','utf8')});
+const queryPath=`/accounts/${account}/d1/database/${database}/query`;
+const columns=await api(queryPath,'POST',{sql:'PRAGMA table_info(task_transfer_requests)'});
+const legacyColumns=columns.result[0].results.map(column=>column.name);
+if(legacyColumns.length&&!legacyColumns.includes('updated_at')){
+ const existing=await api(queryPath,'POST',{sql:'SELECT COUNT(*) count FROM task_transfer_requests'});
+ if(existing.result[0].results[0].count!==0)throw Error('Existing legacy transfer requests require a data-preserving migration before deployment.');
+ await api(queryPath,'POST',{sql:'ALTER TABLE task_transfer_requests RENAME TO task_transfer_requests_legacy_v24'});
+}
+await api(queryPath,'POST',{sql:await readFile('dist/schema.sql','utf8')});
+const activated=new Date(),localDate=new Date(activated.getTime()+330*60000).toISOString().slice(0,10),nextLocalDate=new Date(Date.parse(localDate+'T00:00:00Z')+86400000).toISOString().slice(0,10);
+await api(queryPath,'POST',{batch:[{sql:"UPDATE app_settings SET value=? WHERE key='operational_email_enabled_at' AND value=''",params:[activated.toISOString()]},{sql:"UPDATE app_settings SET value=? WHERE key='operational_email_daily_start_date' AND value=''",params:[nextLocalDate]}]});
 // Credentials are provisioned separately; deployment never resets staff passwords or replaces team data.
-const metadata={main_module:'worker.js',compatibility_date:'2026-11-14',keep_bindings:['secret_text','plain_text'],bindings:[{type:'plain_text',name:'NOTIFICATION_CHANNELS',text:'email'},{type:'d1',name:'DB',database_id:database},{type:'service',name:'WEBSITE_ADMIN',service:process.env.TEL_WEBSITE_ADMIN_SERVICE||'tel-website-admin-api'}],observability:{enabled:true,redact_query_string:true,logs:{enabled:true,invocation_logs:true,persist:true},traces:{enabled:true,persist:true,head_sampling_rate:1}}};
+const metadata={main_module:'worker.js',compatibility_date:'2026-11-14',keep_bindings:['secret_text','plain_text'],bindings:[{type:'plain_text',name:'NOTIFICATION_CHANNELS',text:'email'},{type:'plain_text',name:'TEL_OS_OPERATIONAL_EMAILS',text:'enabled'},{type:'plain_text',name:'TEL_OS_WORK_SENDER_EMAIL',text:process.env.TEL_OS_WORK_SENDER_EMAIL||'notifications@techforeasylife.in'},{type:'d1',name:'DB',database_id:database},{type:'service',name:'WEBSITE_ADMIN',service:process.env.TEL_WEBSITE_ADMIN_SERVICE||'tel-website-admin-api'}],observability:{enabled:true,redact_query_string:true,logs:{enabled:true,invocation_logs:true,persist:true},traces:{enabled:true,persist:true,head_sampling_rate:1}}};
 const form=new FormData();form.append('metadata',new Blob([JSON.stringify(metadata)],{type:'application/json'}));form.append('worker.js',new Blob([await readFile('dist/worker.js','utf8')],{type:'application/javascript+module'}),'worker.js');
 await api(`/accounts/${account}/workers/scripts/${name}`,'PUT',form);
 await api(`/accounts/${account}/workers/scripts/${name}/subdomain`,'POST',{enabled:true,previews_enabled:false});
-await api(`/accounts/${account}/workers/scripts/${name}/schedules`,'PUT',[{cron:'*/5 * * * *'}]);
-console.log('TEL OS Worker and 5-minute automation schedule deployed.');
+await api(`/accounts/${account}/workers/scripts/${name}/schedules`,'PUT',[{cron:'* * * * *'}]);
+console.log('TEL OS Worker deployed: email checks every minute, attendance/workflow checks every five minutes.');

@@ -1,0 +1,11 @@
+.nav-link .channel-unread-dot{display:inline-block;flex:0 0 8px;width:8px;height:8px;min-width:8px;margin-inline-start:auto;border-radius:50%;background:var(--teal);box-shadow:0 0 0 2px var(--nav)}
+.nav-link[data-unread-count]:not([data-unread-count="0"]){font-weight:700}
+#thread-form .composer-footer{gap:12px;flex-wrap:wrap}
+#thread-form textarea,#message-form textarea{font-size:16px}
+[data-thread-messages]{overflow-wrap:anywhere}
+.page:has(.channel-view){padding-bottom:16px}
+.channel-view{min-height:0}
+.channel-view .channel-heading,.channel-view .composer{flex-shrink:0}
+.channel-view .message-feed{min-height:0}
+.channel-view[data-keyboard="true"] .channel-heading{display:none}
+.channel-view .composer textarea{max-height:140px}

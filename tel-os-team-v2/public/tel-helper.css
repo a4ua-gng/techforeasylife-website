@@ -1,10 +1,10 @@
-.tel-helper{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:calc(18px + env(safe-area-inset-bottom) + var(--tel-helper-keyboard-inset,0px));z-index:45;font-family:inherit;color:var(--ink)}
-.tel-helper button{font-family:inherit;cursor:pointer;touch-action:manipulation}
-.tel-helper svg{width:24px;height:24px;flex:none}
-.tel-helper-launcher{display:flex;align-items:center;justify-content:center;gap:9px;min-height:52px;padding:12px 18px;margin-left:auto;border-radius:18px;border:1px solid #b6a2ec;background:#d5c2ff;color:#201235;box-shadow:0 6px 24px #0005;font-size:14px;font-weight:700}
-.tel-helper-launcher:hover{background:#e3d6ff}
+.tel-helper{position:fixed;left:var(--tel-helper-left,16px);top:var(--tel-helper-top,80px);width:var(--tel-helper-width,370px);z-index:45;font-family:inherit;color:var(--ink)}
+.tel-helper button,.tel-helper-launcher{font-family:inherit;cursor:pointer;touch-action:manipulation}
+.tel-helper svg,.tel-helper-launcher svg{width:24px;height:24px;flex:none}
+.tel-helper-launcher{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:none;min-width:44px;min-height:44px;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--teal);font-size:12px;font-weight:600}
+.tel-helper-launcher:hover{background:var(--teal-soft);border-color:var(--teal)}
 .tel-helper-launcher:active,.tel-helper-choice:active{transform:translateY(1px)}
-.tel-helper-panel{width:min(370px,calc(100vw - 32px));max-height:calc(var(--tel-helper-viewport-height,100dvh) - 110px - env(safe-area-inset-bottom));overflow-y:auto;margin-bottom:12px;border:1px solid var(--line);border-radius:20px;background:var(--surface,#111016);box-shadow:0 12px 48px #0008;overscroll-behavior:contain}
+.tel-helper-panel{width:100%;max-height:var(--tel-helper-height,calc(100dvh - 96px));overflow-y:auto;border:1px solid var(--line);border-radius:20px;background:var(--surface,#111016);box-shadow:0 12px 48px #0008;overscroll-behavior:contain}
 .tel-helper-panel[hidden]{display:none}
 .tel-helper-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-bottom:1px solid var(--line)}
 .tel-helper-heading{display:flex;align-items:center;gap:10px;min-width:0}
@@ -27,10 +27,11 @@
 .tel-helper-status{font-size:13px;line-height:1.6;margin:12px 0 0;overflow-wrap:anywhere}
 .tel-helper-status:empty{display:none}
 .tel-helper-privacy{font-size:11px;line-height:1.6;color:var(--muted);margin:12px 0 0}
-.tel-helper :focus-visible{outline:2px solid var(--accent,#d5c2ff);outline-offset:3px}
+.tel-helper :focus-visible,.tel-helper-launcher:focus-visible{outline:2px solid var(--accent,#d5c2ff);outline-offset:3px}
 .tel-helper-highlight{outline:2px solid var(--accent,#d5c2ff);outline-offset:-2px;background:var(--surface-2,#241c32)!important;scroll-margin-top:100px}
 .tel-helper-heartbeat-summary{margin:0 18px 18px;padding:14px 16px;border:1px solid var(--teal);border-radius:12px;background:var(--teal-soft);color:var(--ink);line-height:1.7;overflow-wrap:anywhere}
-.workspace .page{padding-bottom:100px}
-body:has(dialog[open]) .tel-helper,body:has(.sidebar.open) .tel-helper{visibility:hidden}
-@media(max-width:600px){.tel-helper{right:max(14px,env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom) + var(--tel-helper-keyboard-inset,0px))}.tel-helper-launcher{width:54px;height:54px;padding:12px;border-radius:18px}.tel-helper-launcher>span{display:none}.tel-helper-panel{width:min(370px,calc(100vw - 28px));max-height:calc(var(--tel-helper-viewport-height,100dvh) - 108px - env(safe-area-inset-bottom))}.tel-helper-head,.tel-helper-body{padding:14px}}
+.tel-helper-settings{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.tel-helper-hide{min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--muted);font-size:12px}.tel-helper-hide:hover{color:var(--ink);border-color:var(--teal)}.tel-helper-settings p{font-size:11px;line-height:1.6;color:var(--muted);margin:0;flex:1;min-width:125px}.tel-helper-preference{margin-top:24px}.tel-helper-preference input{width:20px;height:20px;flex:none}.tel-helper-preference .checkline{min-height:44px;align-items:center;font-size:14px}
+body:has(dialog[open]) .tel-helper,body:has(.sidebar.open) .tel-helper,body:has(dialog[open]) .tel-helper-launcher,body:has(.sidebar.open) .tel-helper-launcher{visibility:hidden}
+@media(max-width:650px){.topbar .tel-helper-launcher{width:44px;height:44px;min-width:44px;min-height:44px;padding:9px}.tel-helper-launcher>span{display:none}.tel-helper-head,.tel-helper-body{padding:14px}}
+
 @media(prefers-reduced-motion:reduce){.tel-helper *{scroll-behavior:auto!important;transition:none!important}.tel-helper-launcher:active,.tel-helper-choice:active{transform:none}}

@@ -20,7 +20,7 @@ if(url.pathname==='/test-automation')return Response.json(await runAutomations(e
 const compiled=await build({stdin:{contents:wrapper,resolveDir:process.cwd(),sourcefile:'workflow-test-entry.js'},bundle:true,format:'esm',write:false,platform:'browser'});
 const mf=new Miniflare({modules:true,script:compiled.outputFiles[0].text,compatibilityDate:'2026-07-30',d1Databases:{DB:'workflow-tests'}});
 const db=await mf.getD1Database('DB');
-for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql']){
+for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql']){
  const sql=await readFile(file,'utf8');
  for(const part of sql.split(';').map(x=>x.trim()).filter(Boolean))await db.prepare(part).run();
 }

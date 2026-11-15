@@ -32,7 +32,7 @@ const feedback={user_id:'member',period:day().slice(0,7),quality:'Good',timeline
 
 test('TEL collaboration integration in the Workers runtime',async t=>{
  try{
-  for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql']){
+  for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql']){
    const sql=await readFile(new URL('../'+file,import.meta.url),'utf8');
    for(const part of sql.split(';').map(x=>x.trim()).filter(Boolean))await db.prepare(part).run();
   }
@@ -47,11 +47,10 @@ test('TEL collaboration integration in the Workers runtime',async t=>{
    await ok('hr','POST','/api/channels/announcements/messages',{body:'Team update'});
   });
 
-  await t.test('threads stay in their channel and mentions/replies notify authorised recipients',async()=>{
+  await t.test('threads stay in their channel and use unread markers without notification fanout',async()=>{
    const message=(await ok('member','POST','/api/channels/marketing/messages',{body:'Hello @lead @finance'})).message;
-   assert.equal((await db.prepare("SELECT count(*) n FROM notifications WHERE user_id='lead'").first()).n,2);
-   // Finance receives the company announcement, but cannot receive a marketing mention.
-   assert.equal((await db.prepare("SELECT count(*) n FROM notifications WHERE user_id='finance'").first()).n,1);
+   assert.equal((await db.prepare("SELECT count(*) n FROM notifications WHERE user_id='lead'").first()).n,0);
+   assert.equal((await db.prepare("SELECT count(*) n FROM notifications WHERE user_id='finance'").first()).n,0);
    await ok('lead','POST','/api/channels/marketing/messages',{body:'Reply',parent_id:message.id});
    await denied('member','POST','/api/channels/general/messages',{body:'Cross-channel reply',parent_id:message.id},400);
    assert.equal((await ok('member','GET','/api/channels/marketing/messages')).messages.length,2);

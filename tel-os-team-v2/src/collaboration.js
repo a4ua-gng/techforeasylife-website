@@ -1,5 +1,4 @@
 import {queueMeetingDeliveries} from './deliveries.js';
-import {queuePendingWorkDeliveries} from './work-deliveries.js';
 const sameDept = (a, b) => String(a || '').toLowerCase() === String(b || '').toLowerCase();
 const isFounder = user => user.role === 'founder';
 const isHRLead = user => user.role === 'hr_lead';
@@ -64,7 +63,12 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
   };
 
   if (path === '/api/channels' && method === 'GET') {
-    const channels = (await rows(env, 'SELECT * FROM channels ORDER BY CASE department WHEN \'Company\' THEN 0 ELSE 1 END,name')).filter(c => canSeeDepartment(user, c.department));
+    const channels = (await rows(env, `SELECT c.*,
+      (SELECT COUNT(*) FROM messages m LEFT JOIN channel_reads cr ON cr.channel_id=m.channel_id AND cr.user_id=?
+       WHERE m.channel_id=c.id AND m.user_id<>? AND m.rowid>COALESCE(cr.last_read_seq,0)
+       AND m.created_at>=COALESCE((SELECT value FROM app_settings WHERE key='chat_unread_enabled_at'),'9999-01-01')) AS unread_count,
+      (SELECT id FROM messages WHERE channel_id=c.id ORDER BY rowid DESC LIMIT 1) AS latest_message_id
+      FROM channels c ORDER BY CASE c.department WHEN 'Company' THEN 0 ELSE 1 END,c.name`, user.id, user.id)).filter(c => canSeeDepartment(user, c.department));
     return json({ channels });
   }
   if (path === '/api/channels' && method === 'POST') {
@@ -83,8 +87,35 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
   const messageMatch = path.match(/^\/api\/channels\/([^/]+)\/messages$/);
   if (messageMatch && method === 'GET') {
     const channel = await channelAccess(messageMatch[1]);
-    const messages = await rows(env, 'SELECT m.*,u.name FROM (SELECT * FROM messages WHERE channel_id=? ORDER BY created_at DESC,id DESC LIMIT 200) m JOIN users u ON u.id=m.user_id ORDER BY m.created_at,m.id', channel.id);
-    return json({ messages });
+    // Include the parent of a recent reply even when its root predates the window.
+    const messages = await rows(env, `WITH recent AS (SELECT rowid AS seq,* FROM messages WHERE channel_id=? ORDER BY rowid DESC LIMIT 200),
+      selected AS (SELECT * FROM recent UNION SELECT p.rowid AS seq,p.* FROM messages p JOIN recent r ON r.parent_id=p.id WHERE p.channel_id=?)
+      SELECT s.*,u.name,(SELECT COUNT(*) FROM messages reply WHERE reply.parent_id=s.id AND reply.channel_id=s.channel_id) AS reply_count
+      FROM selected s JOIN users u ON u.id=s.user_id ORDER BY s.seq`, channel.id, channel.id);
+    return json({ messages: messages.map(({seq,...message})=>message), read_cursor_id: messages.at(-1)?.id || null });
+  }
+  const readMatch = path.match(/^\/api\/channels\/([^/]+)\/read$/);
+  if (readMatch && method === 'POST') {
+    const channel = await channelAccess(readMatch[1]);
+    const messageId = text(b.message_id,80,'Read message ID',true);
+    const message = await one(env,'SELECT rowid AS seq,id FROM messages WHERE id=? AND channel_id=?',messageId,channel.id);
+    if(!message)fail(400,'Choose a message from this channel.');
+    await run(env,`INSERT INTO channel_reads(user_id,channel_id,last_read_seq,last_read_message_id,updated_at) VALUES(?,?,?,?,?)
+      ON CONFLICT(user_id,channel_id) DO UPDATE SET
+      last_read_message_id=CASE WHEN excluded.last_read_seq>channel_reads.last_read_seq THEN excluded.last_read_message_id ELSE channel_reads.last_read_message_id END,
+      last_read_seq=MAX(channel_reads.last_read_seq,excluded.last_read_seq),updated_at=excluded.updated_at`,user.id,channel.id,message.seq,message.id,now());
+    const count=await one(env,`SELECT COUNT(*) AS unread_count FROM messages m JOIN channel_reads cr ON cr.user_id=? AND cr.channel_id=m.channel_id
+      WHERE m.channel_id=? AND m.user_id<>? AND m.rowid>cr.last_read_seq
+      AND m.created_at>=COALESCE((SELECT value FROM app_settings WHERE key='chat_unread_enabled_at'),'9999-01-01')`,user.id,channel.id,user.id);
+    return json({ok:true,unread_count:count.unread_count});
+  }
+  const threadMatch = path.match(/^\/api\/channels\/([^/]+)\/threads\/([^/]+)$/);
+  if(threadMatch&&method==='GET'){
+    const channel=await channelAccess(threadMatch[1]);
+    const parent=await one(env,'SELECT m.*,u.name,(SELECT COUNT(*) FROM messages r WHERE r.parent_id=m.id AND r.channel_id=m.channel_id) AS reply_count FROM messages m JOIN users u ON u.id=m.user_id WHERE m.id=? AND m.channel_id=? AND m.parent_id IS NULL',threadMatch[2],channel.id);
+    if(!parent)fail(404,'Thread not found in this channel.');
+    const replies=await rows(env,'SELECT r.*,u.name FROM (SELECT rowid AS seq,* FROM messages WHERE parent_id=? AND channel_id=? ORDER BY rowid DESC LIMIT 200) r JOIN users u ON u.id=r.user_id ORDER BY r.seq',parent.id,channel.id);
+    return json({parent,replies:replies.map(({seq,...reply})=>reply),total_replies:parent.reply_count});
   }
   if (messageMatch && method === 'POST') {
     const channel = await channelAccess(messageMatch[1]);
@@ -98,17 +129,8 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
     }
     const messageId = id();
     await run(env, 'INSERT INTO messages(id,channel_id,user_id,body,parent_id,created_at) VALUES(?,?,?,?,?,?)', messageId, channel.id, user.id, content, parent_id, now());
-    // Every current channel member receives one alert. Mentions, thread ownership,
-    // announcements and Harsh's Marketing oversight share this single recipient set.
-    const members = await rows(env, "SELECT id,role,department FROM users WHERE status IN ('active','on_leave')");
-    const recipients = members.filter(person=>person.id!==user.id&&canSeeDepartment(person,channel.department));
-    const notificationTime=now();
-    for(let offset=0;offset<recipients.length;offset+=10){
-      const batch=recipients.slice(offset,offset+10);
-      await run(env,'INSERT OR IGNORE INTO notifications(id,user_id,title,body,link,created_at,dedupe_key) VALUES '+batch.map(()=>'(?,?,?,?,?,?,?)').join(','),
-        ...batch.flatMap(person=>[id(),person.id,parent?`Reply in #${channel.name}`:`Update in #${channel.name}`,`${user.name} posted a message.`,'channel/'+channel.id,notificationTime,'channel-message:'+messageId+':'+person.id]));
-    }
-    try{await queuePendingWorkDeliveries(env);}catch{console.error(JSON.stringify({event:'channel_delivery_queue_needs_retry',message_id:messageId}));}
+    // Chat is signalled only by each member's persistent channel unread cursor.
+    // Message text, mentions and replies do not create inbox/email notifications.
     await audit(env, user, 'message_posted', 'channel', channel.id);
     return json({ message: await one(env, 'SELECT m.*,u.name FROM messages m JOIN users u ON u.id=m.user_id WHERE m.id=?', messageId) }, 201);
   }

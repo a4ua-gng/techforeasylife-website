@@ -1,21 +1,17 @@
 import {id,now,day,fail,json,rows,one,run,audit,notify,requireRole,text,safeUser,salt,hashPassword,randomPassword} from './core.js';
-import {presenceSQL} from './extensions.js';
+import {presenceSQL,workStatusSQL} from './extensions.js';
 const hr=u=>['founder','hr_lead','hr_member'].includes(u.role);
 const roles=['founder','hr_lead','hr_member','team_lead','employee','finance_head'];
 const departments=['Leadership','HR','Marketing','Finance','Strategy'];
 export async function handleAdmin({request,url,env,user,body}){
  const p=url.pathname,m=request.method;
  if(p==='/api/people'&&m==='GET'){
+  const today=day(),at=now();
   const people=await rows(env,`SELECT u.id,u.employee_id,u.username,u.name,u.designation,u.role,u.department,u.manager_id,u.joined_on,u.status,
    (SELECT full_name FROM employee_profiles ep WHERE ep.user_id=u.id) AS full_name,
    CASE WHEN EXISTS(SELECT 1 FROM employee_profiles ep WHERE ep.user_id=u.id AND ep.photo_key IS NOT NULL) THEN '/api/people/'||u.id||'/photo' ELSE NULL END AS photo_url,
    ${presenceSQL()} AS presence,
-   CASE WHEN u.status IN ('suspended','exited') THEN 'unavailable'
-   WHEN u.status='on_leave' OR EXISTS(SELECT 1 FROM leave_requests l WHERE l.user_id=u.id AND l.status='approved' AND l.start_date<=? AND l.end_date>=?) THEN 'on_leave'
-   WHEN EXISTS(SELECT 1 FROM attendance_sessions a WHERE a.user_id=u.id AND a.clock_out IS NULL AND a.state='working') THEN 'working'
-   WHEN EXISTS(SELECT 1 FROM attendance_sessions a WHERE a.user_id=u.id AND a.clock_out IS NULL AND a.state='break') THEN 'on_break'
-   WHEN EXISTS(SELECT 1 FROM availability a WHERE a.user_id=u.id AND a.start_date<=? AND a.end_date>=? AND a.kind IN ('exam','unavailable')) THEN 'unavailable'
-   WHEN u.status IN ('suspended','exited') THEN 'unavailable' ELSE 'offline' END AS crew_status FROM users u ORDER BY u.employee_id`,new Date(Date.now()-90000).toISOString(),new Date(Date.now()-90000).toISOString(),day(),day(),day(),day());
+   ${workStatusSQL()} AS crew_status FROM users u ORDER BY u.employee_id`,at,today,today,today,today);
   return json({people});
  }
  if(p==='/api/people'&&m==='POST'){

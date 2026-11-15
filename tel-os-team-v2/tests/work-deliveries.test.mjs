@@ -8,7 +8,7 @@ const requests=[];
 let providerMode='accepted',providerDelay=0;
 const stamp=new Date().toISOString(),sender='techforeasylife.operations@gmail.com';
 const wrapper=`import {queueWorkDeliveries,queuePendingWorkDeliveries,deliverWorkWhatsApp} from './src/work-deliveries.js';
- export default {async fetch(request,env){const body=await request.json(),config=body.configured===false?{...env,WHATSAPP_WORK_TEMPLATE_NAME:''}:env;let result;if(body.action==='queue')result=await queueWorkDeliveries(config,body.notification);else if(body.action==='backfill')result=await queuePendingWorkDeliveries(config);else result=await deliverWorkWhatsApp(config);return Response.json(result);}};`;
+ export default {async fetch(request,env){const body=await request.json(),config={...env,...(body.configured===false?{WHATSAPP_WORK_TEMPLATE_NAME:''}:{}),...(body.operational?{TEL_OS_OPERATIONAL_EMAILS:'enabled'}:{})};let result;if(body.action==='queue')result=await queueWorkDeliveries(config,body.notification);else if(body.action==='backfill')result=await queuePendingWorkDeliveries(config);else result=await deliverWorkWhatsApp(config);return Response.json(result);}};`;
 before(async()=>{
  const built=await build({stdin:{contents:wrapper,resolveDir:process.cwd(),sourcefile:'work-deliveries-test.js'},bundle:true,write:false,format:'esm',platform:'browser'});
  runtime=new Miniflare({modules:true,script:built.outputFiles[0].text,compatibilityDate:'2026-07-30',d1Databases:{DB:'work-delivery-tests'},log:new Log(LogLevel.NONE),bindings:{WHATSAPP_TOKEN:'isolated-provider-fixture-token',WHATSAPP_PHONE_NUMBER_ID:'fixture-number',WHATSAPP_WORK_TEMPLATE_NAME:'tel_work_update'},outboundService:async request=>{
@@ -101,4 +101,13 @@ test('backfill remains bounded and deduplicated for a large batch',async()=>{
  const statements=[];for(let i=0;i<65;i++)statements.push(db.prepare('INSERT INTO notifications VALUES(?,?,?,?,?,?)').bind('bulk-'+String(i).padStart(3,'0'),'member','Ignored private title','Ignored private body','tasks',stamp));await db.batch(statements);
  const first=await call('backfill');assert.equal(first.inserted,100);const second=await call('backfill');assert.equal(second.inserted,30);assert.equal((await call('backfill')).inserted,0);
  assert.equal((await db.prepare("SELECT COUNT(*) n FROM work_notification_deliveries WHERE notification_id LIKE 'bulk-%'").first()).n,130);
+});
+
+
+test('task-and-meeting mode never fans generic notifications into email or WhatsApp queues',async()=>{
+ const n=await notification('operational-mode-chat','channel/general');
+ assert.equal((await call('queue',{operational:true,notification:n})).inserted,0);
+ assert.equal((await call('backfill',{operational:true})).inserted,0);
+ assert.deepEqual(await deliveries(n.id),[]);
+ const before=requests.length;assert.equal((await call('deliver',{operational:true})).configured,false);assert.equal(requests.length,before);
 });

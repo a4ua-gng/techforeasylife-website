@@ -1,5 +1,7 @@
 import {rows,run,id,now} from './core.js';
+import {queueOperationalMeeting} from './operational-emails.js';
 export async function queueMeetingDeliveries(env,meeting,event='scheduled'){
+ if(env.TEL_OS_OPERATIONAL_EMAILS==='enabled')return queueOperationalMeeting(env,meeting,event);
  const participants=JSON.parse(meeting.participants_json||'[]');if(!participants.length)return;
  const people=await rows(env,`SELECT id,email,phone FROM users WHERE id IN (${participants.map(()=>'?').join(',')})`,...participants);
  const pending=[];for(const user of people){const digits=user.phone.replace(/\D/g,'');const phone=digits.length===10?'+91'+digits:digits.length>=11&&digits.length<=15?'+'+digits:'';

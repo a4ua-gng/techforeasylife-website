@@ -4,13 +4,19 @@ Production: https://tel-os-team-v2.xtremedivyangshu.workers.dev
 
 Cloudflare Workers + a dedicated D1 database provide real employee accounts, department workspaces, attendance, tasks, leave, meetings, private HR tickets, image uploads and founder oversight. The public TEL website content is unchanged.
 
-## Current release: email and navigation helper (2.4.1)
+## Current release: focused work updates (2.5.0)
 
-The floating Ask TEL helper opens existing authorised sections from short requests such as “open my tasks”, “email setup” and “last heartbeat”. Founder heartbeat requests open Activity & status, highlight the selected member and show the actual recorded time. Ambiguous requests offer choices. Requests are matched locally in the browser, require no AI service and do not send typed text to an external provider. Mobile directory search, header controls and card footers now align at narrow widths.
+Chat uses persistent unread dots beside channel names, with no chat emails or Notification-centre entries. Enter sends a chat message or thread reply; Shift+Enter inserts a line break. Drafts survive refreshes and thread polling.
 
-Every employee can verify any normal email address using an eight-digit email code. Google sign-in and phone/WhatsApp onboarding are disabled. The existing instant verification sender and credentials are preserved. Codes expire in10minutes for instant delivery; the hourly Operations queue supports3hour codes when instant delivery is unavailable. Codes are never returned to the client. Verification is scoped to the logged-in requester, rate limited and capped at five attempts. Duplicate active verified addresses are rejected. Only successful verification updates the notification address.
+Online means signed in to a valid session. Working means clocked in and not on a break. Switching tabs or being idle does not show Away. The founder view retains actual app heartbeat times separately. Ask TEL occupies reserved header space, can be hidden, and can be restored from My account; preferences stay separate for each account in the browser.
 
-The notification sender is techforeasylife.operations@gmail.com. Its enabled hourly job sends exactly one consolidated personalised digest per employee with newly claimed relevant events, and no empty check-ins. The D1 receipt ledger prevents automatic repeats and uncertain sends require review. Verification codes are separate from work digests. No inbox-reading step or work-digest delivery through the instant email provider is configured. Founders get wider company events and a copyable/downloadable text overview.
+Employees receive their own unfinished-task plan at09:00IST on eligible workdays, starting the day after activation. Empty plans and approved leave, unavailable/exam periods, holidays and nonworking days are skipped. Meeting invitations are queued immediately and reminders are scheduled one hour before the meeting, including existing future meetings. A meeting created less than one hour ahead receives one combined invitation.
+
+An assignee may request a task handover. The current assigned reviewer must approve before ownership changes. Approval assigns the task immediately, with a targeted in-app notice and email to the new owner. The original requester and reviewer retain private handover notes; these notes are excluded from emails and the target's view. Finished work still requires independent review.
+
+Operational emails use Resend from TEL Operations at notifications@techforeasylife.in, with replies directed to the Operations Gmail address. Recipients must have a current, unique, explicitly verified email in TEL OS; any normal email provider works. The durable outbox, atomic claims, stable provider idempotency keys, rate gate and confirmed provider IDs prevent duplicate and falsely successful sends. Uncertain sends require review; explicit rate-limit rejections are safely deferred. Worker email checks run every minute; existing attendance and workflow checks remain every five minutes.
+
+The former broad hourly Gmail digest is disabled. Its scheduled job now delivers requested verification codes only. Existing instant verification credentials and OTP sender are preserved. Employees verify an eight-digit code before accessing work APIs; Google sign-in and phone/WhatsApp onboarding remain disabled. No inbox is read.
 
 ## Daily work and access
 
@@ -18,9 +24,9 @@ Department Home screens welcome members by name. Marketing reports directly to H
 
 Weekday clock-in defaults to17:00IST from16November2026. Five-minute Cron checks handle pre-start, due, grace and manager/HR follow-ups; approved leave, academic availability, holidays and corrections are exempt. Attendance shows seconds and supports breaks, resume, clock-out and local-midnight accounting. Work status is distinct from app presence.
 
-Channels notify their authorised company/department members and founders without duplicate mention/thread alerts. Employees can change their own profile picture and add permission-checked images to chats, tasks, meetings and private tickets.
+Channels show unread indicators only to their authorised company/department members and founders. Employees can change their own profile picture and add permission-checked images to chats, tasks, meetings and private tickets.
 
-Eight employee PDF profiles were matched; two remain for HR identity review. Seven supplied identity-card images are private to the matched employee and authorised HR/founders, with access logging. Two unmatched cards stay HR-only until matching. Original decoded pixels were preserved with lossless storage. No identity numbers were transcribed. No employee contacts, PDF documents, portraits, identity images, credentials or live database fixtures are included in source.
+Imported employee PDF profiles are matched to existing accounts only after identity confirmation; unmatched records remain for private HR review. Seven supplied identity-card images are private to the matched employee and authorised HR/founders, with access logging. Unmatched cards stay HR-only until matching. Original decoded pixels were preserved with lossless storage. No identity numbers were transcribed. No employee contacts, PDF documents, portraits, identity images, credentials or live database fixtures are included in source.
 
 Activity monitoring records TEL OS sections, app visibility/focus and presence only. It cannot enumerate other tabs or read other websites/typed text. The app discloses recording and retains activity events for30days.
 
