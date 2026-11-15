@@ -25,3 +25,7 @@ CREATE INDEX IF NOT EXISTS idx_work_notification_queue ON work_notification_deli
 INSERT OR IGNORE INTO app_settings(key,value) VALUES('work_notifications_enabled_at',strftime('%Y-%m-%dT%H:%M:%fZ','now'));
 
 CREATE INDEX IF NOT EXISTS idx_notifications_created ON notifications(created_at,id);
+
+CREATE TABLE IF NOT EXISTS email_verification_challenges(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),email TEXT NOT NULL,code TEXT NOT NULL DEFAULT '',code_hash TEXT NOT NULL,requested_at TEXT NOT NULL,expires_at TEXT NOT NULL,attempts INTEGER NOT NULL DEFAULT 0,status TEXT NOT NULL DEFAULT 'queued',sent_at TEXT,provider_id TEXT NOT NULL DEFAULT '',error TEXT NOT NULL DEFAULT '');
+CREATE INDEX IF NOT EXISTS idx_email_challenge_user ON email_verification_challenges(user_id,requested_at,id);
+CREATE TABLE IF NOT EXISTS tel_hourly_email_event_receipts(user_id TEXT NOT NULL REFERENCES users(id),event_key TEXT NOT NULL,recipient TEXT NOT NULL,status TEXT NOT NULL CHECK(status IN ('claimed','sent','needs_review')),provider_id TEXT NOT NULL DEFAULT '',claimed_at TEXT NOT NULL,sent_at TEXT,error TEXT NOT NULL DEFAULT '',PRIMARY KEY(user_id,event_key));

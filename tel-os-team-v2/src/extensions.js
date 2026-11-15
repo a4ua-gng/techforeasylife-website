@@ -20,7 +20,7 @@ export async function handleExtensions({request,url,env,user,body={}}){
  }
  if(p==='/api/activity/heartbeat'&&m==='POST'){
   if(typeof body.client_id!=='string'||!/^[a-f0-9-]{36}$/.test(body.client_id))fail(400,'Invalid activity session.');if(typeof body.visible!=='boolean'||typeof body.focused!=='boolean'||!Number.isInteger(body.idle_seconds)||body.idle_seconds<0||body.idle_seconds>86400)fail(400,'Invalid presence state.');
-  const section=body.section==='grievances'?'private_area':body.section;if(!sections.has(section))fail(400,'Unknown TEL OS section.');
+  const section=['grievances','verify-email'].includes(body.section)?'private_area':body.section;if(!sections.has(section))fail(400,'Unknown TEL OS section.');
   const prev=await one(env,'SELECT * FROM activity_sessions WHERE id=?',body.client_id);if(prev&&prev.user_id!==user.id)fail(403,'This activity session belongs to a different account.');const stamp=now();
   const changes=[env.DB.prepare('INSERT INTO activity_sessions(id,user_id,section,visible,focused,idle_seconds,last_seen) VALUES(?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET section=excluded.section,visible=excluded.visible,focused=excluded.focused,idle_seconds=excluded.idle_seconds,last_seen=excluded.last_seen').bind(body.client_id,user.id,section,body.visible?1:0,body.focused?1:0,body.idle_seconds,stamp)];
   if(!prev||prev.section!==section||prev.visible!==Number(body.visible))changes.push(env.DB.prepare('INSERT INTO activity_events(id,user_id,section,event,created_at) VALUES(?,?,?,?,?)').bind(id(),user.id,section,!prev||prev.section!==section?'opened_section':body.visible?'returned_to_tel_os':'left_tel_os_tab',stamp));

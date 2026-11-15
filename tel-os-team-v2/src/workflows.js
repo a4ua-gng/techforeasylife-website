@@ -1,4 +1,5 @@
 import {runAttendanceReminders} from './schedules.js';
+import {expireEmailVerifications} from './email-verification.js';
 import {queueMeetingDeliveries,deliverMeetingWhatsApp} from './deliveries.js';
 import {queueFounderUpdates} from './founder-updates.js';
 import {queuePendingWorkDeliveries,deliverWorkWhatsApp} from './work-deliveries.js';
@@ -267,6 +268,7 @@ export async function runAutomations(env) {
  for(const meeting of meetings){let participants=[];try{participants=JSON.parse(meeting.participants_json)||[];}catch{};const ids=[...new Set([...participants,meeting.created_by])].filter(x=>typeof x==='string');for(const person of ids)await insertNotice(person,'Upcoming meeting',`${meeting.title} starts ${meeting.starts_at}.`,'meetings',`meeting:${meeting.id}:${person}`);await queueMeetingDeliveries(env,meeting,'reminder');}
  const isMonday=new Intl.DateTimeFormat('en-US',{weekday:'short',timeZone:TZ}).format(new Date())==='Mon';
  if(isMonday){const leaders=await dbRows(env,"SELECT id,role,department FROM users WHERE role IN ('founder','hr_lead','team_lead','finance_head') AND status NOT IN ('suspended','exited','on_leave')");for(const leader of leaders){const filter=leader.role==='founder'?'1=1':'department=?',p=leader.role==='founder'?[]:[leader.department];const summary=await dbOne(env,`SELECT COUNT(*) total,SUM(CASE WHEN status='review' THEN 1 ELSE 0 END) reviews,SUM(CASE WHEN deadline<? AND status!='done' THEN 1 ELSE 0 END) overdue FROM tasks WHERE status!='done' AND ${filter}`,day,...p);await insertNotice(leader.id,'Weekly operations summary',`${summary.total} active assignments; ${summary.reviews||0} awaiting review; ${summary.overdue||0} overdue. Review workload and approved leave before assigning work.`,'reports',`weekly:${day}:${leader.id}`);}}
+ await expireEmailVerifications(env);
  const whatsapp_delivery=await deliverMeetingWhatsApp(env);
  await flushNotices();
  const founder_updates=await queueFounderUpdates(env);

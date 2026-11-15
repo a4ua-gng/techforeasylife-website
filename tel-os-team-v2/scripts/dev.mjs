@@ -3,7 +3,7 @@ import {readFile} from 'node:fs/promises';
 import {spawnSync} from 'node:child_process';
 import {hashPassword,now,day} from '../src/core.js';
 const built=spawnSync(process.execPath,['build.mjs'],{stdio:'inherit'});if(built.status)process.exit(built.status);
-const mf=new Miniflare({modules:true,scriptPath:'dist/worker.js',compatibilityDate:'2026-07-30',d1Databases:{DB:'tel-os-local'},d1Persist:'.mf',host:'127.0.0.1',port:4173});
+const mf=new Miniflare({modules:true,scriptPath:'dist/worker.js',compatibilityDate:'2026-07-30',bindings:{NOTIFICATION_CHANNELS:'email'},d1Databases:{DB:'tel-os-local'},d1Persist:'.mf',host:'127.0.0.1',port:4173});
 const db=await mf.getD1Database('DB');
 await db.exec((await readFile('dist/schema.sql','utf8')).replaceAll('\n',' '));
 const count=await db.prepare('SELECT COUNT(*) n FROM users').first();

@@ -7,6 +7,7 @@ import {handleExtensions} from './extensions.js';
 import {handleMedia} from './media.js';
 import {handleConnections,googleCallback,connectionState} from './connections.js';
 import {handleWebsite} from './website.js';
+import {handleEmailVerification} from './email-verification.js';
 import {handleIdentity} from './identity.js';
 import {handleFounderUpdates} from './founder-updates.js';
 const binaries=typeof __BINARY_ASSETS__==='undefined'?{}:__BINARY_ASSETS__;
@@ -16,17 +17,17 @@ export default {
  async fetch(request,env){const requestId=id();try{
   const url=new URL(request.url),mutating=!['GET','HEAD'].includes(request.method);
   if(mutating){const origin=request.headers.get('Origin');if(origin!==url.origin)fail(403,'Requests must originate from this TEL OS workspace.');}
-  if(url.pathname==='/api/health'&&request.method==='GET')return secure(json({service:'TEL OS',version:'2.3.0'}),requestId);
+  if(url.pathname==='/api/health'&&request.method==='GET')return secure(json({service:'TEL OS',version:'2.4.0'}),requestId);
   if(['GET','HEAD'].includes(request.method)&&assets[url.pathname]){const asset=assets[url.pathname];return secure(new Response(request.method==='HEAD'?null:asset.value,{headers:{'Content-Type':asset.type}}),requestId);}
   if(url.pathname==='/favicon.ico')return secure(new Response(null,{status:204}),requestId);
   if(['GET','HEAD'].includes(request.method)&&binaries[url.pathname]){const a=binaries[url.pathname];return secure(new Response(request.method==='HEAD'?null:Uint8Array.from(atob(a.base64),c=>c.charCodeAt(0)),{headers:{'Content-Type':a.type}}),requestId);}
   if(!url.pathname.startsWith('/api/'))fail(404,'Page not found.');
-  if(url.pathname==='/api/connections/google/callback'&&request.method==='GET')return secure(await googleCallback(request,env),requestId);
+  if(url.pathname==='/api/connections/google/callback'&&request.method==='GET'){if(env.NOTIFICATION_CHANNELS==='email')fail(410,'Use email verification instead.');return secure(await googleCallback(request,env),requestId);}
   const body=mutating&&url.pathname!=='/api/uploads'?await readBody(request):{};
   const user=await authenticate(request,env),context={request,url,env,user,body,helpers};
   let response=await authRoutes(context);
-  if(!response&&url.pathname.startsWith('/api/connections'))response=await handleConnections(context);
-  if(!response&&user.role!=='founder'){const setting=await env.DB.prepare("SELECT value FROM app_settings WHERE key='require_connections'").first();if(setting?.value==='true'&&!(await connectionState(env,user)).complete)fail(428,'Connect your verified Google email and WhatsApp before using the workspace.');}
+  if(!response&&url.pathname.startsWith('/api/connections'))response=await handleEmailVerification(context)||await handleConnections(context);
+  if(!response&&user.role!=='founder'){const setting=await env.DB.prepare("SELECT value FROM app_settings WHERE key='require_connections'").first();if((env.NOTIFICATION_CHANNELS==='email'||setting?.value==='true')&&!(await connectionState(env,user)).complete)fail(428,'Verify your notification email before using the workspace.');}
   if(!response&&url.pathname==='/api/automations'&&request.method==='GET'){requireRole(user,'founder');response=json({schedule:'Every 5 minutes',timezone:'Asia/Kolkata',delivery:'In-app notification centre',runs:await rows(env,'SELECT * FROM automation_runs ORDER BY created_at DESC LIMIT 30')});}
   if(!response&&url.pathname==='/api/automations/run'&&request.method==='POST'){requireRole(user,'founder');response=json(await runAutomations(env));}
   if(!response)response=await handleAdmin(context);

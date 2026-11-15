@@ -32,7 +32,7 @@ async function enqueue(env,notification){
  const specific=notification!==undefined;
  if(specific&&(!notification||typeof notification.id!=='string'||typeof notification.user_id!=='string'))return {inserted:0};
  const statements=[];
- for(const channel of ['email','whatsapp']){
+ for(const channel of (env.NOTIFICATION_CHANNELS==='email'?['email']:['email','whatsapp'])){
   const verified=channel==='email'?verifiedEmail:verifiedPhone;
   const configured=channel==='email'?"EXISTS(SELECT 1 FROM integration_status WHERE provider='gmail' AND status='active_chatgpt_job' AND account_label=?)":'?=1';
   const args=channel==='email'?[GMAIL_SENDER]:[whatsappConfigured(env)?1:0];
@@ -64,7 +64,7 @@ export async function queueWorkDeliveries(env,notification){return enqueue(env,n
 export async function queuePendingWorkDeliveries(env){return enqueue(env);}
 
 export async function deliverWorkWhatsApp(env){
- if(!whatsappConfigured(env))return {configured:false,accepted:0,needs_review:0};
+ if(env.NOTIFICATION_CHANNELS==='email'||!whatsappConfigured(env))return {configured:false,accepted:0,needs_review:0};
  const result=await env.DB.prepare(`SELECT d.id,d.notification_id,d.user_id,d.category,n.link,c.account
   FROM work_notification_deliveries d JOIN notifications n ON n.id=d.notification_id AND n.user_id=d.user_id
   JOIN users u ON u.id=d.user_id JOIN member_connections c ON c.user_id=d.user_id AND c.provider='whatsapp'
