@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS task_transfer_requests (
+CREATE TABLE IF NOT EXISTS task_handover_requests (
  id TEXT PRIMARY KEY,
  task_id TEXT NOT NULL REFERENCES tasks(id),
  from_user_id TEXT NOT NULL REFERENCES users(id),
@@ -17,6 +17,6 @@ CREATE TABLE IF NOT EXISTS task_transfer_requests (
  CHECK(to_user_id<>reviewer_id),
  CHECK(requested_by=from_user_id)
 );
-CREATE UNIQUE INDEX IF NOT EXISTS one_pending_task_transfer_v25 ON task_transfer_requests(task_id) WHERE status='pending';
-CREATE INDEX IF NOT EXISTS task_transfers_reviewer_v25 ON task_transfer_requests(reviewer_id,status,created_at);
-CREATE INDEX IF NOT EXISTS task_transfers_requester_v25 ON task_transfer_requests(requested_by,created_at);
+CREATE UNIQUE INDEX IF NOT EXISTS one_pending_task_transfer_v25 ON task_handover_requests(task_id) WHERE status='pending';
+CREATE INDEX IF NOT EXISTS task_transfers_reviewer_v25 ON task_handover_requests(reviewer_id,status,created_at);
+CREATE INDEX IF NOT EXISTS task_transfers_requester_v25 ON task_handover_requests(requested_by,created_at);

@@ -5,7 +5,7 @@ const activeTasks = ['todo','working','revision'];
 const leads = ['founder','hr_lead','team_lead','finance_head'];
 const select = `SELECT r.*,t.title AS task_title,t.status AS task_status,t.assignee_id,t.leader_id,
  f.name AS from_name,z.name AS to_name,v.name AS reviewer_name
- FROM task_transfer_requests r JOIN tasks t ON t.id=r.task_id
+ FROM task_handover_requests r JOIN tasks t ON t.id=r.task_id
  JOIN users f ON f.id=r.from_user_id JOIN users z ON z.id=r.to_user_id JOIN users v ON v.id=r.reviewer_id`;
 
 function view(item,user){
@@ -65,7 +65,7 @@ export async function handleTaskTransfers({request,url,env,user,body={}}){
    const targetId=text(body.to_user_id,80,true),reason=text(body.reason,1500,true);await checkTarget(env,task,targetId);
    const rid=id(),stamp=now(),date=day(),notificationId=id(),auditId=id();let result;
    try{result=await env.DB.batch([
-    env.DB.prepare(`INSERT INTO task_transfer_requests(id,task_id,from_user_id,to_user_id,reviewer_id,requested_by,reason,created_at,updated_at) SELECT ?,t.id,t.assignee_id,?,t.leader_id,?,?,?,? FROM tasks t WHERE t.id=? AND t.assignee_id=? AND t.leader_id=? AND ${eligibleSQL()}`).bind(rid,targetId,user.id,reason,stamp,stamp,task.id,user.id,task.leader_id,targetId,date,date),
+    env.DB.prepare(`INSERT INTO task_handover_requests(id,task_id,from_user_id,to_user_id,reviewer_id,requested_by,reason,created_at,updated_at) SELECT ?,t.id,t.assignee_id,?,t.leader_id,?,?,?,? FROM tasks t WHERE t.id=? AND t.assignee_id=? AND t.leader_id=? AND ${eligibleSQL()}`).bind(rid,targetId,user.id,reason,stamp,stamp,task.id,user.id,task.leader_id,targetId,date,date),
     env.DB.prepare("INSERT INTO notifications(id,user_id,title,body,link,created_at,dedupe_key) SELECT ?,?,'Task transfer approval needed','A teammate requested a task handover. Open My tasks to review it.','tasks',?,? WHERE changes()>0").bind(notificationId,task.leader_id,stamp,'task-transfer-request:'+rid),
     env.DB.prepare("INSERT INTO audit_events(id,actor_id,action,entity,entity_id,details,created_at) SELECT ?,?,'task.transfer_requested','task',?,'Assigned reviewer approval required',? WHERE changes()>0").bind(auditId,user.id,task.id,stamp)
    ]);}catch(error){if(String(error).includes('UNIQUE'))fail(409,'A transfer is already awaiting approval for this task.');throw error;}
@@ -93,8 +93,8 @@ export async function handleTaskTransfers({request,url,env,user,body={}}){
    if(task.assignee_id!==item.from_user_id||task.leader_id!==item.reviewer_id)fail(409,'The task owner or reviewer changed. Cancel this request and start a fresh transfer.');
    await checkTarget(env,task,item.to_user_id);
    const result=await env.DB.batch([
-    env.DB.prepare(`UPDATE tasks AS t SET assignee_id=?,department=(SELECT department FROM users WHERE id=?),status='todo',submission='',feedback='',updated_at=? WHERE t.id=? AND t.assignee_id=? AND t.leader_id=? AND EXISTS(SELECT 1 FROM task_transfer_requests r WHERE r.id=? AND r.status='pending' AND r.task_id=t.id AND r.from_user_id=t.assignee_id AND r.reviewer_id=t.leader_id) AND ${eligibleSQL()}`).bind(item.to_user_id,item.to_user_id,stamp,item.task_id,item.from_user_id,user.id,item.id,item.to_user_id,date,date),
-    env.DB.prepare("UPDATE task_transfer_requests SET status='approved',decision_note=?,updated_at=?,decided_at=?,decision_actor_id=? WHERE id=? AND status='pending' AND changes()>0").bind(note,stamp,stamp,user.id,item.id),
+    env.DB.prepare(`UPDATE tasks AS t SET assignee_id=?,department=(SELECT department FROM users WHERE id=?),status='todo',submission='',feedback='',updated_at=? WHERE t.id=? AND t.assignee_id=? AND t.leader_id=? AND EXISTS(SELECT 1 FROM task_handover_requests r WHERE r.id=? AND r.status='pending' AND r.task_id=t.id AND r.from_user_id=t.assignee_id AND r.reviewer_id=t.leader_id) AND ${eligibleSQL()}`).bind(item.to_user_id,item.to_user_id,stamp,item.task_id,item.from_user_id,user.id,item.id,item.to_user_id,date,date),
+    env.DB.prepare("UPDATE task_handover_requests SET status='approved',decision_note=?,updated_at=?,decided_at=?,decision_actor_id=? WHERE id=? AND status='pending' AND changes()>0").bind(note,stamp,stamp,user.id,item.id),
     env.DB.prepare("INSERT INTO task_events(id,task_id,actor_id,action,notes,created_at) SELECT ?,?,?,'transfer','Approved handover; the new assignee starts with To do.',? WHERE changes()>0").bind(id(),item.task_id,user.id,stamp),
     env.DB.prepare("INSERT INTO notifications(id,user_id,title,body,link,created_at,dedupe_key) SELECT ?,?,'Task assigned after transfer approval','Your task reviewer approved this assignment. Open My tasks to start.','tasks',?,? WHERE changes()>0").bind(id(),item.to_user_id,stamp,'task-transfer-approved-target:'+item.id),
     env.DB.prepare("INSERT INTO notifications(id,user_id,title,body,link,created_at,dedupe_key) SELECT ?,?,'Task transfer approved','Your reviewer approved the handover. The task now belongs to the new assignee.','tasks',?,? WHERE changes()>0").bind(id(),item.from_user_id,stamp,'task-transfer-approved-requester:'+item.id),
@@ -104,7 +104,7 @@ export async function handleTaskTransfers({request,url,env,user,body={}}){
    await email(env,item.id,'approved');
   }else{
    const result=await env.DB.batch([
-    env.DB.prepare("UPDATE task_transfer_requests SET status=?,decision_note=?,updated_at=?,decided_at=?,decision_actor_id=? WHERE id=? AND status='pending'").bind(next,note,stamp,stamp,user.id,item.id),
+    env.DB.prepare("UPDATE task_handover_requests SET status=?,decision_note=?,updated_at=?,decided_at=?,decision_actor_id=? WHERE id=? AND status='pending'").bind(next,note,stamp,stamp,user.id,item.id),
     env.DB.prepare("INSERT INTO notifications(id,user_id,title,body,link,created_at,dedupe_key) SELECT ?,?,?,?,'tasks',?,? WHERE changes()>0").bind(id(),action==='reject'||user.id!==item.requested_by?item.from_user_id:item.reviewer_id,action==='reject'?'Task transfer declined':'Task transfer cancelled',action==='reject'?'The task stays assigned to you. Open My tasks for the reviewer decision.':'This pending handover was closed without changing the task owner.',stamp,'task-transfer-'+next+':'+item.id),
     env.DB.prepare("INSERT INTO audit_events(id,actor_id,action,entity,entity_id,details,created_at) SELECT ?,?,?,'task',?,'Task owner unchanged',? WHERE changes()>0").bind(id(),user.id,'task.transfer_'+next,item.task_id,stamp)
    ]);

@@ -8,4 +8,4 @@ The connected Resend account confirms techforeasylife.in is verified for sending
 
 Production validation uses scripts/browser-release-v25-check.mjs with a short-lived authorised founder session. It performs read-only checks plus local browser preference changes; it does not post test chat, change attendance, transfer real tasks or send dummy email. The temporary session is revoked afterward.
 
-The old empty transfer table is retained under a legacy backup name before the current approval schema is created. Current accounts, passwords, employee records and task ownership are preserved. Private data and fixtures are excluded from GitHub source.
+The current approval schema uses a separate task_handover_requests table. The legacy task_transfer_requests table and the prior production version remain intact for compatibility and rollback. Current accounts, passwords, employee records and task ownership are preserved. Private data and fixtures are excluded from GitHub source.

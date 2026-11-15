@@ -6,13 +6,6 @@ if(!/^[a-z0-9-]+$/.test(name))throw Error('Invalid Worker name.');
 const built=spawnSync(process.execPath,['build.mjs'],{stdio:'inherit'});if(built.status)process.exit(built.status);
 async function api(path,method,body){const response=await fetch('https://api.cloudflare.com/client/v4'+path,{method,headers:{Authorization:'Bearer '+token,...(body instanceof FormData?{}:{'Content-Type':'application/json'})},body:body instanceof FormData?body:JSON.stringify(body)});const data=await response.json();if(!response.ok||data.success===false)throw Error('Cloudflare API failed: '+response.status+' '+JSON.stringify(data.errors));return data;}
 const queryPath=`/accounts/${account}/d1/database/${database}/query`;
-const columns=await api(queryPath,'POST',{sql:'PRAGMA table_info(task_transfer_requests)'});
-const legacyColumns=columns.result[0].results.map(column=>column.name);
-if(legacyColumns.length&&!legacyColumns.includes('updated_at')){
- const existing=await api(queryPath,'POST',{sql:'SELECT COUNT(*) count FROM task_transfer_requests'});
- if(existing.result[0].results[0].count!==0)throw Error('Existing legacy transfer requests require a data-preserving migration before deployment.');
- await api(queryPath,'POST',{sql:'ALTER TABLE task_transfer_requests RENAME TO task_transfer_requests_legacy_v24'});
-}
 await api(queryPath,'POST',{sql:await readFile('dist/schema.sql','utf8')});
 const activated=new Date(),localDate=new Date(activated.getTime()+330*60000).toISOString().slice(0,10),nextLocalDate=new Date(Date.parse(localDate+'T00:00:00Z')+86400000).toISOString().slice(0,10);
 await api(queryPath,'POST',{batch:[{sql:"UPDATE app_settings SET value=? WHERE key='operational_email_enabled_at' AND value=''",params:[activated.toISOString()]},{sql:"UPDATE app_settings SET value=? WHERE key='operational_email_daily_start_date' AND value=''",params:[nextLocalDate]}]});

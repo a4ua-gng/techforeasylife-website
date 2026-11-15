@@ -43,10 +43,10 @@ export async function queueOperationalMeeting(env,meeting,event='scheduled',opti
  if(meeting.created_at>=settings.enabledAt&&meeting.created_at>=due)await run(env,"UPDATE operational_email_jobs SET status='skipped',error='One-hour notice is included in the immediate invitation.' WHERE kind='meeting_reminder' AND entity_id=? AND source_at=? AND status IN ('queued','blocked')",meeting.id,meeting.starts_at);
  return {queued};
 }
-async function transferTableExists(env){return !!await one(env,"SELECT name FROM sqlite_master WHERE type='table' AND name='task_transfer_requests'");}
+async function transferTableExists(env){return !!await one(env,"SELECT name FROM sqlite_master WHERE type='table' AND name='task_handover_requests'");}
 export async function queueTaskTransferEmails(env,requestId,event,options={}){
  const settings=await config(env);if(!settings||!['requested','approved'].includes(event)||!await transferTableExists(env))return {queued:0};
- const transfer=await one(env,'SELECT id,task_id,from_user_id,to_user_id,reviewer_id,status,created_at,decided_at FROM task_transfer_requests WHERE id=?',requestId);if(!transfer)return {queued:0};
+ const transfer=await one(env,'SELECT id,task_id,from_user_id,to_user_id,reviewer_id,status,created_at,decided_at FROM task_handover_requests WHERE id=?',requestId);if(!transfer)return {queued:0};
  const current=stamp(options.now),sourceAt=event==='requested'?transfer.created_at:transfer.decided_at;
  if(settings.enabledAt>current||!sourceAt||sourceAt<settings.enabledAt||(event==='requested'?transfer.status!=='pending':transfer.status!=='approved'))return {queued:0};
  const userId=event==='requested'?transfer.reviewer_id:transfer.to_user_id,kind='task_transfer_'+event;
@@ -97,7 +97,7 @@ async function collectMeetingNotices(env,settings,current){
 }
 async function recoverTransfers(env,settings,current){
  if(!await transferTableExists(env))return 0;
- const transfers=await rows(env,"SELECT r.id,r.status FROM task_transfer_requests r WHERE ((r.status='pending' AND r.created_at>=?) OR (r.status='approved' AND r.decided_at>=?)) AND NOT EXISTS(SELECT 1 FROM operational_email_jobs j WHERE j.entity_id=r.id AND j.kind=CASE WHEN r.status='pending' THEN 'task_transfer_requested' ELSE 'task_transfer_approved' END) ORDER BY r.created_at LIMIT 100",settings.enabledAt,settings.enabledAt);let inserted=0;
+ const transfers=await rows(env,"SELECT r.id,r.status FROM task_handover_requests r WHERE ((r.status='pending' AND r.created_at>=?) OR (r.status='approved' AND r.decided_at>=?)) AND NOT EXISTS(SELECT 1 FROM operational_email_jobs j WHERE j.entity_id=r.id AND j.kind=CASE WHEN r.status='pending' THEN 'task_transfer_requested' ELSE 'task_transfer_approved' END) ORDER BY r.created_at LIMIT 100",settings.enabledAt,settings.enabledAt);let inserted=0;
  for(const transfer of transfers)inserted+=(await queueTaskTransferEmails(env,transfer.id,transfer.status==='pending'?'requested':'approved',{now:current})).queued;
  return inserted;
 }
@@ -126,7 +126,7 @@ async function renderJob(env,job,person,settings,current){
  }
  if(job.kind.startsWith('task_transfer_')){
   if(!await transferTableExists(env))return {skip:'The task transfer no longer exists.'};
-  const request=await one(env,`SELECT r.id,r.task_id,r.from_user_id,r.to_user_id,r.reviewer_id,r.status,r.created_at,r.decided_at,t.assignee_id,t.leader_id,t.title,t.priority,t.deadline,t.status AS task_status FROM task_transfer_requests r JOIN tasks t ON t.id=r.task_id WHERE r.id=?`,job.entity_id);
+  const request=await one(env,`SELECT r.id,r.task_id,r.from_user_id,r.to_user_id,r.reviewer_id,r.status,r.created_at,r.decided_at,t.assignee_id,t.leader_id,t.title,t.priority,t.deadline,t.status AS task_status FROM task_handover_requests r JOIN tasks t ON t.id=r.task_id WHERE r.id=?`,job.entity_id);
   if(!request||request.task_status==='done')return {skip:'The task transfer is no longer actionable.'};const pending=job.kind==='task_transfer_requested';
   if(pending?(request.status!=='pending'||request.reviewer_id!==person.id||request.leader_id!==person.id||request.assignee_id!==request.from_user_id||request.created_at!==job.source_at):(request.status!=='approved'||request.to_user_id!==person.id||request.assignee_id!==person.id||request.decided_at!==job.source_at))return {skip:'The task transfer or task owner changed.'};
   const task={title:request.title,priority:request.priority,deadline:request.deadline,status:request.task_status};
