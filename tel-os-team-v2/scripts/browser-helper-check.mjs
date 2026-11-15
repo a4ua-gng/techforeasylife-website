@@ -93,6 +93,7 @@ try {
   }
   checks.push('People search and floating helper fit 320,375,393,768 and1440px without overlap or page overflow');
   await founder.page.setViewportSize({width: 393, height: 852});
+  await founder.page.waitForFunction(() => document.querySelector('.sidebar').getBoundingClientRect().right <= 1);
   await mkdir('tests/artifacts', {recursive: true});
   await founder.page.screenshot({path: 'tests/artifacts/helper-mobile-people.png', fullPage: true});
   await founder.page.locator('.tel-helper-launcher').click();
