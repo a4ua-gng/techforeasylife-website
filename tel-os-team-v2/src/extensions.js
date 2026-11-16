@@ -1,7 +1,8 @@
 import {rows,one,run,json,fail,id,now,audit,notify,text,requireRole} from './core.js';
 import {readUpload,mediaAccess} from './media.js';
+import {grievanceReviewers,withGrievanceVisibility} from './grievance-access.js';
 const HR=['founder','hr_lead','hr_member'];
-const sections=new Set(['home','guide','tasks','attendance','leave','calendar','people','meetings','documents','hr','hr-records','reports','performance','exits','notifications','account','channel','monitor','marketing-reports','images','connections','website-team','private_area']);
+const sections=new Set(['home','announcements','guide','tasks','attendance','leave','calendar','people','meetings','documents','hr','hr-records','reports','performance','exits','notifications','account','channel','monitor','marketing-reports','images','connections','website-team','private_area']);
 export function presenceSQL(alias='u'){return `CASE WHEN ${alias}.status IN ('active','on_leave') AND EXISTS(SELECT 1 FROM sessions s WHERE s.user_id=${alias}.id AND s.expires_at>?) THEN 'online' ELSE 'offline' END`;}
 export function workStatusSQL(alias='u'){return `CASE WHEN ${alias}.status NOT IN ('active','on_leave') THEN 'unavailable' WHEN EXISTS(SELECT 1 FROM attendance_sessions a WHERE a.user_id=${alias}.id AND a.clock_out IS NULL AND a.state='working') THEN 'working' WHEN EXISTS(SELECT 1 FROM attendance_sessions a WHERE a.user_id=${alias}.id AND a.clock_out IS NULL AND a.state='break') THEN 'on_break' WHEN ${alias}.status='on_leave' OR EXISTS(SELECT 1 FROM leave_requests l WHERE l.user_id=${alias}.id AND l.status='approved' AND l.start_date<=? AND l.end_date>=?) THEN 'on_leave' WHEN EXISTS(SELECT 1 FROM availability a WHERE a.user_id=${alias}.id AND a.start_date<=? AND a.end_date>=? AND a.kind IN ('exam','unavailable')) THEN 'unavailable' ELSE 'not_clocked_in' END`;}
 export async function handleExtensions({request,url,env,user,body={}}){
@@ -46,7 +47,18 @@ export async function handleExtensions({request,url,env,user,body={}}){
   await env.DB.batch([env.DB.prepare('INSERT INTO marketing_reports(id,user_id,summary,completed,blockers,next_steps,message_id,created_at) VALUES(?,?,?,?,?,?,?,?)').bind(rid,user.id,summary,completed,blockers,next_steps,mid,stamp),env.DB.prepare("INSERT INTO messages(id,channel_id,user_id,body,created_at) VALUES(?,'marketing-reports',?,?,?)").bind(mid,user.id,message,stamp)]);await notify(env,recipient.id,'New Marketing report',`${user.name} submitted a Marketing update.`,'marketing-reports');await audit(env,user,'marketing_report_submitted','marketing_report',rid);return json({id:rid,channel_id:'marketing-reports'},201);
  }
  const ticket=p.match(/^\/api\/grievances\/([^/]+)\/comments$/);
- if(ticket&&['GET','POST'].includes(m)){if(!await mediaAccess(env,user,'grievance',ticket[1],m==='POST'))fail(403,'This ticket is private.');if(m==='POST'){const content=text(body.body,5000,true);await run(env,'INSERT INTO grievance_comments(id,ticket_id,user_id,body,created_at) VALUES(?,?,?,?,?)',id(),ticket[1],user.id,content,now());const g=await one(env,'SELECT user_id,founder_only FROM grievances WHERE id=?',ticket[1]);const reviewers=g.user_id===user.id?await rows(env,g.founder_only?"SELECT id FROM users WHERE role='founder' AND status='active'":"SELECT id FROM users WHERE role IN ('founder','hr_lead','hr_member') AND status='active'"):[{id:g.user_id}];for(const r of reviewers)if(r.id!==user.id)await notify(env,r.id,'HR ticket reply','A private ticket has a new message.','grievances');await audit(env,user,'hr_ticket_reply','grievance',ticket[1]);}return json({comments:await rows(env,'SELECT c.id,c.body,c.created_at,u.name FROM grievance_comments c JOIN users u ON u.id=c.user_id WHERE ticket_id=? ORDER BY c.created_at',ticket[1])});}
+ if(ticket&&['GET','POST'].includes(m)){
+  if(!await mediaAccess(env,user,'grievance',ticket[1],m==='POST'))fail(403,'This ticket is private.');
+  const g=await one(env,'SELECT * FROM grievances WHERE id=?',ticket[1]);
+  if(m==='POST'){
+   const content=text(body.body,5000,true);
+   await run(env,'INSERT INTO grievance_comments(id,ticket_id,user_id,body,created_at) VALUES(?,?,?,?,?)',id(),ticket[1],user.id,content,now());
+   const participants=[{id:g.user_id},...await grievanceReviewers(env,g.id)];
+   for(const r of participants)if(r.id!==user.id&&await mediaAccess(env,{id:r.id},'grievance',g.id))await notify(env,r.id,'HR ticket reply','A private ticket has a new message.','grievances');
+   await audit(env,user,'hr_ticket_reply','grievance',ticket[1]);
+  }
+  return json({comments:await rows(env,'SELECT c.id,c.body,c.created_at,u.name FROM grievance_comments c JOIN users u ON u.id=c.user_id WHERE ticket_id=? ORDER BY c.created_at',ticket[1]),visibility:(await withGrievanceVisibility(env,[g],user))[0].visibility});
+ }
  const deliveries=p.match(/^\/api\/meetings\/([^/]+)\/deliveries$/);
  if(deliveries&&m==='GET'){if(!await mediaAccess(env,user,'meeting',deliveries[1]))fail(403,'This meeting is restricted.');if(env.TEL_OS_OPERATIONAL_EMAILS==='enabled'){const jobs=await rows(env,"SELECT j.id,'email' AS channel,CASE WHEN j.kind='meeting_invitation' THEN 'scheduled' ELSE 'reminder' END AS event,j.status,j.error,j.created_at,j.sent_at,u.name FROM operational_email_jobs j JOIN users u ON u.id=j.user_id WHERE j.entity_id=? AND j.kind IN ('meeting_invitation','meeting_reminder') ORDER BY j.created_at",deliveries[1]);if(jobs.length)return json({deliveries:jobs});}return json({deliveries:await rows(env,'SELECT d.id,d.channel,d.event,d.status,d.error,d.created_at,d.sent_at,u.name FROM meeting_deliveries d JOIN users u ON u.id=d.user_id WHERE meeting_id=? ORDER BY d.created_at',deliveries[1])});}
  if(p==='/api/integrations'&&m==='GET'){requireRole(user,'founder');return json({integrations:await rows(env,'SELECT * FROM integration_status'),delivery_summary:await rows(env,'SELECT channel,status,COUNT(*) count FROM meeting_deliveries GROUP BY channel,status')});}

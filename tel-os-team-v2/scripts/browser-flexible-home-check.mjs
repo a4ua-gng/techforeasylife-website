@@ -150,7 +150,7 @@ try {
     }
     views.set(id, {page, context});
   }
-  checks.push('Founder, HR, Team ARC lead/member and on-leave Finance preserve role actions; Contact HR is beside the welcome and in primary navigation');
+  checks.push('Founder, HR, TeMark lead/member and on-leave Finance preserve role actions; Contact HR is beside the welcome and in primary navigation');
   checks.push('Timeline uses actual open tasks, review responsibilities and upcoming meeting times; completed tasks and past meetings are excluded');
   checks.push('Flexible Home has no fixed 5 PM start or missed-clock-in language; live clock controls and four-hour working plan remain');
   checks.push('Clocked-in and not-clocked-in lists distinguish working, break/leave status and authenticated sign-in independently');

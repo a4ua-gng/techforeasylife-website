@@ -1,5 +1,6 @@
 import {queueMeetingDeliveries} from './deliveries.js';
 import {handleHRRecords} from './hr-records.js';
+import {grievanceScope,canAccessGrievance,validateGrievanceRecipients,grievanceReviewers,withGrievanceVisibility} from './grievance-access.js';
 const sameDept = (a, b) => String(a || '').toLowerCase() === String(b || '').toLowerCase();
 const isFounder = user => user.role === 'founder';
 const isHRLead = user => user.role === 'hr_lead';
@@ -194,33 +195,42 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
     return json({ document: await one(env, 'SELECT * FROM documents WHERE id=?', documentId) }, 201);
   }
 
+  if (path === '/api/grievances/reviewers' && method === 'GET') {
+    return json({founders:await rows(env,"SELECT id,name FROM users WHERE role='founder' AND status='active' ORDER BY name,id"),hr_available:!!await one(env,"SELECT id FROM users WHERE role IN ('hr_lead','hr_member') AND status IN ('active','on_leave') AND id<>? LIMIT 1",user.id)});
+  }
   if (path === '/api/grievances' && method === 'GET') {
-    const query = isFounder(user) ? 'SELECT * FROM grievances ORDER BY created_at DESC LIMIT 200' : ['hr_lead','hr_member'].includes(user.role) ? 'SELECT * FROM grievances WHERE founder_only=0 OR user_id=? ORDER BY created_at DESC LIMIT 200' : 'SELECT * FROM grievances WHERE user_id=? ORDER BY created_at DESC LIMIT 200';
-    return json({ grievances: await rows(env, query, ...(isFounder(user) ? [] : [user.id])) });
+    const scope=await grievanceScope(env,user);
+    const grievances=await rows(env,`SELECT g.* FROM grievances g WHERE ${scope.sql} ORDER BY g.created_at DESC LIMIT 200`,...scope.params);
+    return json({grievances:await withGrievanceVisibility(env,grievances,user)});
   }
   if (path === '/api/grievances' && method === 'POST') {
-    if (b.founder_only !== undefined && typeof b.founder_only !== 'boolean') fail(400, 'Choose whether this is founder-only.');
-    const grievanceId = id();
-    await run(env, 'INSERT INTO grievances(id,user_id,title,body,founder_only,created_at,updated_at) VALUES(?,?,?,?,?,?,?)', grievanceId, user.id, text(b.title, 160, 'Concern title', true), text(b.body, 12000, 'Concern details', true), b.founder_only ? 1 : 0, now(), now());
-    const reviewers = await rows(env, b.founder_only ? "SELECT id FROM users WHERE role='founder' AND status='active'" : "SELECT id FROM users WHERE role IN ('founder','hr_lead','hr_member') AND status='active'");
+    const selection=await validateGrievanceRecipients(env,user,b),grievanceId=id(),stamp=now();
+    await env.DB.batch([
+      env.DB.prepare('INSERT INTO grievances(id,user_id,title,body,founder_only,created_at,updated_at) VALUES(?,?,?,?,?,?,?)').bind(grievanceId,user.id,text(b.title,160,'Concern title',true),text(b.body,12000,'Concern details',true),selection.hr_visible?0:1,stamp,stamp),
+      env.DB.prepare('INSERT INTO grievance_access(ticket_id,hr_visible,selected_by,selected_at) VALUES(?,?,?,?)').bind(grievanceId,selection.hr_visible?1:0,user.id,stamp),
+      ...selection.founder_ids.map(founderId=>env.DB.prepare('INSERT INTO grievance_founder_recipients(ticket_id,founder_id) VALUES(?,?)').bind(grievanceId,founderId))
+    ]);
+    const reviewers = await grievanceReviewers(env,grievanceId);
     for (const reviewer of reviewers) if (reviewer.id !== user.id) await notify(env, reviewer.id, 'Confidential concern received', 'A private concern is awaiting authorised review.', 'grievances');
-    // Audit excludes the title and body; the restricted founder audit retains the actor for accountability.
+    // Private actions remain outside the global founder activity feed.
     await audit(env, user, 'confidential_concern_received', 'grievance', grievanceId);
-    return json({ grievance: await one(env, 'SELECT * FROM grievances WHERE id=?', grievanceId) }, 201);
+    return json({grievance:(await withGrievanceVisibility(env,[await one(env,'SELECT * FROM grievances WHERE id=?',grievanceId)],user))[0]},201);
   }
   const grievanceMatch = path.match(/^\/api\/grievances\/([^/]+)$/);
   if (grievanceMatch && method === 'PATCH') {
     const grievance = await one(env, 'SELECT * FROM grievances WHERE id=?', grievanceMatch[1]);
     if (!grievance) fail(404, 'Concern not found.');
-    if ((!isFounder(user) && !(['hr_lead','hr_member'].includes(user.role) && !grievance.founder_only)) || grievance.user_id === user.id) fail(403, 'An independent authorised reviewer must handle this concern.');
+    if (!await canAccessGrievance(env,user,grievance.id,{review:true})) fail(403, 'An independent authorised reviewer must handle this concern.');
+    if (b.hr_visible!==undefined||b.founder_ids!==undefined||b.founder_only!==undefined) fail(400,'A review cannot change the ticket recipients.');
     if (!['in_review', 'resolved'].includes(b.status)) fail(400, 'Choose in_review or resolved.');
     if (grievance.status === 'resolved') fail(409, 'This concern is already resolved.');
     const response = text(b.response, 6000, 'Review response', b.status === 'resolved');
-    const result = await run(env, 'UPDATE grievances SET status=?,response=?,reviewed_by=?,updated_at=? WHERE id=? AND status=?', b.status, response, user.id, now(), grievance.id, grievance.status);
+    if(b.expected_updated_at!==undefined&&b.expected_updated_at!==grievance.updated_at)fail(409,'This concern changed; refresh before reviewing.');
+    const result = await run(env, 'UPDATE grievances SET status=?,response=?,reviewed_by=?,updated_at=? WHERE id=? AND status=? AND updated_at=?', b.status, response, user.id, now(), grievance.id, grievance.status,grievance.updated_at);
     if (result.meta?.changes === 0) fail(409, 'This concern changed; refresh before reviewing.');
     await notify(env, grievance.user_id, 'Confidential concern updated', 'An authorised reviewer updated your report.', 'grievances');
     await audit(env, user, 'confidential_concern_reviewed', 'grievance', grievance.id);
-    return json({ grievance: await one(env, 'SELECT * FROM grievances WHERE id=?', grievance.id) });
+    return json({grievance:(await withGrievanceVisibility(env,[await one(env,'SELECT * FROM grievances WHERE id=?',grievance.id)],user))[0]});
   }
 
   if (path === '/api/performance' && method === 'GET') {

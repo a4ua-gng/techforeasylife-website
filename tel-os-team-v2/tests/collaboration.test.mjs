@@ -32,7 +32,7 @@ const feedback={user_id:'member',period:day().slice(0,7),quality:'Good',timeline
 
 test('TEL collaboration integration in the Workers runtime',async t=>{
  try{
-  for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql']){
+  for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql','schema-announcements.sql','schema-grievance-access.sql']){
    const sql=await readFile(new URL('../'+file,import.meta.url),'utf8');
    await db.exec(sql.replace(/^\s*--.*$/gm,'').replaceAll('\n',' '));
   }
@@ -86,13 +86,13 @@ test('TEL collaboration integration in the Workers runtime',async t=>{
   });
 
   await t.test('founder-only concerns remain private and require independent review',async()=>{
-   const concern=(await ok('member','POST','/api/grievances',{title:'Sensitive concern',body:'PRIVATE-FIXTURE-BODY',founder_only:true})).grievance;
+   const concern=(await ok('member','POST','/api/grievances',{title:'Sensitive concern',body:'PRIVATE-FIXTURE-BODY',hr_visible:false,founder_ids:['founder','founder2']})).grievance;
    for(const actor of ['hr','hrmember','member2'])assert.equal((await ok(actor,'GET','/api/grievances')).grievances.length,0);
    await denied('hr','PATCH','/api/grievances/'+concern.id,{status:'resolved',response:'Unauthorized'},403);
    await ok('founder','PATCH','/api/grievances/'+concern.id,{status:'in_review',response:'Received'});
    await ok('founder','PATCH','/api/grievances/'+concern.id,{status:'resolved',response:'Reviewed and resolved'});
    await denied('founder','PATCH','/api/grievances/'+concern.id,{status:'resolved',response:'Duplicate'},409);
-   const own=(await ok('founder','POST','/api/grievances',{title:'Founder concern',body:'Independent review needed',founder_only:true})).grievance;
+   const own=(await ok('founder','POST','/api/grievances',{title:'Founder concern',body:'Independent review needed',hr_visible:false,founder_ids:['founder2']})).grievance;
    await denied('founder','PATCH','/api/grievances/'+own.id,{status:'resolved',response:'Self approval'},403);
    await ok('founder2','PATCH','/api/grievances/'+own.id,{status:'resolved',response:'Independent founder reviewed'});
    const audits=await db.prepare('SELECT details FROM audit_events').all();

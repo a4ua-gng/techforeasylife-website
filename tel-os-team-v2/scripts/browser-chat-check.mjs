@@ -14,7 +14,7 @@ const runtime=new Miniflare({modules:true,script:compiled.outputFiles[0].text,co
 const browser=await chromium.launch({headless:true,executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
 try{
  const db=await runtime.getD1Database('DB');
- const schemas=['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql'];
+ const schemas=['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql','schema-announcements.sql','schema-grievance-access.sql'];
  for(const file of schemas)await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
  await db.prepare("UPDATE app_settings SET value='2020-01-01T00:00:00.000Z' WHERE key='chat_unread_enabled_at'").run();
  const password='LocalChatFixture!2026',salt='0123456789abcdef0123456789abcdef',hash=await hashPassword(password,salt),stamp=new Date().toISOString();

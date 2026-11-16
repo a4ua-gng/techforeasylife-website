@@ -1,5 +1,6 @@
 import {helpers,json,fail,readBody,authenticate,authRoutes,id,rows,requireRole} from './core.js';
 import {maintenanceStatus,maintenanceAccess} from './maintenance.js';
+import {handleAnnouncements} from './announcements.js';
 import {handleHRRecords} from './hr-records.js';
 import {handleDeadlinePolicy,runDeadlinePolicy} from './deadline-policy.js';
 import {handleAdmin} from './admin.js';
@@ -23,7 +24,7 @@ export default {
   const url=new URL(request.url),mutating=!['GET','HEAD'].includes(request.method);
   if(mutating){const origin=request.headers.get('Origin');if(origin!==url.origin)fail(403,'Requests must originate from this TEL OS workspace.');}
   if(url.pathname==='/api/status'&&request.method==='GET')return secure(json(await maintenanceStatus(env)),requestId);
-  if(url.pathname==='/api/health'&&request.method==='GET')return secure(json({service:'TEL OS',version:'2.7.0'}),requestId);
+  if(url.pathname==='/api/health'&&request.method==='GET')return secure(json({service:'TEL OS',version:'2.8.0'}),requestId);
   if(['GET','HEAD'].includes(request.method)&&assets[url.pathname]){const asset=assets[url.pathname];return secure(new Response(request.method==='HEAD'?null:asset.value,{headers:{'Content-Type':asset.type}}),requestId);}
   if(url.pathname==='/favicon.ico')return secure(new Response(null,{status:204}),requestId);
   if(['GET','HEAD'].includes(request.method)&&binaries[url.pathname]){const a=binaries[url.pathname];return secure(new Response(request.method==='HEAD'?null:Uint8Array.from(atob(a.base64),c=>c.charCodeAt(0)),{headers:{'Content-Type':a.type}}),requestId);}
@@ -39,6 +40,7 @@ export default {
   if(!response&&url.pathname==='/api/automations'&&request.method==='GET'){requireRole(user,'founder');response=json({schedule:'Every 5 minutes',timezone:'Asia/Kolkata',delivery:'In-app notification centre',runs:await rows(env,'SELECT * FROM automation_runs ORDER BY created_at DESC LIMIT 30')});}
   if(!response&&url.pathname==='/api/automations/run'&&request.method==='POST'){requireRole(user,'founder');response=json(await runAutomations(env));}
   if(!response&&url.pathname==='/api/operational-emails/status'&&request.method==='GET'){requireRole(user,'founder');response=json({...await getOperationalEmailStatus(env),...(url.searchParams.get('verify')==='domain'?{domain:await verifyOperationalEmailDomain(env)}:{})});}
+  if(!response)response=await handleAnnouncements(context);
   if(!response)response=await handleHRRecords(context);
   if(!response)response=await handleDeadlinePolicy(context);
   if(!response)response=await handleAdmin(context);

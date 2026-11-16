@@ -1,13 +1,9 @@
-# TEL OS2.7 verification ·16November2026 IST
+# TEL OS2.8 verification ·16November2026 IST
 
-221 integrated Workers/D1 tests pass. The suite covers flexible attendance, unchanged active/break timers across maintenance, session/login gates, audited manual meeting rosters, HR privacy, one-day deadline grace and escalation, current verified email recipients, role changes, urgent queues, provider rate limits/idempotency and uncertain-send review. Existing attendance, task review, transfers, private images and email verification are included.
+Release checks cover announcement authorship/audiences, per-member revision dismissal, selected-founder/optional-HR ticket access across chat/reviews/images, current-role changes, legacy tickets, global audit privacy, and complete maintenance blocking without session or attendance changes. Existing attendance, deadline, transfer, email and image protection checks remain in the full Workers/D1 suite.
 
-Local Chromium checks cover14 comprehensive chat flows,6 prior chat regressions,13 flexible Home/Attendance/Guide flows across five roles, and existing presence/helper/transfer/email flows. Chat checks include320/375/393px, keyboard pan, landscape, image upload retries, draft retention, Enter/IME, unread dots and generic dialogs. New Home checks exercise actual clock-in, ticking time, break, resume and clock-out in an isolated database.
+Real local Chromium flows cover HR publishing and popup dismissal, calendar Month/Agenda/filter/date navigation, actual task/meeting details, HR date input geometry, founder actions/feed, TeMark labels with canonical API values, dismissible Home HR preferences, private reviewer selection and chat, and the interactive helper. Checked widths include320,375,393,650/768 and1440px, with keyboard, focus, enlarged text and landscape checks as appropriate.
 
-All provider tests use synthetic fixtures with outbound email blocked or mocked. The sole requested real Resend sender test was confirmed delivered to its owner-specified recipient. No dummy employee task, meeting, chat, attendance or welcome message was created in production for testing.
+All browser fixture data is synthetic and outbound email is blocked or mocked. No production announcement, task, private ticket or employee message is created as a test. Private fixtures, credentials and screenshots are excluded from public source.
 
-Maintenance hotfix and integrated worker passed9 targeted runtime checks,14 authentication regressions and a375px browser check. Maintenance never updates clock-in/out, passwords or existing login sessions; founders and open work/break sessions keep access and background jobs continue.
-
-Additive schemas preserve existing users, records, outboxes and the prior Worker version. SQL trigger bodies are applied as complete statements. Private files, credentials, live employee fixtures, PDFs and portraits are excluded from GitHub source. Production rollout preserves every existing binding and both separate email senders.
-
-Production checks use scripts/browser-release-v27-check.mjs with a short-lived founder session, read-only records APIs and local browser preferences. It does not send real chat or transfer tasks. That session is revoked after testing.
+Full maintenance is checked against signed-in founder and employee fixtures, including open work/break sessions: private APIs and valid logins return503 while passwords, existing sessions and attendance rows remain unchanged. Production rollout preserves existing bindings, sender credentials, data and the prior Worker version. Public access remains blocked during rollout; live maintenance and release checks use a short-lived founder session that is revoked afterward.

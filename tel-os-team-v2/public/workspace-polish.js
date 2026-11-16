@@ -5,7 +5,7 @@
   const previousWorkspace = departmentWorkspace;
   const previousHome = homePage;
   const previousShell = shell;
-  const presentationLabel = value => String(value).replace(/\bMarketing\b/g, 'Team ARC').replace(/\bmarketing\b/g, 'Team ARC');
+  const presentationLabel = value => String(value).replace(/\bMarketing\b/g, 'TeMark').replace(/\bmarketing\b/g, 'TeMark');
 
   function kind() {
     if (!user) return '';
@@ -25,7 +25,7 @@
       next.title = 'A clear view of the company.';
       next.copy = 'Stay close to every department. Review delivery, support your people, and give the next decision a clear owner.';
     } else if (workspace.key === 'marketing') {
-      next.name = 'Team ARC';
+      next.name = 'TeMark';
       next.title = isLead() ? 'Good ideas. Clear briefs. Work delivered.' : 'Your ideas have a place to move forward.';
       next.copy = isLead()
         ? 'Give every brief an owner, make feedback useful, and help your team move from the first idea to the final delivery.'
@@ -56,7 +56,7 @@
 
     const workspaceKind = kind();
     const subtitle = title.querySelector('p');
-    if (subtitle && workspaceKind === 'arc') subtitle.textContent = 'Your Team ARC workspace. A little clarity for everything you’re creating.';
+    if (subtitle && workspaceKind === 'arc') subtitle.textContent = 'Your TeMark workspace. A little clarity for everything you’re creating.';
     if (subtitle && workspaceKind === 'hr') subtitle.textContent = 'Your people operations workspace, with the next review in focus.';
     const existingTitleAction = title.querySelector(':scope > .btn');
     const titleActions = document.createElement('div');
@@ -74,12 +74,12 @@
     overview.classList.add('workspace-hero');
     const eyebrow = overview.querySelector('.department-tag');
     if (eyebrow && workspaceKind === 'founder') eyebrow.innerHTML = icon('chart') + 'Founders · Company view';
-    if (eyebrow && workspaceKind === 'arc') eyebrow.innerHTML = icon('task') + 'Team ARC · Creative workspace';
+    if (eyebrow && workspaceKind === 'arc') eyebrow.innerHTML = icon('task') + 'TeMark · Creative workspace';
     if (eyebrow && workspaceKind === 'hr') eyebrow.innerHTML = icon('people') + 'HR · People operations';
     const role = overview.querySelector('.department-role');
     if (role) role.setAttribute('aria-label', 'Your role: ' + role.textContent);
 
-    actions.setAttribute('aria-label', workspaceKind === 'founder' ? 'Company actions' : workspaceKind === 'arc' ? 'Team ARC actions' : workspaceKind === 'hr' ? 'People operations actions' : 'Workspace actions');
+    actions.setAttribute('aria-label', workspaceKind === 'founder' ? 'Company actions' : workspaceKind === 'arc' ? 'TeMark actions' : workspaceKind === 'hr' ? 'People operations actions' : 'Workspace actions');
     stats.classList.add('workspace-metrics');
     stats.setAttribute('aria-label', workspaceKind === 'founder' ? 'Company overview' : 'Current work overview');
     daily.classList.add('workspace-workday');
@@ -129,25 +129,25 @@
     }
     if (!user) return;
     const name = document.querySelector('.workspace-name');
-    const displayName = {founder: 'Founders workspace', arc: 'Team ARC', hr: 'People operations'}[workspaceKind] || (user.department || 'Team') + ' workspace';
+    const displayName = {founder: 'Founders workspace', arc: 'TeMark', hr: 'People operations'}[workspaceKind] || (user.department || 'Team') + ' workspace';
     const displayCopy = {founder: 'Company clarity. Thoughtful decisions.', arc: 'Ideas, shaped together.', hr: 'Care for the people behind the work.'}[workspaceKind] || 'Ideas. Made real. Together.';
     const nameHeading = name?.querySelector('strong');
     const nameCopy = name?.querySelector('small');
     if (nameHeading && nameHeading.textContent !== displayName) nameHeading.textContent = displayName;
     if (nameCopy && nameCopy.textContent !== displayCopy) nameCopy.textContent = displayCopy;
     for (const link of document.querySelectorAll('.nav-scroll a[href="#marketing-reports"] > span:first-of-type, .nav-scroll a[href="#channel/marketing"] > span:first-of-type, .nav-scroll a[href="#channel/marketing-reports"] > span:first-of-type')) {
-      const label = link.closest('a').getAttribute('href') === '#channel/marketing' ? 'Team ARC' : 'Team ARC reports';
+      const label = link.closest('a').getAttribute('href') === '#channel/marketing' ? 'TeMark' : 'TeMark reports';
       if (link.textContent !== label) link.textContent = label;
     }
     const crumb = document.querySelector('.breadcrumb strong');
     if (crumb && route === 'home' && crumb.textContent !== displayName) crumb.textContent = displayName;
-    if (crumb && route === 'marketing-reports' && crumb.textContent !== 'Team ARC reports') crumb.textContent = 'Team ARC reports';
+    if (crumb && route === 'marketing-reports' && crumb.textContent !== 'TeMark reports') crumb.textContent = 'TeMark reports';
     for (const option of document.querySelectorAll('select[name="department"] option[value="Marketing"]')) {
-      if (option.textContent !== 'Team ARC') option.textContent = 'Team ARC';
+      if (option.textContent !== 'TeMark') option.textContent = 'TeMark';
     }
     if (route === 'marketing-reports') {
       const heading = main?.querySelector('.page-title h1');
-      if (heading && heading.textContent === 'Marketing reports') heading.textContent = 'Team ARC reports';
+      if (heading && heading.textContent === 'Marketing reports') heading.textContent = 'TeMark reports';
     }
   }
 

@@ -4,9 +4,19 @@ Production: https://tel-os-team-v2.xtremedivyangshu.workers.dev
 
 Cloudflare Workers + a dedicated D1 database provide real employee accounts, department workspaces, attendance, tasks, leave, meetings, private HR tickets, image uploads and founder oversight. The public TEL website content is unchanged.
 
-## Current release: flexible work and people operations (2.7.0)
+## Current release: TeMark, announcements and private support (2.8.0)
 
-Home brings together a welcoming Your work today timeline, personal tasks, upcoming meetings, a live attendance card and a prominent Contact HR shortcut. Founders, Team ARC (Marketing) and HR use distinct department layouts and accents. Team right now separates signed-in status from clocked-in work and breaks.
+Marketing is displayed as TeMark throughout the workspace; saved department identifiers stay compatible with existing accounts and permissions. Phone date filters stack without overlapping, founder text summaries use compact aligned controls, and Home lists Today’s tasks for you. The Home HR shortcut has an X and an account setting to restore it.
+
+HR and founders can draft, publish, edit and archive in-app announcements. Staff see only their authorised audience. Popups are dismissible per member and revision, defer while typing or in chat, and remain available in Announcements history. Publishing does not send emails or chat notices.
+
+New private HR tickets let the sender choose specific founders and whether HR may read them. The same access applies to lists, reviews, chat and images. Unselected founders cannot read these tickets or their audit metadata. Existing tickets retain their prior access rules. The reviewer choices are shown before submission and alongside the ticket.
+
+Team Calendar has Month and Agenda views, Today/date navigation, category filters and My items. It uses existing scoped meetings, task deadlines, approved leave, shared availability and holidays. Private leave reasons are excluded. Existing event details and availability actions remain available.
+
+Optional Ask TEL offers guided app help, contextual buttons and fresh personal task, meeting and work-status answers. It uses role-aware allowed routes and a small in-memory conversation; it makes no external model calls, reads no private HR/chat contents and performs no work changes. Hide and restore preferences remain per account/browser.
+
+Home brings together a welcoming Your work today timeline, personal tasks, upcoming meetings, a live attendance card and a prominent Contact HR shortcut. Founders, TeMark (Marketing) and HR use distinct department layouts and accents. Team right now separates signed-in status from clocked-in work and breaks.
 
 Company attendance is flexible: members choose when to begin, aim for around four active hours, pause for breaks and clock out when finished. Fixed-start lateness notices are suppressed. Existing attendance and schedule history remain intact, and an authorised fixed policy can still be configured explicitly.
 
@@ -14,11 +24,11 @@ Chat uses a contextual thread pane on desktop and a full thread view on phones, 
 
 HR control panel is restricted to HR and founders. It combines work presence, recorded attendance, manual meeting rosters, correction history, task deadlines and one-day extensions, with links to existing staff, leave and confidential support tools. An owning, participating department lead can record attendance for their department; HR/founders can review and correct. Call-provider joins are not inferred. Legacy attendance checkboxes use the same audited path.
 
-After activation, an unfinished task missing its IST end-of-day deadline receives one extra calendar day. The assignee is notified. If it remains unfinished after that day, the assignee, current authorised reviewer and HR receive a follow-up; Team ARC leads receive Team ARC follow-ups only. Submitted work awaiting review, approved work and completed tasks are excluded. Original dates are retained. Historical overdue work is not backfilled.
+After activation, an unfinished task missing its IST end-of-day deadline receives one extra calendar day. The assignee is notified. If it remains unfinished after that day, the assignee, current authorised reviewer and HR receive a follow-up; TeMark leads receive TeMark follow-ups only. Submitted work awaiting review, approved work and completed tasks are excluded. Original dates are retained. Historical overdue work is not backfilled.
 
 New urgent assignments use a durable immediate Resend queue. Approved urgent handovers use one urgent transfer email. Current verified unique notification addresses are required; no employee contact fallback is used.
 
-Maintenance is an access gate only. Founders and members with an open work or break session retain access. Blocked members keep their accounts and sessions; no clock-in time is reset or attendance forced closed. Existing background work continues.
+Maintenance is an access gate only. Full mode pauses every account, including founders, without changing passwords or attendance; the ordinary mode can preserve already-open work sessions. Founders and members with an open work or break session retain access. Blocked members keep their accounts and sessions; no clock-in time is reset or attendance forced closed. Existing background work continues.
 
 Chat uses persistent unread dots beside channel names, with no chat emails or Notification-centre entries. Enter sends a chat message or thread reply; Shift+Enter inserts a line break. Drafts survive refreshes and thread polling.
 
@@ -34,7 +44,7 @@ All ChatGPT scheduled jobs, including the Gmail verification fallback, are pause
 
 ## Daily work and access
 
-Department Home screens welcome members by name. Marketing reports directly to Harsh. Humaira and Himan administer HR records, ordinary private tickets and ticket chats; founders-only complaints bypass HR. Tasks require formal submission and independent review. Leave uses reporting-lead recommendation followed by separate HR/founder verification.
+Department Home screens welcome members by name. Marketing reports directly to Harsh. Humaira and Himan administer HR records; private ticket access follows the sender’s selected founder and HR choices. Tasks require formal submission and independent review. Leave uses reporting-lead recommendation followed by separate HR/founder verification.
 
 Flexible attendance is the company default. An explicit fixed policy supports pre-start, due, grace and manager/HR follow-ups, with approved leave, academic availability, holidays and corrections exempt. Attendance shows seconds and supports breaks, resume, clock-out and local-midnight accounting. Work status is distinct from app presence.
 

@@ -102,7 +102,7 @@ try {
   await db.prepare("INSERT INTO tasks(id,title,description,assignee_id,leader_id,department,priority,deadline,expected_deliverable,status,created_by,created_at,updated_at) VALUES('arc-brief','Campaign concept direction','Synthetic local design brief','arc-member','arc-lead','Marketing','normal','2027-01-01','Share the concept and rationale','working','arc-lead',?,?)").bind(stamp, stamp).run();
   await db.prepare("INSERT INTO leave_requests(id,user_id,type,start_date,end_date,reason,status,leader_id,created_at,updated_at) VALUES('people-review','arc-member','personal','2027-01-04','2027-01-04','Synthetic fixture request','pending_hr','arc-lead',?,?)").bind(stamp, stamp).run();
   await db.prepare("INSERT INTO attendance_corrections(id,user_id,work_date,requested_seconds,reason,status,created_at,updated_at) VALUES('people-correction','arc-member','2026-11-01',7200,'Synthetic fixture correction','pending',?,?)").bind(stamp, stamp).run();
-  checks.push('Disposable Miniflare database contains synthetic Founders, HR, Team ARC, and ordinary Finance fixtures; external requests are blocked');
+  checks.push('Disposable Miniflare database contains synthetic Founders, HR, TeMark, and ordinary Finance fixtures; external requests are blocked');
 
   const origin = String(await runtime.ready).replace(/\/$/, '');
   assert.match(origin, /^http:\/\/127\.0\.0\.1:\d+$/);
@@ -129,7 +129,7 @@ try {
     if (id === 'founder') {
       assert.match(firstPrimary, /Departments at a glance/);
       assert.ok(await page.locator('.department-quick-paths a[href="#reports"]').count());
-      assert.equal(await primary.locator('.department-overview-card > h3', {hasText: 'Team ARC'}).count(), 1);
+      assert.equal(await primary.locator('.department-overview-card > h3', {hasText: 'TeMark'}).count(), 1);
     }
     if (role.startsWith('hr_')) {
       assert.match(firstPrimary, /People actions needing attention/);
@@ -138,7 +138,7 @@ try {
       assert.ok(await page.locator('.department-quick-paths [data-action="new-person"]').count());
     }
     if (department === 'Marketing') {
-      assert.match(await page.locator('.department-tag').innerText(), /Team ARC/);
+      assert.match(await page.locator('.department-tag').innerText(), /TeMark/);
       assert.match(firstPrimary, /Campaign concept direction/);
       assert.equal(await page.locator('.department-quick-paths [data-action="new-task"]').count(), role === 'team_lead' ? 1 : 0);
       assert.equal(await page.locator('#main a[href="#hr"]').count(), 0);
@@ -161,7 +161,7 @@ try {
   }
   checks.push('All six role variants preserve their greeting, canonical department, role actions, workday controls and department-specific features');
   checks.push('320, 375, 393, 768, 1024 and 1440px Home layouts have no horizontal overflow, readable hero copy and 44px controls');
-  checks.push('Founders see company overview first, HR sees real review fixtures, and Team ARC sees its actual deliverable without additional permissions');
+  checks.push('Founders see company overview first, HR sees real review fixtures, and TeMark sees its actual deliverable without additional permissions');
 
   const founder = views.get('founder');
   await founder.page.setViewportSize({width: 320, height: 900});
@@ -175,16 +175,16 @@ try {
   const arc = views.get('arc-lead');
   await arc.page.locator('.department-quick-paths [data-action="new-task"]').click();
   await arc.page.locator('#modal-form select[name="department"]').count();
-  assert.equal(await arc.page.locator('#modal-form').count(), 1, 'Team ARC allocation action must still open its real form');
+  assert.equal(await arc.page.locator('#modal-form').count(), 1, 'TeMark allocation action must still open its real form');
   await arc.page.locator('[data-action="close-dialog"]').first().click();
   await founder.page.goto(origin + '/#hr');
   await founder.page.locator('[data-action="new-person"]').waitFor();
   await founder.page.locator('[data-action="new-person"]').click();
   const departmentOption = founder.page.locator('select[name="department"] option[value="Marketing"]');
-  assert.equal(await departmentOption.innerText(), 'Team ARC');
+  assert.equal(await departmentOption.innerText(), 'TeMark');
   assert.equal(await departmentOption.getAttribute('value'), 'Marketing');
   await founder.page.locator('[data-action="close-dialog"]').first().click();
-  checks.push('Existing task allocation and People admin forms still open; Team ARC option retains the Marketing payload value');
+  checks.push('Existing task allocation and People admin forms still open; TeMark option retains the Marketing payload value');
   assert.deepEqual(errors, []);
   checks.push('No browser JavaScript errors or HTTP 500 responses');
   await writeFile(artifacts + '/browser-workspace-v26-report.json', JSON.stringify({passed: true, checks, geometries, snapshots, errors}, null, 2));

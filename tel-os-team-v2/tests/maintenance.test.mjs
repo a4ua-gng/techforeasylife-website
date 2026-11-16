@@ -14,7 +14,7 @@ before(async()=>{
  let scriptPath=process.env.TEL_MAINTENANCE_TEST_WORKER;
  if(!scriptPath){await mkdir('tests/artifacts',{recursive:true});scriptPath='tests/artifacts/maintenance-worker.mjs';await build({entryPoints:['src/worker.js'],bundle:true,format:'esm',platform:'browser',target:'es2022',outfile:scriptPath,define:{__HTML__:JSON.stringify('<html>test</html>'),__CSS__:JSON.stringify(''),__APP__:JSON.stringify('')}});}
  mf=new Miniflare({modules:true,scriptPath,compatibilityDate:'2026-07-30',d1Databases:{DB:'maintenance-test'}});db=await mf.getD1Database('DB');
- for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql'])await db.exec((await readFile(file,'utf8')).replace(/\n/g,' '));
+ for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql','schema-announcements.sql','schema-grievance-access.sql'])await db.exec((await readFile(file,'utf8')).replace(/\n/g,' '));
  const salt='0123456789abcdef0123456789abcdef',hash=await hashPassword(password,salt);
  for(const [id,role] of [['founder','founder'],['working','employee'],['break','employee'],['offline','employee']]){
   await db.prepare('INSERT INTO users(id,employee_id,username,name,designation,role,department,joined_on,status,password_hash,password_salt,must_change_password,created_at) VALUES(?,?,?,?,?,?,?,\'2026-01-01\',\'active\',?,?,0,?)').bind(id,'MT-'+id,id,'Fixture '+id,role,role,'Marketing',hash,salt,at).run();
@@ -61,6 +61,17 @@ test('environment maintenance flag and D1 maintenance flag share the read-only g
 });
 test('routine background automation remains available without forcing an attendance clock-out',async()=>{
  const before=await open();const result=await req('/api/automations/run',{user:'founder',method:'POST',body:{}});assert.equal(result.status,200);assert.ok(await db.prepare("SELECT key FROM automation_runs WHERE key='last_success'").first());assert.deepEqual(await open(),before);
+});
+test('full maintenance blocks every account and valid login without changing sessions or attendance',async()=>{
+ const before=await open(),sessions=(await db.prepare('SELECT * FROM sessions ORDER BY token_hash').all()).results;
+ await mode('full');
+ try{
+  const status=await req('/api/status');assert.equal(status.data.maintenance,true);assert.equal(status.data.full_maintenance,true);
+  for(const user of [undefined,'founder','working','break','offline']){const result=await req('/api/me',{user});assert.equal(result.status,503);assert.equal(result.data.full_maintenance,true);assert.equal(result.headers.get('set-cookie'),null);}
+  for(const username of ['founder','working','break','offline']){const result=await req('/api/auth/login',{method:'POST',body:{username,password}});assert.equal(result.status,503);assert.equal(result.data.full_maintenance,true);assert.equal(result.headers.get('set-cookie'),null);}
+  assert.equal((await maintenanceAccess({DB:db,TEL_OS_MAINTENANCE:'full'},{id:'founder',role:'founder'})).status,503);
+  assert.deepEqual(await open(),before);assert.deepEqual((await db.prepare('SELECT * FROM sessions ORDER BY token_hash').all()).results,sessions);
+ }finally{await mode('on');}
 });
 test('explicit logout works during maintenance and does not end attendance',async()=>{
  const before=await open();const result=await req('/api/auth/logout',{user:'offline',method:'POST',body:{}});assert.equal(result.status,200);assert.match(result.headers.get('set-cookie'),/Max-Age=0/);assert.deepEqual(await open(),before);

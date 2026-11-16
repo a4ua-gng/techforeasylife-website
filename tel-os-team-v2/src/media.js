@@ -1,11 +1,12 @@
 import {one,rows,run,id,now,fail,json,audit} from './core.js';
+import {canAccessGrievance} from './grievance-access.js';
 const HR=['founder','hr_lead','hr_member'];
 export async function mediaAccess(env,u,type,key,write=false){
  if(type==='profile'){const p=await one(env,'SELECT id,role FROM users WHERE id=?',key);return !!p&&(!write||p.id===u.id||(HR.includes(u.role)&&(!['founder','hr_lead'].includes(p.role)||u.role==='founder')));}
  if(type==='channel'){const c=await one(env,'SELECT * FROM channels WHERE id=?',key);return !!c&&(u.role==='founder'||c.department==='Company'||(c.department!=='Leadership'&&c.department===u.department))&&(!write||c.posting_policy!=='announcements'||['founder','hr_lead'].includes(u.role));}
  const tables={task:'tasks',meeting:'meetings',grievance:'grievances',leave:'leave_requests',correction:'attendance_corrections',document:'documents',marketing_report:'marketing_reports'};
  if(!tables[type])return false;const r=await one(env,`SELECT * FROM ${tables[type]} WHERE id=?`,key);if(!r)return false;
- if(type==='grievance')return r.user_id===u.id||u.role==='founder'||(['hr_lead','hr_member'].includes(u.role)&&!r.founder_only);
+ if(type==='grievance')return canAccessGrievance(env,u,r.id);
  if(type==='leave'||type==='correction')return r.user_id===u.id||HR.includes(u.role);
  if(type==='task')return r.assignee_id===u.id||r.leader_id===u.id||u.role==='founder'||(!write&&HR.includes(u.role));
  if(type==='marketing_report')return u.role==='founder'||(u.department==='Marketing'&&(!write||r.user_id===u.id));
@@ -15,7 +16,7 @@ export async function mediaAccess(env,u,type,key,write=false){
 export async function readUpload(env,user,uploadId,head=false){const r=await one(env,'SELECT * FROM uploads WHERE id=?',uploadId);if(!r)fail(404,'Image not found.');if(!await mediaAccess(env,user,r.context_type,r.context_id))fail(403,'This image belongs to a restricted record.');if(head)return new Response(null,{headers:{'Content-Type':r.mime_type}});const parts=await rows(env,'SELECT data_base64 FROM upload_chunks WHERE upload_id=? ORDER BY part',r.id);const bytes=[];let n=0;for(const p of parts){const a=Uint8Array.from(atob(p.data_base64),c=>c.charCodeAt(0));bytes.push(a);n+=a.length;}const all=new Uint8Array(n);let off=0;for(const b of bytes){all.set(b,off);off+=b.length;}return new Response(all,{headers:{'Content-Type':r.mime_type,'Cache-Control':'no-store'}});}
 export async function handleMedia({request,url,env,user}){
  const p=url.pathname,m=request.method;
- if(p==='/api/uploads'&&m==='GET'){const type=url.searchParams.get('type'),key=url.searchParams.get('id');if(type&&key){if(!await mediaAccess(env,user,type,key))fail(403,'This record is restricted.');return json({uploads:await rows(env,'SELECT id,filename,mime_type,size,created_at FROM uploads WHERE context_type=? AND context_id=? ORDER BY created_at DESC LIMIT 50',type,key)});}return json({uploads:await rows(env,'SELECT id,filename,mime_type,size,context_type,context_id,created_at FROM uploads WHERE owner_id=? ORDER BY created_at DESC LIMIT 50',user.id)});}
+ if(p==='/api/uploads'&&m==='GET'){const type=url.searchParams.get('type'),key=url.searchParams.get('id');if(type&&key){if(!await mediaAccess(env,user,type,key))fail(403,'This record is restricted.');return json({uploads:await rows(env,'SELECT id,filename,mime_type,size,created_at FROM uploads WHERE context_type=? AND context_id=? ORDER BY created_at DESC LIMIT 50',type,key)});}const owned=await rows(env,'SELECT id,filename,mime_type,size,context_type,context_id,created_at FROM uploads WHERE owner_id=? ORDER BY created_at DESC LIMIT 50',user.id),uploads=[];for(const upload of owned)if(upload.context_type!=='grievance'||await mediaAccess(env,user,upload.context_type,upload.context_id))uploads.push(upload);return json({uploads});}
  const match=p.match(/^\/api\/uploads\/([^/]+)$/);if(match&&['GET','HEAD'].includes(m))return readUpload(env,user,match[1],m==='HEAD');
  if(p==='/api/uploads'&&m==='POST'){
   if(!request.headers.get('Content-Type')?.startsWith('multipart/form-data'))fail(415,'Choose an image file.');

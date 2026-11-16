@@ -1,0 +1,109 @@
+/* Keep native controls inside their layout tracks, including iOS date fields. */
+.workspace-page :is(.field, .search, .form-grid, .hr-record-filters) { min-width: 0; max-width: 100%; }
+:is(.workspace-page, dialog) :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  box-sizing: border-box;
+  min-width: 0;
+  min-inline-size: 0;
+  max-width: 100%;
+  max-inline-size: 100%;
+}
+:is(.workspace-page, dialog) .field :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  width: 100%;
+  inline-size: 100%;
+}
+:is(.workspace-page, dialog) input:is([type="date"], [type="month"], [type="time"], [type="datetime-local"]) {
+  display: block;
+  width: 100%;
+  inline-size: 100%;
+  min-width: 0;
+  min-inline-size: 0;
+  min-height: 48px;
+  line-height: 1.5;
+  -webkit-appearance: none;
+  appearance: none;
+}
+:is(.workspace-page, dialog) input::-webkit-date-and-time-value { min-width: 0; min-height: 1.5em; text-align: left; }
+:is(.workspace-page, dialog) input::-webkit-datetime-edit { min-width: 0; padding: 0; }
+:is(.workspace-page, dialog) input::-webkit-datetime-edit-fields-wrapper { min-width: 0; padding: 0; }
+:is(.workspace-page, dialog) input::-webkit-calendar-picker-indicator { flex: 0 0 auto; margin-inline: 6px 0; }
+.workspace-page .hr-record-filters { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr) auto; }
+.workspace-page .hr-record-filters .field { gap: 8px; }
+.workspace-page .hr-record-filters .field label { margin: 0; }
+.workspace-page .hr-record-filters :is(input, select, .btn) { min-height: 48px; }
+.workspace-page .hr-record-filters .btn { min-width: 0; }
+.workspace-page .hr-record-table :is(td, th, strong, small) { min-width: 0; overflow-wrap: anywhere; }
+.workspace-page .hr-control-links > a { min-width: 0; }
+.workspace-page .hr-control-links > a .svg { flex: none; }
+.workspace-page :is(.btn, .link-btn) { max-width: 100%; overflow-wrap: anywhere; }
+.workspace-page :is(.flexible-task-link, .flexible-meeting-link) > span { min-width: 0; }
+.workspace-page :is(.flexible-task-link, .flexible-meeting-link) :is(strong, small) { overflow-wrap: anywhere; }
+
+/* Labels reflow within equal metric tracks instead of widening the page. */
+.workspace-page .stats > .stat { min-width: 0; }
+.workspace-page .stat-head > span { min-width: 0; overflow-wrap: anywhere; }
+.workspace-page :is(.stat-head, .stat-note, .stat-value) { overflow-wrap: anywhere; }
+.workspace-page .stat-head { gap: 8px; }
+.workspace-page .stat-value { line-height: 1.25; }
+
+/* A single, readable overview card with its actions alongside the heading. */
+.workspace-page .interface-founder-heading { margin-bottom: 20px; }
+.workspace-page .founder-summary.interface-founder-overview { padding: 20px 24px; }
+.workspace-page .interface-founder-overview > .panel-header { padding: 0 0 16px; gap: 12px 20px; align-items: center; }
+.workspace-page .interface-founder-overview h2 { font-size: 19px; }
+.interface-founder-actions { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+.workspace-page .interface-founder-actions > .btn { width: auto; min-height: 44px; padding: 9px 14px; }
+.workspace-page .interface-founder-overview ul { padding-left: 22px; margin: 0; }
+.workspace-page .interface-founder-overview li { font-size: 16px; line-height: 1.65; padding-block: 4px; overflow-wrap: anywhere; }
+.workspace-page .interface-founder-overview > .hint { margin: 16px 0 0; }
+.workspace-page .interface-founder-feed .founder-text-update { padding: 20px 24px; }
+.workspace-page .interface-founder-feed .list-card-head { align-items: center; margin: 0 0 10px; }
+.workspace-page .interface-founder-feed .list-card-head > strong { min-width: 0; overflow-wrap: anywhere; }
+.workspace-page .interface-founder-feed .pre { font-size: 16px; line-height: 1.65; margin: 0 0 12px; color: var(--workspace-text); }
+.workspace-page .interface-founder-feed .link-btn { min-height: 44px; }
+
+/* Make the personal task list easy to identify without another large task card. */
+.workspace-page .interface-today-tasks .flexible-timeline-heading { flex-wrap: wrap; }
+.workspace-page .interface-today-tasks .flexible-timeline-heading > div { min-width: 0; flex: 1 1 240px; }
+.workspace-page .interface-today-tasks .flexible-timeline-heading h2 { font-size: clamp(23px, 2vw, 28px); font-weight: 600; }
+.workspace-page .interface-today-tasks .flexible-step-heading { flex-wrap: wrap; }
+.workspace-page .interface-task-heading { color: var(--workspace-accent); }
+.workspace-page .interface-today-tasks .interface-task-summary { font-size: 14px; line-height: 1.6; margin: 0 0 8px; }
+.workspace-page .interface-review-list { margin-top: 14px; }
+.workspace-page .interface-review-list > h4 { font-size: 14px; line-height: 1.6; margin: 0; font-weight: 600; }
+.workspace-page .interface-review-list .flexible-task-link { min-height: 56px; padding-block: 10px; }
+.workspace-page .interface-today-tasks .flexible-task-state { min-width: 0; overflow-wrap: anywhere; }
+.workspace-page .interface-today-tasks :is(.flexible-task-link, .flexible-meeting-link, .link-btn) { min-height: 44px; }
+
+@media (max-width: 800px) {
+  .workspace-page .hr-record-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 650px) {
+  .workspace-page .hr-record-filters { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .workspace-page .hr-record-filters > :is(.field, button) { grid-column: 1 / -1; }
+  .workspace-page .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+  .workspace-page .stat { padding: 16px 14px; }
+  .workspace-page .stat-head { font-size: 14px; line-height: 1.5; }
+  .workspace-page .stat-note { font-size: 13px; line-height: 1.55; }
+  .workspace-page .stat-value { font-size: clamp(26px, 8vw, 32px); margin: 14px 0 8px; letter-spacing: -.7px; }
+  .workspace-page .founder-summary.interface-founder-overview { padding: 20px; }
+  .workspace-page .interface-founder-overview > .panel-header { padding: 0 0 14px; }
+  .interface-founder-actions { width: 100%; }
+  .workspace-page .interface-founder-actions > .btn { flex: 1 1 130px; }
+  .workspace-page .interface-founder-feed .founder-text-update { padding: 20px; }
+  .workspace-page .interface-today-tasks .interface-task-summary { font-size: 15px; }
+  .workspace-page .interface-today-tasks .flexible-timeline-heading { padding-bottom: 18px; }
+  .workspace-page .interface-today-tasks .flexible-timeline-step { gap: 10px; }
+}
+@media (max-width: 360px) {
+  .workspace-page .interface-today-tasks { padding-inline: 16px; }
+  .workspace-page .interface-today-tasks .flexible-timeline-step { grid-template-columns: 24px minmax(0, 1fr); }
+  .workspace-page .interface-today-tasks .flexible-timeline-marker { width: 24px; height: 24px; }
+  .workspace-page .interface-today-tasks .flexible-timeline-step:not(:last-child)::before { left: 11px; }
+}
+/* The optional Home shortcut has its own account-scoped browser preference. */
+.workspace-page .flexible-hr-shortcut{position:relative;padding-right:76px}
+.workspace-page .flexible-hr-shortcut .interface-hide-hr-shortcut{position:absolute;top:12px;right:12px;color:var(--workspace-muted);background:transparent;border:1px solid var(--workspace-line)}
+.workspace-page .interface-home-preference{margin-top:24px}
+.workspace-page .interface-home-preference .checkline{display:flex;align-items:center;gap:12px;min-height:48px;font-size:16px}
+.workspace-page .interface-home-preference input{width:20px;height:20px;flex:none}
+@media(max-width:650px){.workspace-page .flexible-hr-shortcut{padding-right:64px}.workspace-page .flexible-hr-shortcut>.btn{max-width:100%;white-space:normal}}

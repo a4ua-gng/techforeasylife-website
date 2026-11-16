@@ -1,4 +1,4 @@
-# TEL OS2.7 operational email configuration
+# TEL OS2.8 operational email configuration
 
 Work notifications use the existing verified Resend domain. Preserve RESEND_API_KEY and TEL_OS_SENDER_EMAIL for verification. Add plaintext TEL_OS_OPERATIONAL_EMAILS=enabled and TEL_OS_WORK_SENDER_EMAIL=notifications@techforeasylife.in. No Google OAuth or WhatsApp setup is needed for employees; they verify any normal email inside TEL OS.
 
@@ -25,3 +25,9 @@ Apply schema-urgent-email.sql, schema-flexible-work.sql, schema-hr-records.sql a
 Set attendance_mode=flexible. Set urgent_task_email_enabled_at and deadline_policy_enabled_at to the rollout UTC timestamp only when blank; old assignments/deadline misses are not replayed. Deadline policy runs before the shared email dispatcher each minute. The additive urgent/deadline outboxes use the existing global rate gate and provider confirmation rules.
 
 Maintenance uses app_settings.tel_maintenance_mode=on/off or TEL_OS_MAINTENANCE=enabled. Public status is GET /api/status. Founders and active clocked-in/break members remain eligible; static assets, login for eligible members and logout remain available. Do not reset attendance to enter or exit maintenance. Disable maintenance after the live checks.
+
+## Announcements and selected HR recipients
+
+Apply schema-announcements.sql and schema-grievance-access.sql additively. Existing tickets without an explicit access row retain legacy access; all new private tickets require a boolean HR choice and validated founder IDs. No announcement or private ticket content is added to the email dispatcher.
+
+For a complete maintenance block set tel_maintenance_mode=full, or TEL_OS_MAINTENANCE=full. This blocks founders, working accounts and ordinary employees alike. Static assets and public health/status remain available to render the maintenance page; login and private APIs cannot grant access. The original on mode preserves founder/open-session access, and off restores ordinary permission checks. Worker subdomain availability can be disabled during rollout and restored only after full-mode deployment checks.

@@ -11,7 +11,7 @@ const runtime = new Miniflare({modules: true, scriptPath: 'dist/worker.js', comp
 const browser = await chromium.launch({headless: true, executablePath: '/usr/bin/chromium', args: ['--no-sandbox']});
 try {
   const db = await runtime.getD1Database('DB');
-  const originalSchemas = ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql'];
+  const originalSchemas = ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql','schema-announcements.sql','schema-grievance-access.sql'];
   const extraSchemas = (await readdir('.')).filter(file => /^schema-.*\.sql$/.test(file) && !originalSchemas.includes(file));
   for (const file of [...originalSchemas, ...extraSchemas]) await db.exec((await readFile(file, 'utf8')).replaceAll('\n', ' '));
   const password = 'LocalHelperPreference!2026', salt = '0123456789abcdef0123456789abcdef', hash = await hashPassword(password, salt), stamp = new Date().toISOString();

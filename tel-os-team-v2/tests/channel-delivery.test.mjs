@@ -12,7 +12,7 @@ before(async()=>{
  const built=await build({stdin:{contents:wrapper,resolveDir:process.cwd(),sourcefile:'channel-delivery-test.js'},bundle:true,write:false,format:'esm',platform:'browser'});
  runtime=new Miniflare({modules:true,script:built.outputFiles[0].text,compatibilityDate:'2026-07-30',d1Databases:{DB:'channel-delivery-tests'},log:new Log(LogLevel.NONE),bindings:{WHATSAPP_TOKEN:'isolated-template-fixture-token',WHATSAPP_PHONE_NUMBER_ID:'fixture-number',WHATSAPP_WORK_TEMPLATE_NAME:'tel_work_update'},outboundService:async()=>{throw Error('Channel tests must never send external messages.');}});
  db=await runtime.getD1Database('DB');
- for(const path of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql'])await db.exec((await readFile(path,'utf8')).replaceAll('\n',' '));
+ for(const path of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql','schema-announcements.sql','schema-grievance-access.sql'])await db.exec((await readFile(path,'utf8')).replaceAll('\n',' '));
  const fixtures=[
   ['harsh','founder','Leadership','active'],['devangi','founder','Leadership','on_leave'],
   ['hr-lead','hr_lead','HR','active'],['hr-member','hr_member','HR','active'],
