@@ -14,7 +14,7 @@ const people=['member','target','reviewer','stranger','leave','exempt','inactive
 before(async()=>{
  runtime=new Miniflare({modules:true,script:'export default {fetch(){return new Response("fixture")}}',compatibilityDate:'2026-07-30',d1Databases:{DB:'operational-email-tests'},log:new Log(LogLevel.NONE)});
  db=await runtime.getD1Database('DB');
- for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-extensions.sql','schema-schedules.sql','schema-task-transfers.sql','schema-operational-email.sql'])await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
+ for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-extensions.sql','schema-schedules.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql'])await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
  for(const person of people)await db.prepare('INSERT INTO users(id,employee_id,username,name,designation,role,department,joined_on,password_hash,password_salt,status,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)').bind(person,person,person,person+' fixture',person==='reviewer'?'Team lead':'Employee',person==='reviewer'?'team_lead':'employee','Test department','2026-01-01','fixture','fixture',person==='inactive'?'suspended':'active',CUTOVER).run();
  globalThis.fetch=async(input,options={})=>{
   const url=new URL(typeof input==='string'?input:input.url);assert.equal(url.origin,'https://api.resend.com','Tests must never reach a real external provider');

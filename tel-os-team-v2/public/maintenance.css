@@ -1,0 +1,17 @@
+.maintenance-page{min-height:100dvh;display:grid;place-items:center;padding:40px 24px;background:var(--bg,#f6f7f9)}
+.maintenance-card{width:100%;max-width:640px;padding:48px;border:1px solid var(--line,#e3e5e9);border-radius:24px;background:var(--surface,#fff);box-shadow:0 16px 56px #11182708}
+.maintenance-brand{display:flex;align-items:center;gap:12px;width:fit-content;margin-bottom:40px;text-decoration:none;color:inherit;font-size:22px;font-weight:800}
+.maintenance-brand .tel-logo{width:64px;height:auto;object-fit:contain}
+.maintenance-card .eyebrow{display:block;font-size:11px;letter-spacing:.12em}
+.maintenance-symbol{display:grid;place-items:center;width:56px;height:56px;margin:24px 0 20px;border-radius:16px;background:var(--teal-soft,#f1edff);color:var(--teal-dark,#624494)}
+.maintenance-symbol .svg{width:28px;height:28px}
+.maintenance-card h1{margin:0 0 16px;font-size:clamp(30px,5vw,42px);line-height:1.15;letter-spacing:-.04em}
+.maintenance-intro{margin:0;font-size:17px;line-height:1.65;color:var(--muted,#556070)}
+.maintenance-attendance{display:flex;align-items:flex-start;gap:14px;margin:28px 0;padding:20px;background:var(--teal-soft,#f5f7fa);border-radius:14px;color:var(--ink,#344054)}
+.maintenance-attendance>.svg{flex:none;width:22px;height:22px;margin-top:2px}
+.maintenance-attendance p{margin:6px 0 0;font-size:14px;line-height:1.65}
+.maintenance-actions{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.maintenance-actions .btn{min-height:44px;justify-content:center}
+.maintenance-card .hint{margin:0;line-height:1.6}
+.maintenance-login-note{padding:14px;margin:0 0 24px;border-radius:10px;background:var(--teal-soft,#f5f7fa);color:var(--ink,#344054);font-size:14px;line-height:1.6}
+@media(max-width:600px){.maintenance-page{padding:20px 16px}.maintenance-card{padding:28px 24px;border-radius:20px}.maintenance-brand{margin-bottom:32px}.maintenance-actions{flex-direction:column}.maintenance-actions .btn{width:100%}}

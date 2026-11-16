@@ -10,12 +10,14 @@ function checkedTime(value){if(typeof value!=='string'||!/^([01]\d|2[0-3]):[0-5]
 function checkedDays(value){if(!Array.isArray(value)||!value.length||value.length>7||value.some(x=>!Number.isInteger(x)||x<1||x>7)||new Set(value).size!==value.length)fail(400,'Choose unique working weekdays from Monday to Sunday.');return [...value].sort((a,b)=>a-b);}
 function checkedText(value,max,label){if(value===undefined)return '';if(typeof value!=='string'||value.length>max)fail(400,`${label} must be text, at most ${max} characters.`);return value.trim();}
 const decoded=row=>row?{...row,enabled:!!row.enabled,weekdays:JSON.parse(row.weekdays_json),weekdays_json:undefined}:null;
-const publicPolicy=row=>{const p=decoded(row);return p?{timezone:TZ,start_time:p.start_time,weekdays:p.weekdays,enabled:p.enabled,effective_date:p.effective_date,reminder_minutes:p.reminder_minutes,grace_minutes:p.grace_minutes,escalation_minutes:p.escalation_minutes}:null;};
+const attendanceDetails=mode=>({attendance_mode:mode==='fixed'?'fixed':'flexible',flexible:mode!=='fixed',target_hours:4});
+const publicPolicy=row=>{const p=decoded(row);return p?{timezone:TZ,...attendanceDetails(p.attendance_mode),start_time:p.start_time,weekdays:p.weekdays,enabled:p.enabled,effective_date:p.effective_date,reminder_minutes:p.reminder_minutes,grace_minutes:p.grace_minutes,escalation_minutes:p.escalation_minutes}:null;};
+const policiesFor=env=>rows(env,"SELECT p.*,COALESCE((SELECT value FROM app_settings WHERE key='attendance_mode'),'flexible') attendance_mode FROM attendance_policy p ORDER BY effective_date DESC,updated_at DESC,id DESC");
 
-async function context(env,at){
+async function context(env,at,loadedPolicies){
  const date=dateAt(at);
  const [policies,overrides,people,holidays,leaves,availability,clockIns,corrections]=await Promise.all([
-  rows(env,'SELECT * FROM attendance_policy ORDER BY effective_date DESC,updated_at DESC,id DESC'),
+  loadedPolicies||policiesFor(env),
   rows(env,'SELECT * FROM work_schedules ORDER BY effective_date DESC,updated_at DESC,id DESC'),
   rows(env,'SELECT id,name,department,role,manager_id,status,created_at FROM users ORDER BY name'),
   rows(env,'SELECT id,date,title FROM work_holidays WHERE date>=? AND date<=? ORDER BY date',date,plusDays(date,120)),
@@ -25,13 +27,13 @@ async function context(env,at){
   rows(env,"SELECT DISTINCT user_id FROM attendance_corrections WHERE work_date=? AND status='approved'",date)
  ]);
  if(!policies.length)fail(503,'Clock-in schedules are being configured. Please retry shortly.');
- return {date,at,policies,overrides,people,holidays,leaves,availability,clockIns,corrections};
+ return {date,at,...attendanceDetails(policies[0].attendance_mode),policies,overrides,people,holidays,leaves,availability,clockIns,corrections};
 }
 function policyFor(ctx,date){return ctx.policies.find(p=>p.effective_date<=date)||ctx.policies[ctx.policies.length-1];}
 function configuration(ctx,user,date){
  const policy=decoded(policyFor(ctx,date));
  const override=decoded(ctx.overrides.find(s=>s.user_id===user.id&&s.effective_date<=date));
- return {...policy,...(override||{}),timezone:TZ,enabled:policy.enabled&&(override?override.enabled:true),effective_date:override?[policy.effective_date,override.effective_date].sort().at(-1):policy.effective_date,inherited:!override,reminder_minutes:policy.reminder_minutes,grace_minutes:policy.grace_minutes,escalation_minutes:policy.escalation_minutes};
+ return {...policy,...(override||{}),timezone:TZ,...attendanceDetails(ctx.attendance_mode),enabled:policy.enabled&&(override?override.enabled:true),effective_date:override?[policy.effective_date,override.effective_date].sort().at(-1):policy.effective_date,inherited:!override,reminder_minutes:policy.reminder_minutes,grace_minutes:policy.grace_minutes,escalation_minutes:policy.escalation_minutes};
 }
 function exemption(ctx,user,date){
  if(user.status==='on_leave')return 'On leave';
@@ -43,9 +45,10 @@ function exemption(ctx,user,date){
  return '';
 }
 function todayState(ctx,user,config){
- const scheduled_at=instant(ctx.date,config.start_time),first_clock_in=ctx.clockIns.find(c=>c.user_id===user.id)?.first_clock_in||null;
- const base={date:ctx.date,status:'not_scheduled',reason:'',scheduled_at,first_clock_in,minutes_late:first_clock_in?Math.max(0,Math.ceil((Date.parse(first_clock_in)-Date.parse(scheduled_at))/60000)):0};
+ const scheduled_at=ctx.flexible?null:instant(ctx.date,config.start_time),first_clock_in=ctx.clockIns.find(c=>c.user_id===user.id)?.first_clock_in||null;
+ const base={date:ctx.date,status:'not_scheduled',reason:'',scheduled_at,first_clock_in,minutes_late:!ctx.flexible&&first_clock_in?Math.max(0,Math.ceil((Date.parse(first_clock_in)-Date.parse(scheduled_at))/60000)):0};
  const exempt=exemption(ctx,user,ctx.date);if(exempt)return {...base,status:'exempt',reason:exempt};
+ if(ctx.flexible)return {...base,status:'flexible',reason:first_clock_in?'Clock-in recorded. Your work time continues until you pause or clock out.':'Start when you are ready and track your work toward the daily target.'};
  if(!config.enabled)return {...base,reason:'Clock-in reminders are disabled for this schedule'};
  if(ctx.date<config.effective_date)return {...base,reason:`Schedule begins ${config.effective_date}`};
  if(!config.weekdays.includes(weekday(ctx.date)))return {...base,reason:'Not a scheduled working day'};
@@ -56,16 +59,17 @@ function todayState(ctx,user,config){
  const t=Date.parse(ctx.at);return {...base,status:t<Date.parse(scheduled_at)?'upcoming':t<graceAt?'due':'missing',reason:t<Date.parse(scheduled_at)?'Clock in at your scheduled start':t<graceAt?'Your clock-in is due':'No clock-in recorded after the grace period'};
 }
 function nextShift(ctx,user){
+ if(ctx.flexible)return null;
  for(let n=0;n<=90;n++){const date=plusDays(ctx.date,n),config=configuration(ctx,user,date);if(!config.enabled||date<config.effective_date||!config.weekdays.includes(weekday(date))||exemption(ctx,user,date))continue;const scheduled_at=instant(date,config.start_time);if(Date.parse(scheduled_at)<=Date.parse(ctx.at))continue;return {date,scheduled_at,start_time:config.start_time};}
  return null;
 }
-function scheduleView(ctx,user){const c=configuration(ctx,user,ctx.date),pending=decoded([...ctx.overrides].reverse().find(s=>s.user_id===user.id&&s.effective_date>ctx.date));return {user_id:user.id,name:user.name,department:user.department,manager_id:user.manager_id,inherited:c.inherited,start_time:c.start_time,weekdays:c.weekdays,enabled:c.enabled,effective_date:c.effective_date,note:c.note||'',today:todayState(ctx,user,c),next_shift:nextShift(ctx,user),pending_change:pending?{start_time:pending.start_time,weekdays:pending.weekdays,enabled:pending.enabled,effective_date:pending.effective_date,note:pending.note}:null};}
+function scheduleView(ctx,user){const c=configuration(ctx,user,ctx.date),pending=decoded([...ctx.overrides].reverse().find(s=>s.user_id===user.id&&s.effective_date>ctx.date));return {user_id:user.id,name:user.name,department:user.department,manager_id:user.manager_id,...attendanceDetails(ctx.attendance_mode),inherited:c.inherited,start_time:c.start_time,weekdays:c.weekdays,enabled:c.enabled,effective_date:c.effective_date,note:c.note||'',today:todayState(ctx,user,c),next_shift:nextShift(ctx,user),pending_change:pending?{start_time:pending.start_time,weekdays:pending.weekdays,enabled:pending.enabled,effective_date:pending.effective_date,note:pending.note}:null};}
 function validateChange(body,current,at){
  const start_time=checkedTime(body.start_time===undefined?current.start_time:body.start_time),weekdays=checkedDays(body.weekdays===undefined?current.weekdays:body.weekdays);
  if(body.enabled!==undefined&&typeof body.enabled!=='boolean')fail(400,'Enabled must be true or false.');
  const enabled=body.enabled===undefined?current.enabled:body.enabled,effective_date=body.effective_date===undefined?current.effective_date:body.effective_date;
  if(!validDate(effective_date)||effective_date<dateAt(at))fail(400,'Choose today or a future effective date.');
- if(enabled&&effective_date===dateAt(at)&&Date.parse(instant(effective_date,start_time))<=Date.parse(at))fail(400,'Today’s start has passed. Choose a future start or a future effective date.');
+ if(!current.flexible&&enabled&&effective_date===dateAt(at)&&Date.parse(instant(effective_date,start_time))<=Date.parse(at))fail(400,'Today’s start has passed. Choose a future start or a future effective date.');
  return {start_time,weekdays,enabled,effective_date};
 }
 function writable(user){if(!HR.includes(user.role))fail(403,'HR or a founder must update clock-in schedules.');}
@@ -77,31 +81,38 @@ export async function handleSchedules({request,url,env,user,body={}}){
   const visible=ctx.people.filter(p=>HR.includes(user.role)||p.id===user.id||(HEADS.includes(user.role)&&p.department===user.department));
   const schedules=visible.map(p=>scheduleView(ctx,p)),self=schedules.find(s=>s.user_id===user.id);
   const pendingPolicy=[...ctx.policies].reverse().find(p=>p.effective_date>ctx.date);
-  return json({policy:publicPolicy(policyFor(ctx,ctx.date)),pending_policy:pendingPolicy?publicPolicy(pendingPolicy):null,schedules,today:self?.today||null,next_shift:self?.next_shift||null,holidays:ctx.holidays});
+  return json({...attendanceDetails(ctx.attendance_mode),policy:publicPolicy(policyFor(ctx,ctx.date)),pending_policy:pendingPolicy?publicPolicy(pendingPolicy):null,schedules,today:self?.today||null,next_shift:self?.next_shift||null,holidays:ctx.holidays});
  }
  if(path==='/api/schedules/policy'&&method==='PATCH'){
   if(!['founder','hr_lead'].includes(user.role))fail(403,'Only founders and the HR lead can change the company clock-in policy.');
-  const at=now(),ctx=await context(env,at),current=publicPolicy(policyFor(ctx,ctx.date)),change=validateChange(body,current,at);
+  const at=now(),ctx=await context(env,at),current=publicPolicy(policyFor(ctx,ctx.date));
+  if(body.attendance_mode!==undefined&&!['flexible','fixed'].includes(body.attendance_mode))fail(400,'Attendance mode must be flexible or fixed.');
+  const details=attendanceDetails(body.attendance_mode===undefined?ctx.attendance_mode:body.attendance_mode);
+  const modeOnly=body.attendance_mode!==undefined&&!['start_time','weekdays','enabled','effective_date','reminder_minutes','grace_minutes','escalation_minutes'].some(key=>body[key]!==undefined);
+  const change=modeOnly?{start_time:current.start_time,weekdays:current.weekdays,enabled:current.enabled,effective_date:current.effective_date}:validateChange(body,{...current,...details},at);
   const timings={};for(const [key,max] of [['reminder_minutes',120],['grace_minutes',60],['escalation_minutes',240]]){const value=body[key]===undefined?current[key]:body[key];if(!Number.isInteger(value)||value<0||value>max)fail(400,`${key.replaceAll('_',' ')} must be an integer from 0 to ${max}.`);timings[key]=value;}
   if(timings.escalation_minutes<timings.grace_minutes)fail(400,'Escalation must follow the grace period.');
   if(body.timezone!==undefined&&body.timezone!==TZ)fail(400,'The company schedule uses Asia/Kolkata.');
-  const pid=id();await run(env,'INSERT INTO attendance_policy(id,timezone,start_time,weekdays_json,enabled,effective_date,reminder_minutes,grace_minutes,escalation_minutes,activated_at,updated_at,updated_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',pid,TZ,change.start_time,JSON.stringify(change.weekdays),change.enabled?1:0,change.effective_date,timings.reminder_minutes,timings.grace_minutes,timings.escalation_minutes,at,at,user.id);
-  await audit(env,user,'clock_in_policy_updated','attendance_policy',pid,`Effective ${change.effective_date} at ${change.start_time} IST`);
-  const people=ctx.people.filter(p=>['active','on_leave'].includes(p.status));for(const person of people)await notify(env,person.id,'Company clock-in schedule updated',`The default start is ${change.start_time} IST from ${change.effective_date}. Open your schedule for working days and personal exceptions.`,'schedule');
-  return json({policy:{timezone:TZ,...change,...timings}});
+  const pid=id(),insertPolicy=!modeOnly||(!details.flexible&&ctx.flexible),statements=[env.DB.prepare("INSERT INTO app_settings(key,value) VALUES('attendance_mode',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value").bind(details.attendance_mode)];
+  // Reactivating fixed attendance creates a fresh activation time, preventing a retroactive miss today.
+  if(insertPolicy)statements.push(env.DB.prepare('INSERT INTO attendance_policy(id,timezone,start_time,weekdays_json,enabled,effective_date,reminder_minutes,grace_minutes,escalation_minutes,activated_at,updated_at,updated_by) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)').bind(pid,TZ,change.start_time,JSON.stringify(change.weekdays),change.enabled?1:0,change.effective_date,timings.reminder_minutes,timings.grace_minutes,timings.escalation_minutes,at,at,user.id));
+  await env.DB.batch(statements);
+  await audit(env,user,'clock_in_policy_updated','attendance_policy',insertPolicy?pid:policyFor(ctx,ctx.date).id,details.flexible?'Flexible attendance; daily work target retained':`Fixed attendance effective ${change.effective_date} at ${change.start_time} IST`);
+  const people=ctx.people.filter(p=>['active','on_leave'].includes(p.status));for(const person of people)await notify(env,person.id,'Company attendance policy updated',details.flexible?'Attendance is flexible. Start when you are ready, track your work, and pause or clock out when you finish. Your daily work target is unchanged.':`The default start is ${change.start_time} IST from ${change.effective_date}. Open your schedule for working days and personal exceptions.`,'schedule');
+  return json({...details,policy:{timezone:TZ,...details,...change,...timings}});
  }
  const match=path.match(/^\/api\/schedules\/([^/]+)$/);
  if(match&&['PUT','DELETE'].includes(method)){
   writable(user);const target=await one(env,'SELECT id,name,department,role,manager_id,status,created_at FROM users WHERE id=?',match[1]);if(!target)fail(404,'Team member not found.');
   if(method==='DELETE'){
    const ctx=await context(env,now()),policy=decoded(policyFor(ctx,ctx.date)),alreadyClocked=ctx.clockIns.some(c=>c.user_id===target.id);
-   if(policy.enabled&&policy.effective_date<=ctx.date&&policy.weekdays.includes(weekday(ctx.date))&&!exemption(ctx,target,ctx.date)&&!alreadyClocked&&Date.parse(instant(ctx.date,policy.start_time))<=Date.parse(ctx.at))fail(409,'Today’s company start has passed. Set a future personal schedule, or reset before the next company start to avoid a retroactive missed-clock-in alert.');
+   if(!ctx.flexible&&policy.enabled&&policy.effective_date<=ctx.date&&policy.weekdays.includes(weekday(ctx.date))&&!exemption(ctx,target,ctx.date)&&!alreadyClocked&&Date.parse(instant(ctx.date,policy.start_time))<=Date.parse(ctx.at))fail(409,'Today’s company start has passed. Set a future personal schedule, or reset before the next company start to avoid a retroactive missed-clock-in alert.');
    await run(env,'DELETE FROM work_schedules WHERE user_id=?',target.id);await audit(env,user,'clock_in_schedule_reset','user',target.id);await notify(env,target.id,'Clock-in schedule reset','Your schedule now follows the company default. Check your next working day.','schedule');const updated=await context(env,now());return json({schedule:scheduleView(updated,target)});
   }
   const at=now(),ctx=await context(env,at),current=configuration(ctx,target,ctx.date),change=validateChange(body,current,at),note=checkedText(body.note,1000,'Schedule note');
   await run(env,'INSERT INTO work_schedules(id,user_id,start_time,weekdays_json,enabled,effective_date,note,updated_by,updated_at) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(user_id,effective_date) DO UPDATE SET start_time=excluded.start_time,weekdays_json=excluded.weekdays_json,enabled=excluded.enabled,note=excluded.note,updated_by=excluded.updated_by,updated_at=excluded.updated_at',id(),target.id,change.start_time,JSON.stringify(change.weekdays),change.enabled?1:0,change.effective_date,note,user.id,at);
   await audit(env,user,'clock_in_schedule_updated','user',target.id,`Effective ${change.effective_date} at ${change.start_time} IST`);
-  await notify(env,target.id,'Your clock-in schedule changed',`Clock in at ${change.start_time} IST on your scheduled weekdays from ${change.effective_date}. Open your schedule for details.`,'schedule');
+  await notify(env,target.id,'Your clock-in schedule changed',ctx.flexible?'Your saved schedule was updated. Attendance remains flexible; start when you are ready and track your work.':`Clock in at ${change.start_time} IST on your scheduled weekdays from ${change.effective_date}. Open your schedule for details.`,'schedule');
   const updated=await context(env,at);return json({schedule:scheduleView(updated,target)});
  }
  if(path==='/api/holidays'&&method==='POST'){
@@ -119,7 +130,10 @@ export async function handleSchedules({request,url,env,user,body={}}){
 }
 
 export async function runAttendanceReminders(env,at=now()){
- if(!Number.isFinite(Date.parse(at)))fail(400,'Invalid schedule check time.');const ctx=await context(env,at);let count=0,missing=0;
+ if(!Number.isFinite(Date.parse(at)))fail(400,'Invalid schedule check time.');
+ const policies=await policiesFor(env),details=attendanceDetails(policies[0]?.attendance_mode);
+ if(details.flexible)return {schedule_notifications:0,missing_clock_ins:0,checked_at:at,...details};
+ const ctx=await context(env,at,policies);let count=0,missing=0;
  const pending=[];
  const notice=(userId,title,body,key)=>pending.push([id(),userId,title,body,'schedule',at,key]);
  for(const user of ctx.people){
@@ -136,5 +150,5 @@ export async function runAttendanceReminders(env,at=now()){
  // Each ten-row insert uses70 parameters, below D1's100-parameter limit.
  // Keep scheduled checks within the Free Workers query budget as the team grows.
  for(let offset=0;offset<pending.length;offset+=10){const chunk=pending.slice(offset,offset+10),placeholders=chunk.map(()=>'(?,?,?,?,?,?,?)').join(',');const result=await run(env,`INSERT OR IGNORE INTO notifications(id,user_id,title,body,link,created_at,dedupe_key) VALUES ${placeholders}`,...chunk.flat());count+=result.meta?.changes||0;}
- return {schedule_notifications:count,missing_clock_ins:missing,checked_at:at};
+ return {schedule_notifications:count,missing_clock_ins:missing,checked_at:at,...details};
 }

@@ -14,7 +14,7 @@ const metadata={main_module:'worker.js',compatibility_date:'2026-11-14',keep_bin
 const form=new FormData();form.append('metadata',new Blob([JSON.stringify(metadata)],{type:'application/json'}));form.append('worker.js',new Blob([await readFile('dist/worker.js','utf8')],{type:'application/javascript+module'}),'worker.js');
 await api(`/accounts/${account}/workers/scripts/${name}`,'PUT',form);
 const activated=new Date(),localDate=new Date(activated.getTime()+330*60000).toISOString().slice(0,10),nextLocalDate=new Date(Date.parse(localDate+'T00:00:00Z')+86400000).toISOString().slice(0,10);
-await api(queryPath,'POST',{batch:[{sql:"UPDATE app_settings SET value=? WHERE key='operational_email_enabled_at' AND value=''",params:[activated.toISOString()]},{sql:"UPDATE app_settings SET value=? WHERE key='operational_email_daily_start_date' AND value=''",params:[nextLocalDate]}]});
+await api(queryPath,'POST',{batch:[{sql:"UPDATE app_settings SET value=? WHERE key='deadline_policy_enabled_at' AND value=''",params:[activated.toISOString()]},{sql:"UPDATE app_settings SET value=? WHERE key='urgent_task_email_enabled_at' AND value=''",params:[activated.toISOString()]},{sql:"UPDATE app_settings SET value=? WHERE key='operational_email_enabled_at' AND value=''",params:[activated.toISOString()]},{sql:"UPDATE app_settings SET value=? WHERE key='operational_email_daily_start_date' AND value=''",params:[nextLocalDate]}]});
 await api(`/accounts/${account}/workers/scripts/${name}/subdomain`,'POST',{enabled:true,previews_enabled:false});
 await api(`/accounts/${account}/workers/scripts/${name}/schedules`,'PUT',[{cron:'* * * * *'}]);
 console.log('TEL OS Worker deployed: email checks every minute, attendance/workflow checks every five minutes.');

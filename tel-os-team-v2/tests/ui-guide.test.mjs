@@ -15,7 +15,7 @@ before(async()=>{
  const result=await build({entryPoints:['src/worker.js'],bundle:true,format:'esm',platform:'browser',write:false,define:{__HTML__:JSON.stringify('<html>guide test</html>'),__CSS__:JSON.stringify(''),__APP__:JSON.stringify(''),__BINARY_ASSETS__:JSON.stringify(binaries)}});
  mf=new Miniflare({modules:true,script:result.outputFiles[0].text,compatibilityDate:'2026-07-30',d1Databases:{DB:'guide-test'}});
  db=await mf.getD1Database('DB');
- for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql'])await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
+ for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql'])await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
  for(const uid of ['member','other']){await db.prepare('INSERT INTO users(id,employee_id,username,name,designation,role,department,joined_on,password_hash,password_salt,must_change_password,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,0,?)').bind(uid,uid,uid,uid,'Team Member','employee','Marketing','2026-01-01','fixture-hash','fixture-salt',new Date().toISOString()).run();await db.prepare('INSERT INTO onboarding(user_id) VALUES(?)').bind(uid).run();}
 });
 after(async()=>{if(mf)await mf.dispose();});

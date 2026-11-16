@@ -3,6 +3,7 @@ import {expireEmailVerifications} from './email-verification.js';
 import {queueMeetingDeliveries,deliverMeetingWhatsApp} from './deliveries.js';
 import {queueFounderUpdates} from './founder-updates.js';
 import {queuePendingWorkDeliveries,deliverWorkWhatsApp} from './work-deliveries.js';
+import {queueUrgentTaskEmail} from './operational-emails.js';
 const HR = ['founder', 'hr_lead', 'hr_member'];
 const LEADS = ['founder', 'hr_lead', 'team_lead', 'finance_head'];
 const TZ = 'Asia/Kolkata';
@@ -54,12 +55,12 @@ export async function handleWorkflows({request,url,env,user,body={},helpers}) {
  const path=url.pathname,method=request.method;
  const date=stamp();
  const validateRange=(start,end)=>{if(!validDay(start)||!validDay(end)||start>end)fail(400,'Choose a valid start and end date.'); if((Date.parse(end)-Date.parse(start))/86400000>366)fail(400,'Date ranges must be one year or less.');};
- const getTask=async id=>{const row=await dbOne(env,`${taskSelect} WHERE t.id=?`,id);if(!row)fail(404,'Assignment not found.');return {...row,overdue:row.deadline<today()&&row.status!=='done'};};
+ const getTask=async id=>{const row=await dbOne(env,`${taskSelect} WHERE t.id=?`,id);if(!row)fail(404,'Assignment not found.');return {...row,overdue:row.deadline<today()&&['todo','working','revision'].includes(row.status)};};
  const getLeave=async id=>{const row=await dbOne(env,`${leaveSelect} WHERE l.id=?`,id);if(!row)fail(404,'Leave request not found.');return row;};
  if(path==='/api/tasks'&&method==='GET'){
   const filters=user.role==='founder'?{sql:'1=1',p:[]}:isLead(user)?{sql:'(t.department=? OR t.assignee_id=? OR t.leader_id=?)',p:[user.department,user.id,user.id]}:{sql:'t.assignee_id=?',p:[user.id]};
   const tasks=await dbRows(env,`${taskSelect} WHERE ${filters.sql} ORDER BY t.deadline,t.created_at DESC LIMIT 500`,...filters.p);
-  return json({tasks:tasks.map(t=>({...t,overdue:t.deadline<today()&&t.status!=='done'}))});
+  return json({tasks:tasks.map(t=>({...t,overdue:t.deadline<today()&&['todo','working','revision'].includes(t.status)}))});
  }
  if(path==='/api/tasks'&&method==='POST'){
   if(!isLead(user))fail(403,'Only department leads and founders can assign work.');
@@ -75,6 +76,7 @@ export async function handleWorkflows({request,url,env,user,body={},helpers}) {
   if(leader.id===assignee.id)fail(400,'The assignee and reviewer must be different people.');
   const id=uid();
   await dbRun(env,"INSERT INTO tasks (id,title,description,assignee_id,leader_id,department,priority,deadline,expected_deliverable,status,created_by,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,'todo',?,?,?)",id,title,description,assignee.id,leader.id,assignee.department,priority,body.deadline,expected,user.id,date,date);
+  if(priority==='urgent')await queueUrgentTaskEmail(env,id,{now:date});
   await audit(env,user,'task.created','task',id,title);
   await notify(env,assignee.id,'New assignment',title,'tasks');
   return json({task:await getTask(id)},201);
@@ -251,7 +253,9 @@ export async function runAutomations(env) {
  };
  const open=await dbRows(env,'SELECT user_id FROM attendance_sessions WHERE clock_out IS NULL AND work_date<?',day);
  for(const row of open)await rolloverSession(env,row.user_id,date);
- const tasks=await dbRows(env,"SELECT id,title,assignee_id,leader_id,deadline,status,updated_at FROM tasks WHERE status!='done' AND deadline<?",day);
+ const deadlinePolicy=await dbOne(env,"SELECT value FROM app_settings WHERE key='deadline_policy_enabled_at'");
+ const policyActive=deadlinePolicy?.value&&Number.isFinite(Date.parse(deadlinePolicy.value));
+ const tasks=policyActive?[]:await dbRows(env,"SELECT id,title,assignee_id,leader_id,deadline,status,updated_at FROM tasks WHERE status IN ('todo','working','revision') AND deadline<?",day);
  for(const t of tasks){await insertNotice(t.assignee_id,'Assignment overdue',`${t.title} was due ${t.deadline}. Update the deliverable or discuss the deadline with your lead.`,'tasks',`overdue:${day}:${t.id}:${t.assignee_id}`);if(t.leader_id!==t.assignee_id)await insertNotice(t.leader_id,'Overdue assignment needs attention',`${t.title} was due ${t.deadline}.`,'tasks',`overdue:${day}:${t.id}:${t.leader_id}`);}
  const reviews=await dbRows(env,"SELECT id,title,leader_id FROM tasks WHERE status='review' AND updated_at<?",new Date(Date.now()-48*3600000).toISOString());
  for(const t of reviews)await insertNotice(t.leader_id,'Review waiting over 48 hours',t.title,'tasks',`review:${day}:${t.id}`);
@@ -263,12 +267,12 @@ export async function runAutomations(env) {
  for(const l of leaves)await insertNotice(l.user_id,'Approved leave is active',`Your approved leave runs ${l.start_date} to ${l.end_date}.`,'calendar',`leave-active:${day}:${l.id}`);
  const pending=await dbRows(env,"SELECT l.id,l.user_id,l.status,l.start_date,l.leader_id,u.name,u.manager_id FROM leave_requests l JOIN users u ON u.id=l.user_id WHERE l.status IN ('pending_lead','pending_hr') AND l.created_at<?",new Date(Date.now()-48*3600000).toISOString());
  for(const l of pending){const reviewers=await dbRows(env,l.status==='pending_hr'?"SELECT id FROM users WHERE role IN ('founder','hr_lead','hr_member') AND id<>? AND id<>? AND status NOT IN ('suspended','exited')":"SELECT id FROM users WHERE (role='founder' OR id=?) AND id<>? AND status NOT IN ('suspended','exited')",...(l.status==='pending_hr'?[l.user_id,l.leader_id||'']:[l.manager_id||'',l.user_id]));for(const r of reviewers)await insertNotice(r.id,'Leave approval waiting over 48 hours',`${l.name}'s leave starts ${l.start_date}.`,'leave',`pending-leave:${day}:${l.id}:${r.id}`);}
- const repeated=await dbRows(env,"SELECT t.assignee_id,t.leader_id,u.name,COUNT(*) count FROM tasks t JOIN users u ON u.id=t.assignee_id WHERE t.status!='done' AND t.deadline<? GROUP BY t.assignee_id,t.leader_id HAVING COUNT(*)>=3",day);
+ const repeated=policyActive?[]:await dbRows(env,"SELECT t.assignee_id,t.leader_id,u.name,COUNT(*) count FROM tasks t JOIN users u ON u.id=t.assignee_id WHERE t.status IN ('todo','working','revision') AND t.deadline<? GROUP BY t.assignee_id,t.leader_id HAVING COUNT(*)>=3",day);
  for(const row of repeated)await insertNotice(row.leader_id,'Delivery pattern needs a conversation',`${row.name} has ${row.count} overdue assignments. Review workload, academic commitments and handover needs together before deciding next steps.`,'tasks',`repeated-overdue:${day}:${row.assignee_id}:${row.leader_id}`);
  const meetings=env.TEL_OS_OPERATIONAL_EMAILS==='enabled'?[]:await dbRows(env,'SELECT id,title,starts_at,participants_json,created_by FROM meetings WHERE starts_at>? AND starts_at<=?',date,new Date(Date.now()+24*3600000).toISOString());
  for(const meeting of meetings){let participants=[];try{participants=JSON.parse(meeting.participants_json)||[];}catch{};const ids=[...new Set([...participants,meeting.created_by])].filter(x=>typeof x==='string');for(const person of ids)await insertNotice(person,'Upcoming meeting',`${meeting.title} starts ${meeting.starts_at}.`,'meetings',`meeting:${meeting.id}:${person}`);await queueMeetingDeliveries(env,meeting,'reminder');}
  const isMonday=new Intl.DateTimeFormat('en-US',{weekday:'short',timeZone:TZ}).format(new Date())==='Mon';
- if(isMonday){const leaders=await dbRows(env,"SELECT id,role,department FROM users WHERE role IN ('founder','hr_lead','team_lead','finance_head') AND status NOT IN ('suspended','exited','on_leave')");for(const leader of leaders){const filter=leader.role==='founder'?'1=1':'department=?',p=leader.role==='founder'?[]:[leader.department];const summary=await dbOne(env,`SELECT COUNT(*) total,SUM(CASE WHEN status='review' THEN 1 ELSE 0 END) reviews,SUM(CASE WHEN deadline<? AND status!='done' THEN 1 ELSE 0 END) overdue FROM tasks WHERE status!='done' AND ${filter}`,day,...p);await insertNotice(leader.id,'Weekly operations summary',`${summary.total} active assignments; ${summary.reviews||0} awaiting review; ${summary.overdue||0} overdue. Review workload and approved leave before assigning work.`,'reports',`weekly:${day}:${leader.id}`);}}
+ if(isMonday){const leaders=await dbRows(env,"SELECT id,role,department FROM users WHERE role IN ('founder','hr_lead','team_lead','finance_head') AND status NOT IN ('suspended','exited','on_leave')");for(const leader of leaders){const filter=leader.role==='founder'?'1=1':'department=?',p=leader.role==='founder'?[]:[leader.department];const summary=await dbOne(env,`SELECT COUNT(*) total,SUM(CASE WHEN status='review' THEN 1 ELSE 0 END) reviews,SUM(CASE WHEN deadline<? AND status IN ('todo','working','revision') THEN 1 ELSE 0 END) overdue FROM tasks WHERE status!='done' AND ${filter}`,day,...p);await insertNotice(leader.id,'Weekly operations summary',`${summary.total} active assignments; ${summary.reviews||0} awaiting review; ${summary.overdue||0} overdue. Review workload and approved leave before assigning work.`,'reports',`weekly:${day}:${leader.id}`);}}
  await expireEmailVerifications(env);
  const whatsapp_delivery=await deliverMeetingWhatsApp(env);
  await flushNotices();

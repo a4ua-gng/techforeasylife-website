@@ -1,4 +1,5 @@
 import {queueWorkDeliveries} from './work-deliveries.js';
+import {maintenanceAccess} from './maintenance.js';
 export const id = () => crypto.randomUUID();
 export const now = () => new Date().toISOString();
 export const day = () => new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -39,6 +40,7 @@ export async function authRoutes({request,url,env,body,user}){
    await env.DB.batch(keys.map(key=>env.DB.prepare('INSERT INTO login_attempts(key,attempts,window_start) VALUES(?,1,?) ON CONFLICT(key) DO UPDATE SET attempts=CASE WHEN ?-window_start>=900000 THEN 1 ELSE attempts+1 END, window_start=CASE WHEN ?-window_start>=900000 THEN ? ELSE window_start END').bind(key,Date.now(),Date.now(),Date.now(),Date.now())));
    fail(401,'Username or password is incorrect.');
   }
+  const maintenance=await maintenanceAccess(env,record);if(maintenance)return maintenance;
   await run(env,'DELETE FROM login_attempts WHERE key=?',keys[0]);const token=await newSession(env,record.id);await audit(env,record,'login','account',record.id);
   return json({user:safeUser(record)},200,{'Set-Cookie':cookie(token)});
  }

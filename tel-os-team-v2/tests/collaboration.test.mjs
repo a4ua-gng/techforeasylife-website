@@ -32,9 +32,9 @@ const feedback={user_id:'member',period:day().slice(0,7),quality:'Good',timeline
 
 test('TEL collaboration integration in the Workers runtime',async t=>{
  try{
-  for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql']){
+  for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql']){
    const sql=await readFile(new URL('../'+file,import.meta.url),'utf8');
-   for(const part of sql.split(';').map(x=>x.trim()).filter(Boolean))await db.prepare(part).run();
+   await db.exec(sql.replace(/^\s*--.*$/gm,'').replaceAll('\n',' '));
   }
   for(const [id,role,department] of fixtures)await db.prepare('INSERT INTO users(id,employee_id,username,name,designation,role,department,joined_on,password_hash,password_salt,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)').bind(id,id,id,'Fixture '+id,role,role,department,day(),'fixture-hash','fixture-salt',new Date().toISOString()).run();
 
@@ -66,6 +66,16 @@ test('TEL collaboration integration in the Workers runtime',async t=>{
    await denied('lead','PATCH','/api/meetings/'+meeting.id,{attended:['finance']},400);
    const updated=await ok('lead','PATCH','/api/meetings/'+meeting.id,{decisions:'Approved layout',follow_ups:'Member produces final artwork',attended:['member','lead']});
    assert.deepEqual(updated.meeting.attended,['member','lead']);
+   assert.equal((await db.prepare('SELECT COUNT(*) n FROM meeting_attendance_history WHERE meeting_id=?').bind(meeting.id).first()).n,2);
+   await ok('lead','PATCH','/api/meetings/'+meeting.id,{decisions:'Further notes',attended:['lead','member']});
+   assert.equal((await db.prepare('SELECT COUNT(*) n FROM meeting_attendance_history WHERE meeting_id=?').bind(meeting.id).first()).n,2);
+   await denied('lead','POST','/api/meetings',{title:'Unaudited attendance',purpose:'Review',starts_at:new Date().toISOString(),department:'Marketing',participants:['member'],attended:['member']},400);
+   const future=(await ok('lead','POST','/api/meetings',{title:'Future review',purpose:'Review',starts_at:new Date(Date.now()+86400000).toISOString(),department:'Marketing',participants:['member']})).meeting;
+   await denied('lead','PATCH','/api/meetings/'+future.id,{attended:['member']},409);
+   await ok('lead','PATCH','/api/meetings/'+future.id,{decisions:'Planning notes only',attended:[]});
+   const founderMeeting=(await ok('founder','POST','/api/meetings',{title:'Department meeting',purpose:'Review',starts_at:new Date(Date.now()-3600000).toISOString(),department:'Marketing',participants:['lead','member']})).meeting;
+   await denied('lead','PATCH','/api/meetings/'+founderMeeting.id,{attended:['member']},403);
+   await ok('lead','PATCH','/api/meetings/'+founderMeeting.id,{decisions:'Department manager can still add notes',attended:[]});
   });
 
   await t.test('documents are scoped to their intended department',async()=>{

@@ -7,6 +7,6 @@ await collect('');
 assets.__BINARY_ASSETS__=binaries;
 await mkdir('dist',{recursive:true});
 await build({entryPoints:['src/worker.js'],bundle:true,format:'esm',platform:'browser',target:'es2022',outfile:'dist/worker.js',define:Object.fromEntries(Object.entries(assets).map(([k,v])=>[k,JSON.stringify(v)])),minify:false});
-const schema=(await Promise.all(['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql'].map(f=>readFile(f,'utf8')))).join('\n');
+const schema=(await Promise.all(['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql'].map(f=>readFile(f,'utf8')))).join('\n');
 await writeFile('dist/schema.sql',schema);
 console.log('Built Worker, frontend assets, and idempotent schema.');

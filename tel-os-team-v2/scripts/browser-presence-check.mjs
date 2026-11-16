@@ -10,7 +10,7 @@ const checks=[],errors=[],runtime=new Miniflare({modules:true,scriptPath:'dist/w
 const browser=await chromium.launch({headless:true,executablePath:'/usr/bin/chromium',args:['--no-sandbox']});
 try{
  const db=await runtime.getD1Database('DB');
- for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql'])await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
+ for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql'])await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
  const password='LocalPresenceBrowser!2026',salt='0123456789abcdef0123456789abcdef',hash=await hashPassword(password,salt),stamp=new Date().toISOString();
  for(const[id,role]of[['presence-founder','founder'],['presence-member','employee']]){
   await db.prepare('INSERT INTO users(id,employee_id,username,name,designation,role,department,email,joined_on,password_hash,password_salt,must_change_password,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,0,?)').bind(id,id,id,id,role,role,'Marketing',id+'@example.test','2026-01-01',hash,salt,stamp).run();

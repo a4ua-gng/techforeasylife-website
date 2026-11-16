@@ -1,4 +1,5 @@
 import {queueMeetingDeliveries} from './deliveries.js';
+import {handleHRRecords} from './hr-records.js';
 const sameDept = (a, b) => String(a || '').toLowerCase() === String(b || '').toLowerCase();
 const isFounder = user => user.role === 'founder';
 const isHRLead = user => user.role === 'hr_lead';
@@ -150,6 +151,7 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
     if (!participants.includes(user.id)) participants.push(user.id);
     const attended = await userIDs(b.attended || [], 'Attendance');
     if (attended.some(p => !participants.includes(p))) fail(400, 'Meeting attendance must come from the participant list.');
+    if (attended.length) fail(400, 'Save the meeting first, then record attendance after it has started. This preserves the attendance record and its correction history.');
     const meetingId = id();
     await run(env, 'INSERT INTO meetings(id,title,purpose,starts_at,call_url,participants_json,attended_json,decisions,follow_ups,department,kind,created_by,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)', meetingId, title, purpose, new Date(timestamp).toISOString(), urlValue(b.call_url), JSON.stringify(participants), JSON.stringify(attended), text(b.decisions, 5000, 'Decisions'), text(b.follow_ups, 5000, 'Follow-up responsibilities'), department, b.kind === 'client_call' ? 'client_call' : 'meeting', user.id, now(), now());
     for (const participant of participants) if (participant !== user.id) await notify(env, participant, 'Meeting scheduled', `${title} · ${new Date(timestamp).toISOString()}`, 'meetings');
@@ -165,7 +167,17 @@ export async function handleCollaboration({ request, url, env, user, body, helpe
     const participants = JSON.parse(meeting.participants_json || '[]');
     const attended = b.attended === undefined ? JSON.parse(meeting.attended_json || '[]') : await userIDs(b.attended, 'Attendance');
     if (attended.some(p => !participants.includes(p))) fail(400, 'Meeting attendance must come from the participant list.');
-    await run(env, 'UPDATE meetings SET decisions=?,follow_ups=?,attended_json=?,updated_at=? WHERE id=?', text(b.decisions ?? meeting.decisions, 5000, 'Decisions'), text(b.follow_ups ?? meeting.follow_ups, 5000, 'Follow-up responsibilities'), JSON.stringify(attended), now(), meeting.id);
+    const decisions = text(b.decisions ?? meeting.decisions, 5000, 'Decisions'), followUps = text(b.follow_ups ?? meeting.follow_ups, 5000, 'Follow-up responsibilities');
+    const previousAttended = JSON.parse(meeting.attended_json || '[]');
+    const changedAttendance = b.attended !== undefined && (attended.length !== previousAttended.length || attended.some(p => !previousAttended.includes(p)));
+    if (changedAttendance) {
+      const recorded = await rows(env, 'SELECT user_id,status FROM meeting_attendance WHERE meeting_id=?', meeting.id);
+      // Preserve an explicit excuse when the legacy two-state checkbox remains unchecked.
+      const entries = participants.map(user_id => ({ user_id, status: attended.includes(user_id) ? 'present' : recorded.find(r => r.user_id === user_id)?.status === 'excused' ? 'excused' : 'absent' }));
+      const attendanceURL = new URL('/api/meetings/' + encodeURIComponent(meeting.id) + '/attendance', url.origin);
+      await handleHRRecords({ request: { method: 'PUT' }, url: attendanceURL, env, user, body: { entries } });
+    }
+    await run(env, 'UPDATE meetings SET decisions=?,follow_ups=?,attended_json=?,updated_at=? WHERE id=?', decisions, followUps, JSON.stringify(attended), now(), meeting.id);
     await audit(env, user, 'meeting_record_updated', 'meeting', meeting.id);
     return json({ meeting: meetingData(await one(env, 'SELECT * FROM meetings WHERE id=?', meeting.id)) });
   }

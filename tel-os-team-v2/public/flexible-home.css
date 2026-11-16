@@ -1,0 +1,141 @@
+/* A calm daily plan using TEL's established charcoal and lavender system. */
+.flexible-home-intro { margin: 0 0 24px; }
+.flexible-hr-shortcut { display: flex; align-items: center; gap: 18px; padding: 20px 24px; border: 1px solid var(--workspace-line); border-radius: 18px; background: var(--workspace-soft); }
+.flexible-hr-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; background: var(--workspace-soft); color: var(--workspace-accent); flex: none; }
+.flexible-hr-shortcut > div { min-width: 0; flex: 1; }
+.flexible-hr-shortcut strong { color: var(--workspace-text); font-size: 15px; font-weight: 600; }
+.flexible-hr-shortcut p { font-size: 14px; line-height: 1.7; color: var(--workspace-muted); margin: 4px 0 0; }
+.flexible-hr-shortcut > .btn { flex: none; border-color: var(--workspace-line); color: var(--workspace-accent); background: var(--workspace-panel); }
+.flexible-today-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr); gap: 24px; align-items: start; margin-bottom: 32px; }
+.flexible-today-grid > * { min-width: 0; }
+.flexible-timeline { padding: 28px; border-color: var(--workspace-line); }
+.flexible-timeline-heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; padding-bottom: 22px; }
+.flexible-timeline-heading .eyebrow { color: var(--workspace-accent); font-size: 10px; letter-spacing: 1.35px; line-height: 1.8; }
+.flexible-timeline-heading h2 { font-size: 25px; line-height: 1.4; letter-spacing: -.7px; font-weight: 500; margin: 6px 0 8px; }
+.flexible-timeline-heading p { color: var(--workspace-muted); font-size: 14px; line-height: 1.75; margin: 0; }
+.flexible-today-date { color: var(--workspace-muted); font-size: 12px; line-height: 1.7; flex: none; padding-top: 5px; }
+.flexible-timeline-list, .flexible-task-list, .flexible-meeting-list, .flexible-presence-group ul { list-style: none; margin: 0; padding: 0; }
+.flexible-timeline-step { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 16px; position: relative; padding-bottom: 24px; }
+.flexible-timeline-step:last-child { padding-bottom: 0; }
+.flexible-timeline-step:not(:last-child)::before { content: ''; position: absolute; top: 36px; bottom: 4px; left: 15px; width: 1px; background: var(--workspace-line); }
+.flexible-timeline-marker { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--workspace-line); border-radius: 50%; color: var(--workspace-accent); background: var(--workspace-soft); }
+.flexible-timeline-marker .svg { width: 16px; height: 16px; }
+.flexible-timeline-content { min-width: 0; padding-top: 3px; }
+.flexible-timeline-content h3 { font-size: 15px; font-weight: 600; line-height: 1.6; margin: 0 0 8px; }
+.flexible-timeline-content p { font-size: 14px; line-height: 1.8; color: var(--workspace-muted); margin: 0; }
+.flexible-step-heading { display: flex; align-items: start; justify-content: space-between; gap: 12px; margin-top: -5px; }
+.flexible-step-heading h3 { margin-top: 5px; }
+.flexible-step-heading .link-btn { font-size: 12px; padding: 4px 0; margin-top: -4px; white-space: nowrap; min-height: 44px; }
+.flexible-task-list > li + li { border-top: 1px solid var(--workspace-line); }
+.flexible-task-link, .flexible-meeting-link { border: 0; width: 100%; color: var(--workspace-text); background: transparent; text-align: left; display: flex; align-items: center; gap: 14px; border-radius: 10px; cursor: pointer; transition: background-color 150ms ease; }
+.flexible-task-link { padding: 12px 0; min-height: 68px; }
+.flexible-task-link:hover, .flexible-meeting-link:hover { background: var(--workspace-soft); }
+.flexible-task-link > span:first-child { min-width: 0; flex: 1; }
+.flexible-task-link strong, .flexible-meeting-copy > strong { display: block; font-size: 14px; font-weight: 500; line-height: 1.7; overflow-wrap: anywhere; }
+.flexible-task-link small, .flexible-meeting-copy > small { display: block; font-size: 12px; color: var(--workspace-muted); line-height: 1.7; margin-top: 3px; }
+.flexible-task-state { display: flex; align-items: center; gap: 6px; font-size: 11px; line-height: 1.7; color: var(--workspace-accent); max-width: 108px; flex: none; }
+.flexible-task-state .svg { width: 14px; height: 14px; flex: none; }
+.flexible-timeline-content .flexible-more-copy { font-size: 12px; padding-top: 8px; }
+.flexible-meeting-list { display: grid; gap: 8px; }
+.flexible-meeting-link { padding: 12px; background: var(--workspace-soft); min-height: 78px; }
+.flexible-meeting-time { flex: none; font-size: 10px; line-height: 1.5; color: var(--workspace-muted); min-width: 70px; }
+.flexible-meeting-time > strong { display: block; font-size: 14px; font-weight: 500; color: var(--workspace-accent); margin-top: 4px; }
+.flexible-meeting-time small { font-size: 10px; margin-left: 4px; }
+.flexible-meeting-copy { min-width: 0; flex: 1; }
+.flexible-meeting-link > .svg { width: 16px; height: 16px; flex: none; color: var(--workspace-accent); }
+.workspace-home .flexible-workday { display: flex; gap: 16px; }
+.flexible-policy-note { display: flex; align-items: start; gap: 14px; padding: 20px 22px; border: 1px solid var(--workspace-line); border-radius: 18px; background: var(--workspace-soft); }
+.flexible-policy-note > .svg { width: 20px; height: 20px; color: var(--workspace-accent); margin-top: 2px; flex: none; }
+.flexible-policy-note > div { min-width: 0; }
+.flexible-policy-note strong { font-size: 14px; font-weight: 600; }
+.flexible-policy-note p { color: var(--workspace-muted); font-size: 13px; line-height: 1.8; margin: 8px 0 4px; }
+.flexible-policy-note .link-btn { font-size: 12px; }
+.workspace-home .flexible-role-intro { min-height: 0; padding: 24px 28px; margin-bottom: 24px; }
+.workspace-home .flexible-role-intro .department-tag { margin-bottom: 8px; }
+.workspace-home .flexible-role-intro h2 { font-size: 23px; margin-bottom: 8px; max-width: 40ch; }
+.workspace-home .flexible-role-intro p { font-size: 16px; line-height: 1.8; }
+.flexible-team-presence .panel-header { align-items: start; }
+.flexible-team-presence .panel-header p { font-size: 13px; line-height: 1.7; color: var(--workspace-muted); margin: 6px 0 0; }
+.flexible-presence-groups { display: grid; gap: 22px; padding: 0 24px 24px; }
+.flexible-presence-group h3 { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; font-weight: 600; line-height: 1.7; color: var(--workspace-text); margin: 0 0 8px; }
+.flexible-presence-group h3 > span:last-child { min-width: 24px; text-align: center; border: 1px solid var(--workspace-line); border-radius: 8px; color: var(--workspace-accent); background: var(--workspace-soft); }
+.flexible-presence-group li { display: flex; align-items: center; gap: 12px; padding: 10px 0; min-height: 64px; }
+.flexible-presence-group li + li { border-top: 1px solid var(--workspace-line); }
+.flexible-presence-group .avatar { width: 36px; height: 36px; font-size: 11px; flex: none; }
+.flexible-member-name { min-width: 0; flex: 1; }
+.flexible-member-name strong { display: block; font-weight: 500; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.flexible-member-name small { color: var(--workspace-muted); font-size: 12px; line-height: 1.6; }
+.flexible-login-status { font-size: 10px; line-height: 1.7; color: var(--workspace-muted); flex: none; }
+.flexible-login-status.is-online { color: var(--workspace-accent); }
+.flexible-presence-group > p { color: var(--workspace-muted); font-size: 13px; line-height: 1.8; margin: 12px 0 0; }
+.flexible-presence-more summary { display: flex; align-items: center; gap: 8px; padding: 10px 0; min-height: 44px; color: var(--workspace-accent); font-size: 12px; list-style: none; cursor: pointer; }
+.flexible-presence-more summary::-webkit-details-marker { display: none; }
+.flexible-presence-more summary .svg { width: 14px; height: 14px; }
+.flexible-presence-more[open] summary .svg { transform: rotate(90deg); }
+.flexible-presence-note { color: var(--workspace-muted); font-size: 12px; line-height: 1.8; padding: 18px 24px; margin: 0; border-top: 1px solid var(--workspace-line); }
+.sidebar .flexible-hr-nav { color: var(--workspace-accent); }
+.flexible-schedule-summary { margin-bottom: 24px; }
+.flexible-schedule-summary > h2 { font-size: 25px; line-height: 1.5; margin: 20px 0 12px; font-weight: 500; }
+.flexible-schedule-summary > p { font-size: 16px; line-height: 1.8; max-width: 75ch; color: var(--workspace-muted); }
+.flexible-arrangements .schedule-policy p { max-width: 75ch; }
+@media (max-width: 1200px) {
+  .flexible-today-grid { grid-template-columns: minmax(0, 1.2fr) minmax(280px, 1fr); gap: 20px; }
+  .flexible-timeline { padding: 24px; }
+  .flexible-today-date { display: none; }
+  .flexible-task-state { max-width: 85px; }
+}
+@media (max-width: 760px) {
+  .flexible-today-grid { grid-template-columns: minmax(0, 1fr); }
+  .flexible-today-grid .flexible-workday { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .flexible-today-date { display: block; }
+  .flexible-hr-shortcut { flex-wrap: wrap; }
+  .flexible-hr-shortcut > .btn { margin-left: 62px; }
+  .flexible-timeline { padding: 24px; }
+  .flexible-task-state { max-width: 108px; }
+}
+@media (max-width: 650px) {
+  .flexible-hr-shortcut { padding: 20px; gap: 14px; }
+  .flexible-hr-icon { display: none; }
+  .flexible-hr-shortcut > .btn { margin-left: 0; width: 100%; }
+  .flexible-hr-shortcut strong { font-size: 16px; }
+  .flexible-hr-shortcut p { font-size: 16px; }
+  .flexible-today-grid .flexible-workday { display: flex; }
+  .flexible-timeline { padding: 24px 20px; }
+  .flexible-timeline-heading { gap: 12px; }
+  .flexible-timeline-heading .eyebrow { font-size: 10px; }
+  .flexible-timeline-heading h2 { font-size: 24px; }
+  .flexible-timeline-heading p, .flexible-timeline-content p { font-size: 16px; }
+  .flexible-today-date { display: none; }
+  .flexible-timeline-step { grid-template-columns: 28px minmax(0, 1fr); gap: 12px; }
+  .flexible-timeline-marker { width: 28px; height: 28px; }
+  .flexible-timeline-step:not(:last-child)::before { left: 13px; top: 32px; }
+  .flexible-timeline-content h3 { font-size: 16px; }
+  .flexible-step-heading { flex-wrap: wrap; gap: 0 12px; margin-bottom: 4px; }
+  .flexible-step-heading h3 { margin-bottom: 0; }
+  .flexible-step-heading .link-btn { margin-top: 0; min-height: 44px; font-size: 14px; }
+  .flexible-task-link { flex-wrap: wrap; gap: 6px; padding: 14px 0; }
+  .flexible-task-link > span:first-child { flex-basis: 100%; }
+  .flexible-task-link strong, .flexible-meeting-copy > strong { font-size: 16px; }
+  .flexible-task-link small, .flexible-meeting-copy > small { font-size: 14px; }
+  .flexible-task-state { max-width: 100%; font-size: 12px; }
+  .flexible-meeting-link { flex-wrap: wrap; gap: 10px; padding: 14px; }
+  .flexible-meeting-time { min-width: 0; flex-basis: 100%; font-size: 12px; }
+  .flexible-meeting-time > strong { display: inline; font-size: 15px; margin-left: 8px; }
+  .flexible-meeting-time small { font-size: 12px; }
+  .flexible-policy-note { padding: 22px; }
+  .flexible-policy-note strong { font-size: 16px; }
+  .flexible-policy-note p { font-size: 16px; }
+  .flexible-policy-note .link-btn { font-size: 14px; }
+  .workspace-home .flexible-role-intro { padding: 24px; }
+  .workspace-home .flexible-role-intro h2 { font-size: 23px; }
+  .workspace-home .flexible-role-intro p { font-size: 16px; }
+  .flexible-presence-groups { padding: 0 22px 22px; }
+  .flexible-presence-group h3 { font-size: 15px; }
+  .flexible-member-name strong { font-size: 15px; }
+  .flexible-member-name small { font-size: 13px; }
+  .flexible-login-status { font-size: 11px; }
+  .flexible-presence-note { padding: 18px 22px; font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flexible-task-link, .flexible-meeting-link { transition: none; }
+}

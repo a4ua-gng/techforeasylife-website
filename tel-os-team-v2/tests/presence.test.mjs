@@ -10,7 +10,7 @@ const origin='https://presence.test',password='LocalPresenceFixture!2026',salt='
 before(async()=>{
  const built=await build({entryPoints:['src/worker.js'],bundle:true,write:false,format:'esm',platform:'browser',define:{__HTML__:JSON.stringify('presence fixture'),__CSS__:JSON.stringify(''),__APP__:JSON.stringify(''),__BINARY_ASSETS__:JSON.stringify({})}});
  runtime=new Miniflare({modules:true,script:built.outputFiles[0].text,compatibilityDate:'2026-07-30',d1Databases:{DB:'presence-fixture'}});db=await runtime.getD1Database('DB');
- for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql'])await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
+ for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql'])await db.exec((await readFile(file,'utf8')).replaceAll('\n',' '));
  const hash=await hashPassword(password,salt),stamp=new Date().toISOString();
  for(const [uid,role]of[['founder','founder'],['member','employee'],['paused','employee']]){
   await db.prepare('INSERT INTO users(id,employee_id,username,name,designation,role,department,email,joined_on,password_hash,password_salt,must_change_password,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,0,?)').bind(uid,uid,uid,uid,role,role,'Marketing',uid+'@example.test','2026-01-01',hash,salt,stamp).run();

@@ -1,4 +1,4 @@
-# TEL OS2.5 operational email configuration
+# TEL OS2.7 operational email configuration
 
 Work notifications use the existing verified Resend domain. Preserve RESEND_API_KEY and TEL_OS_SENDER_EMAIL for verification. Add plaintext TEL_OS_OPERATIONAL_EMAILS=enabled and TEL_OS_WORK_SENDER_EMAIL=notifications@techforeasylife.in. No Google OAuth or WhatsApp setup is needed for employees; they verify any normal email inside TEL OS.
 
@@ -17,3 +17,11 @@ Preserve the WEBSITE_ADMIN service binding and TEL_OS_TEAM_KEY secret. HR can ma
 ## Rollout verification
 
 Use the checked-in build and automated tests. Confirm /api/health and the founder-only operational email status, keep the previous Worker version available for rollback, and verify the live user flows without posting dummy chat, changing real attendance or emailing test events to employees.
+
+## Flexible work, urgent assignments and deadline follow-ups
+
+Apply schema-urgent-email.sql, schema-flexible-work.sql, schema-hr-records.sql and schema-deadline-policy.sql additively. The meeting attendance history uses SQL triggers: submit complete SQL statements/schema files, never split blindly on semicolons. Preserve existing outboxes and credentials.
+
+Set attendance_mode=flexible. Set urgent_task_email_enabled_at and deadline_policy_enabled_at to the rollout UTC timestamp only when blank; old assignments/deadline misses are not replayed. Deadline policy runs before the shared email dispatcher each minute. The additive urgent/deadline outboxes use the existing global rate gate and provider confirmation rules.
+
+Maintenance uses app_settings.tel_maintenance_mode=on/off or TEL_OS_MAINTENANCE=enabled. Public status is GET /api/status. Founders and active clocked-in/break members remain eligible; static assets, login for eligible members and logout remain available. Do not reset attendance to enter or exit maintenance. Disable maintenance after the live checks.

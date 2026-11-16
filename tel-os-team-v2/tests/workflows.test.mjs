@@ -20,9 +20,9 @@ if(url.pathname==='/test-automation')return Response.json(await runAutomations(e
 const compiled=await build({stdin:{contents:wrapper,resolveDir:process.cwd(),sourcefile:'workflow-test-entry.js'},bundle:true,format:'esm',write:false,platform:'browser'});
 const mf=new Miniflare({modules:true,script:compiled.outputFiles[0].text,compatibilityDate:'2026-07-30',d1Databases:{DB:'workflow-tests'}});
 const db=await mf.getD1Database('DB');
-for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql']){
+for(const file of ['schema-core.sql','schema-workflows.sql','schema-collaboration.sql','schema-schedules.sql','schema-extensions.sql','schema-chat-read.sql','schema-task-transfers.sql','schema-operational-email.sql','schema-urgent-email.sql','schema-flexible-work.sql','schema-hr-records.sql','schema-deadline-policy.sql']){
  const sql=await readFile(file,'utf8');
- for(const part of sql.split(';').map(x=>x.trim()).filter(Boolean))await db.prepare(part).run();
+ await db.exec(sql.replaceAll('\n',' '));
 }
 const now=new Date().toISOString();
 const people=[['founder','Founder','founder','Leadership',null],['founder2','Founder 2','founder','Leadership',null],['hr','HR Lead','hr_lead','HR','founder'],['hr2','HR Member','hr_member','HR','hr'],['lead','Marketing Lead','team_lead','Marketing','founder'],['employee','Employee','employee','Marketing','lead'],['employee2','Employee 2','employee','Marketing','lead'],['finance','Finance','finance_head','Finance','founder']];
