@@ -5,11 +5,11 @@ Static multi-page website for TEL's education and practical-learning branch, bui
 ## Pages
 
 - `index.html` — Home
-- `product.html` — TEL Model Rocket Kit and project two teaser
-- `schools.html` — Institution and individual pathways
+- `education.html` — TEL Education, school programmes and kit details
+- `temark.html` — TeMark marketing services and portfolio
+- `founder.html` — Direct-link-only portfolio (noindex; not linked from public site)
 - `safety.html` — SafeFlight access, learning, weather, quiz, TEL Control handoff and STEM tools
 - `control.html` — Hidden, no-index full-screen TEL Control classroom demonstration
-- `play.html` — Archived TEL Play Lab file; intentionally hidden from navigation and search indexing
 - `careers.html` — Live vacancy board, vacant-position counts and simplified applications
 - `about.html` — Mission and founding team
 - `contact.html` — Email-based enquiry form
@@ -52,9 +52,13 @@ Connect `techforeasylife.in` only after the GitHub Pages preview looks correct. 
 - Passing SafeFlight reveals the hidden `control.html` link for the current browser tab. That full-screen demo is deliberately omitted from navigation and search indexing.
 - Current weather awareness is supplied through Open-Meteo. Green means no automatic caution, yellow requires mentor review and red blocks the classroom demonstration; none of these states is practical authorization.
 - The TEL Control countdown is an audio/visual classroom communication simulation only. It does not connect to or activate physical equipment, and restricted equipment remains mentor-controlled.
-- The public Play destination has been removed from navigation, the homepage, footers and the sitemap. Its files are retained only so the section can be restored later without rebuilding it.
+- The retired Play Lab, legacy product and school pages were removed from the published site, along with their sitemap entries. Old URLs should return 404 after deployment.
 - SafeFlight draws five unique questions per attempt from exactly 1,000 supervised-safety scenario variations using a Fisher–Yates shuffle. A perfect score is still required.
 - SafeFlight cards, stage headings, progress navigation, condition panels and quiz controls use matched grid alignment across desktop and mobile.
 - Careers is visible in the desktop and mobile navigation and on the homepage.
 - Founder portraits for Harsh Das and Devangi Das are included on the About page, together with TEL classroom and field photographs on the Schools page.
 - The Schools page includes the institution proposal, ecosystem integration formats, reasons to choose TEL, implementation pathway and institution FAQ.
+
+## Search indexing policy (19 Nov 2026)
+
+The sitemap lists the active public landing pages: home, TEL Education, and TeMark. The founder portfolio remains available to those given its direct URL, has a `noindex` meta tag, and is not linked from the public About page. Obsolete pages are deleted from the deployed source so they can drop from search results when crawled again.
