@@ -133,7 +133,8 @@ body.tel-page{margin:0;background:#070707;color:#f6f6f6;font-family:Inter,Arial,
 .telv-empty{padding:24px 0;color:#a0a0a0;font-size:13px;grid-column:1/-1}
 .tel-page [hidden]{display:none!important}
 .tel-page a:focus-visible,.tel-page button:focus-visible,.tel-header a:focus-visible,.tel-header button:focus-visible,.tel-footer a:focus-visible{outline:2px solid #c1c1c1;outline-offset:5px}
-.telv-target,:target{scroll-margin-top:116px}
+/* The page already reserves the sticky header through scroll-padding in tel-tidy.css. */
+.telv-target,:target{scroll-margin-top:12px}
 @media(max-width:1050px){.tel-nav{gap:18px}.tel-nav a{font-size:11px}.telv-hero{min-height:590px;gap:30px;padding-top:74px}.telv-title{font-size:clamp(56px,6.8vw,78px)}.telv-venture{padding:27px}.telv-split{gap:45px}.tel-footer-links{gap:30px}.telv-page-intro{padding-top:74px}}
 @media(max-width:820px){
  .telv-shell,.tel-footer{width:calc(100% - 40px)}

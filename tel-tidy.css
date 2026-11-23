@@ -22,6 +22,8 @@ body{overflow-wrap:break-word}
 .telv-button{min-height:48px;font-size:13px;padding:12px 19px}
 .telv-final{padding-block:45px 52px}
 .telv-cta{padding:32px;gap:28px}
+.telv-cta .telv-cta-actions{align-items:stretch}
+.telv-cta-actions .telv-button{justify-content:space-between}
 .telv-cta .telv-copy{font-size:14px}
 .telv-venture{padding:28px}
 .telv-venture-brand{height:94px;margin-block:16px 15px}

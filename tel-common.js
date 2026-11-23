@@ -6,10 +6,14 @@
  const groups=[...document.querySelectorAll('[data-venture-menu]')];
  const hover=matchMedia('(hover: hover) and (min-width: 821px)');
  const timers=new WeakMap();
+ let keyboardNavigation=false;
+ document.addEventListener('keydown',()=>{keyboardNavigation=true;},{capture:true});
+ document.addEventListener('pointerdown',()=>{keyboardNavigation=false;},{capture:true});
  function setMenu(group,open){
   clearTimeout(timers.get(group));
   group.querySelector('.tel-nav-submenu').hidden=!open;
   group.querySelector('.tel-nav-disclosure').setAttribute('aria-expanded',String(open));
+  group.classList.toggle('is-open',open);
  }
  const closeMenus=except=>groups.forEach(group=>{if(group!==except)setMenu(group,false);});
  function openMenu(group){closeMenus(group);setMenu(group,true);}
@@ -17,20 +21,33 @@
   const button=group.querySelector('.tel-nav-disclosure');
   button.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')!=='true';closeMenus(group);setMenu(group,open);});
   group.querySelector('.tel-nav-venture-link').addEventListener('pointerenter',event=>{if(hover.matches&&event.pointerType!=='touch')openMenu(group);});
-  group.addEventListener('pointerleave',()=>{if(hover.matches&&!group.contains(document.activeElement))timers.set(group,setTimeout(()=>setMenu(group,false),160));});
-  group.addEventListener('focusin',event=>{clearTimeout(timers.get(group));if(event.target.matches('.tel-nav-venture-link:focus-visible')&&hover.matches)openMenu(group);});
-  group.addEventListener('focusout',event=>{if(!group.contains(event.relatedTarget))setMenu(group,false);});
+  group.addEventListener('pointerenter',()=>clearTimeout(timers.get(group)));
+  group.addEventListener('pointerleave',()=>{
+   const keyboardFocus=keyboardNavigation&&group.querySelector('.tel-nav-submenu').contains(document.activeElement);
+   if(hover.matches&&!keyboardFocus)timers.set(group,setTimeout(()=>setMenu(group,false),160));
+  });
+  group.addEventListener('focusin',event=>{clearTimeout(timers.get(group));if(keyboardNavigation&&event.target.matches('.tel-nav-venture-link:focus-visible')&&hover.matches)openMenu(group);});
+  // Pointer clicks switch panels after mouseup, so collapsing on blur would move the next button mid-click.
+  group.addEventListener('focusout',event=>{if(keyboardNavigation&&!group.contains(event.relatedTarget))setMenu(group,false);});
   group.addEventListener('keydown',event=>{
-   if(event.key==='ArrowDown'&&event.target.matches('.tel-nav-venture-link,.tel-nav-disclosure')){event.preventDefault();openMenu(group);group.querySelector('.tel-nav-submenu a')?.focus();}
-   if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true'){event.preventDefault();event.stopPropagation();setMenu(group,false);button.focus();}
+   if(event.key==='ArrowDown'&&event.target.matches('.tel-nav-venture-link,.tel-nav-disclosure')){event.preventDefault();openMenu(group);group.querySelector('.tel-nav-submenu a')?.focus({preventScroll:true});}
+   if(event.key==='Escape'&&button.getAttribute('aria-expanded')==='true'){event.preventDefault();event.stopPropagation();setMenu(group,false);button.focus({preventScroll:true});}
   });
  });
  const close=()=>{nav?.classList.remove('open');toggle?.setAttribute('aria-expanded','false');toggle?.setAttribute('aria-label','Open navigation');closeMenus();};
  toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Close navigation':'Open navigation');nav?.classList.toggle('open',open);if(!open)closeMenus();});
  nav?.addEventListener('click',event=>{if(event.target.closest('a'))close();});
- document.addEventListener('keydown',event=>{if(event.key==='Escape'&&toggle?.getAttribute('aria-expanded')==='true'){close();toggle.focus();}});
+ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&toggle?.getAttribute('aria-expanded')==='true'){close();toggle.focus({preventScroll:true});}});
  document.addEventListener('click',event=>{if(header&&!header.contains(event.target))close();});
  window.addEventListener('resize',()=>{if(window.innerWidth>820)close();},{passive:true});
+ hover.addEventListener('change',close);
+ // Dismiss on page-scroll input, without treating keyboard focus or anchor positioning as scrolling intent.
+ const closeOnPageScroll=event=>{if(hover.matches&&!event.target.closest?.('.tel-nav-submenu'))closeMenus();};
+ window.addEventListener('wheel',closeOnPageScroll,{passive:true});
+ window.addEventListener('touchmove',closeOnPageScroll,{passive:true});
+ document.addEventListener('keydown',event=>{
+  if(!event.defaultPrevented&&['PageDown','PageUp','Home','End'].includes(event.key))closeOnPageScroll(event);
+ });
  const update=()=>header?.classList.toggle('scrolled',window.scrollY>24);update();window.addEventListener('scroll',update,{passive:true});
  document.querySelectorAll('[data-year]').forEach(el=>el.textContent=new Date().getFullYear());
  // Expand a school format before an incoming deep link scrolls into view.
